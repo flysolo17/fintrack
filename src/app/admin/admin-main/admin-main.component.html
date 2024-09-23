@@ -1,2 +1,24 @@
-<router-outlet></router-outlet>
-<h1>Admin</h1>
+<div class="container-fluid vh-100 overflow-hidden p-0">
+  <div class="d-flex h-100 overflow-hidden">
+    <div class="sidebar bg-dark overflow-auto p-3" style="width: 250px">
+      <div class="w-100">
+        <h4 class="text-white p-3">Fintrack</h4>
+      </div>
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="dashboard" routerLinkActive
+            >Dashboard</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="collectors" routerLinkActive
+            >Collectors</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div class="flex-grow-1 overflow-auto">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

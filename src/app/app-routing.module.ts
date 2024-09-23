@@ -6,6 +6,10 @@ import { ContactComponent } from './landing-page/contact/contact.component';
 import { LandingMainComponent } from './landing-page/landing-main/landing-main.component';
 import { AdminMainComponent } from './admin/admin-main/admin-main.component';
 import { BorrowerMainComponent } from './borrower/borrower-main/borrower-main.component';
+import { LoginComponent } from './auth/login/login.component';
+import { CollectorMainComponent } from './collector/collector-main/collector-main.component';
+import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+import { AdminCollectorsComponent } from './admin/admin-collectors/admin-collectors.component';
 
 const routes: Routes = [
   {
@@ -37,13 +41,37 @@ const routes: Routes = [
   },
 
   {
+    path: 'login',
+    component: LoginComponent,
+    children: [],
+  },
+
+  {
     path: 'admin',
     component: AdminMainComponent,
-    children: [],
+    children: [
+      {
+        path: '',
+        component: AdminDashboardComponent,
+      },
+      {
+        path: 'dashboard',
+        component: AdminDashboardComponent,
+      },
+      {
+        path: 'collectors',
+        component: AdminCollectorsComponent,
+      },
+    ],
   },
   {
     path: 'borrower',
     component: BorrowerMainComponent,
+    children: [],
+  },
+  {
+    path: 'collector',
+    component: CollectorMainComponent,
     children: [],
   },
 ];

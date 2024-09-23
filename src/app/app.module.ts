@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
@@ -20,6 +20,12 @@ import { EditProfileComponent } from './auth/edit-profile/edit-profile.component
 import { LandingMainComponent } from './landing-page/landing-main/landing-main.component';
 import { AdminMainComponent } from './admin/admin-main/admin-main.component';
 import { BorrowerMainComponent } from './borrower/borrower-main/borrower-main.component';
+import { LoginComponent } from './auth/login/login.component';
+import { CollectorMainComponent } from './collector/collector-main/collector-main.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+import { AdminCollectorsComponent } from './admin/admin-collectors/admin-collectors.component';
+import { CreateCollectorComponent } from './admin/modals/create-collector/create-collector.component';
 
 @NgModule({
   declarations: [
@@ -34,8 +40,13 @@ import { BorrowerMainComponent } from './borrower/borrower-main/borrower-main.co
     LandingMainComponent,
     AdminMainComponent,
     BorrowerMainComponent,
+    LoginComponent,
+    CollectorMainComponent,
+    AdminDashboardComponent,
+    AdminCollectorsComponent,
+    CreateCollectorComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, NgbModule],
+  imports: [BrowserModule, AppRoutingModule, NgbModule, ReactiveFormsModule],
   providers: [
     provideFirebaseApp(() => initializeApp(environment)),
     provideAuth(() => getAuth()),

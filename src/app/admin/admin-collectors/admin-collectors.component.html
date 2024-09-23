@@ -1,0 +1,88 @@
+<div class="d-flex align-items-center justify-content-between p-3">
+  <h5 class="text-primary fw-bold">Collectors</h5>
+  <button class="btn btn-success" (click)="createCollector()">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      class="bi bi-plus-lg me-2"
+      viewBox="0 0 16 16"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"
+      />
+    </svg>
+    new
+  </button>
+</div>
+
+<div class="card m-3">
+  <div class="card-header bg-dark">
+    <div class="d-flex align-items-center justify-content-between">
+      <form class="d-flex" role="search">
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+        />
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+  <div class="card-body">
+    <table class="table table-hover table-borderless">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Fullname</th>
+          <th scope="col">Username</th>
+          <th scope="col">Email</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of collector$ | async; index as i">
+          <td>{{ i + 1 }}</td>
+          <th scope="row">
+            <div class="d-flex gap-2 align-items-center">
+              <img
+                [src]="user.profile"
+                width="40px"
+                height="40px"
+                class="rounded-circle"
+              />
+              <h6>
+                {{ user.firstName }} {{ user.middleName[0] }}.
+                {{ user.lastName }}
+              </h6>
+            </div>
+          </th>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.phone }}</td>
+          <td>
+            <div ngbDropdown class="d-inline-block">
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                id="dropdownBasic1"
+                ngbDropdownToggle
+              >
+                Edit
+              </button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button ngbDropdownItem>View Profile</button>
+                <button ngbDropdownItem>Delete Collector</button>
+                <button ngbDropdownItem>Change Password</button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

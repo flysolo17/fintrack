@@ -11,10 +11,4 @@ export class AppComponent {
   title = 'fintrack';
 
   constructor(private authService: AuthService) {}
-  login() {
-    this.authService.login('fintrackadmin', 'admin1234').subscribe({
-      error: (err: any) => alert(err['message']),
-      next: (data: Users | null | undefined) => alert(data?.email),
-    });
-  }
 }

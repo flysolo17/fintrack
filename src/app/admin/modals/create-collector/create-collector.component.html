@@ -1,0 +1,154 @@
+<div class="modal-header border-0 bg-success">
+  <h4 class="text-white">Create Collector</h4>
+</div>
+
+<div class="modal-body">
+  <form class="w-100" [formGroup]="collectorForm$" (submit)="createCollector()">
+    <div class="mb-3">
+      <label for="firstName" class="form-label">First Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="firstName"
+        formControlName="firstName"
+      />
+      <div
+        *ngIf="
+          collectorForm$.get('firstName')?.invalid &&
+          collectorForm$.get('firstName')?.touched
+        "
+        class="text-danger"
+      >
+        First Name is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="middleName" class="form-label">Middle Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="middleName"
+        formControlName="middleName"
+      />
+      <div
+        *ngIf="
+          collectorForm$.get('middleName')?.invalid &&
+          collectorForm$.get('middleName')?.touched
+        "
+        class="text-danger"
+      >
+        Middle Name is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="lastName" class="form-label">Last Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="lastName"
+        formControlName="lastName"
+      />
+      <div
+        *ngIf="
+          collectorForm$.get('lastName')?.invalid &&
+          collectorForm$.get('lastName')?.touched
+        "
+        class="text-danger"
+      >
+        Last Name is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="profile" class="form-label">Profile Picture</label>
+      <input
+        type="file"
+        class="form-control"
+        formControlName="profile"
+        id="profile"
+        (change)="onFileSelected($event)"
+      />
+      <div *ngIf="!selectedFile" class="text-danger">
+        Profile Picture is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="phone" class="form-label">Phone</label>
+      <input
+        type="text"
+        class="form-control"
+        id="phone"
+        formControlName="phone"
+      />
+      <div
+        *ngIf="
+          collectorForm$.get('phone')?.invalid &&
+          collectorForm$.get('phone')?.touched
+        "
+        class="text-danger"
+      >
+        Phone is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        formControlName="email"
+      />
+      <div
+        *ngIf="
+          collectorForm$.get('email')?.invalid &&
+          collectorForm$.get('email')?.touched
+        "
+        class="text-danger"
+      >
+        Valid Email is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        formControlName="username"
+      />
+      <div
+        *ngIf="
+          collectorForm$.get('username')?.invalid &&
+          collectorForm$.get('username')?.touched
+        "
+        class="text-danger"
+      >
+        Username is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        formControlName="password"
+      />
+      <div
+        *ngIf="
+          collectorForm$.get('password')?.invalid &&
+          collectorForm$.get('password')?.touched
+        "
+        class="text-danger"
+      >
+        Password is required.
+      </div>
+    </div>
+    <button
+      class="btn btn-primary w-100"
+      type="submit"
+      [disabled]="collectorForm$.invalid || selectedFile == null"
+    >
+      Create Collector
+    </button>
+  </form>
+</div>
