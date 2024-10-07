@@ -1,0 +1,28 @@
+body {
+  background-color: #f8f9fa; /* Light background */
+}
+
+.card {
+  border-radius: 15px; /* Rounded corners */
+}
+
+.card-header {
+  background-color: #007bff; /* Primary color */
+  color: white;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+input.form-control {
+  border-radius: 10px; /* Rounded input fields */
+}
+
+.btn {
+  border-radius: 10px; /* Rounded buttons */
+  font-weight: bold;
+}
+
+input.form-control:focus {
+  border-color: #007bff; /* Focus color */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Focus shadow */
+}

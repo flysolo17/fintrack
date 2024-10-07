@@ -1,0 +1,8 @@
+.logo {
+  max-width: 40px; /* Adjust size based on your logo */
+  height: auto;
+}
+
+.sidebar .logo {
+  margin-right: 10px; /* Space between logo and title */
+}
