@@ -1,20 +1,24 @@
 <div
   class="container-fluid vh-100 d-flex align-items-center justify-content-center"
 >
-  <div class="card w-50">
-    <div class="card-header">
-      <h6>Login</h6>
+  <div class="text-center mb-4">
+    <img src="../../../assets/Icon_login.png" alt="Logo" class="logo" />
+  </div>
+  <div class="card w-50 shadow-lg">
+    <div class="card-header text-center">
+      <h6 class="text-uppercase">Login</h6>
     </div>
     <div class="card-body">
       <form class="w-100" [formGroup]="loginForm$" (submit)="login()">
-        <div class="mb-3">
+        <div class="mb-4">
           <label for="username" class="form-label">Username</label>
           <input
             type="text"
             class="form-control"
             id="username"
             formControlName="username"
-            placeholder="pedro029"
+            placeholder="Enter E-mail"
+            aria-describedby="usernameHelp"
           />
           <div
             *ngIf="
@@ -26,7 +30,7 @@
             Username is required and must be at least 3 characters long.
           </div>
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
           <label for="password" class="form-label">Password</label>
           <div class="input-group">
             <input
@@ -35,6 +39,7 @@
               id="password"
               formControlName="password"
               placeholder="*****"
+              aria-describedby="passwordHelp"
             />
             <button
               type="button"
@@ -54,7 +59,7 @@
             Password is required and must be at least 6 characters long.
           </div>
         </div>
-        <button class="btn btn-primary w-100" type="submit">Login</button>
+        <button class="btn btn-success w-100" type="submit">Login</button>
       </form>
     </div>
   </div>

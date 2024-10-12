@@ -1,0 +1,175 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Header Styling */
+header {
+  background-color: #fff;
+  padding: 20px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+  width: 85%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 40px;
+  margin-right: 10px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.signup-btn,
+.login-btn {
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.signup-btn {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #333;
+}
+
+.login-btn {
+  background-color: #52b788;
+  color: #fff;
+  border: none;
+}
+
+/* Hero Section */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 0;
+  background-color: #f1f7f1;
+}
+
+.left {
+  max-width: 50%;
+}
+
+.left h1 {
+  font-size: 36px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.left p {
+  font-size: 18px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.compare-offers {
+  background-color: #52b788;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.subtext {
+  color: #666;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.right {
+  max-width: 40%;
+}
+
+.quote-box {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.quote-box h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+.quote-box label {
+  font-size: 14px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+input[type="range"] {
+  width: 100%;
+  margin: 10px 0;
+}
+
+#amountValue {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.installments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.installments button {
+  background-color: #e9ecef;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.simulate-btn {
+  background-color: #52b788;
+  color: #fff;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
