@@ -1,0 +1,26 @@
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Collector Page</a>
+    <div class="d-flex">
+      <div ngbDropdown class="d-inline-block">
+        <button
+          type="button"
+          class="btn btn-dark"
+          id="loan-dropdown"
+          ngbDropdownToggle
+        >
+          Create a loan
+        </button>
+        <div
+          ngbDropdownMenu
+          class="dropdown-menu dropdown-menu-end"
+          aria-labelledby="loan-dropdown"
+        >
+          <button ngbDropdownItem (click)="createLoan()">New</button>
+
+          <button ngbDropdownItem>Previous Borrower</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

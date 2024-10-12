@@ -12,7 +12,7 @@ import {
   setDoc,
   where,
 } from '@angular/fire/firestore';
-import { userConverter, Users, UserType } from '../models/users';
+import { userConverter, Users, UserType } from '../models/accounts/users';
 import { EncryptionService } from './encryption.service';
 import { generateRandomString } from '../utils/Constants';
 import { User, user } from '@angular/fire/auth';
@@ -75,6 +75,7 @@ export class AuthService {
       return false;
     }
   }
+
   async createCollector(user: Users, file: File) {
     try {
       const encryptedPassword = this.encriptionService.encrypt(user.password);

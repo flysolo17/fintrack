@@ -6,11 +6,13 @@ export interface Users {
   middleName: string;
   lastName: string;
   profile: string | null;
+
   type: UserType;
   phone: string;
   email: string;
   username: string;
   password: string;
+
   createdAt: Date;
 }
 

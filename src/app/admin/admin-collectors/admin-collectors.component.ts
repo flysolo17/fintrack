@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateCollectorComponent } from '../modals/create-collector/create-collector.component';
 import { AuthService } from '../../services/auth.service';
 import { Observable } from 'rxjs';
-import { Users } from '../../models/users';
+import { Users } from '../../models/accounts/users';
 
 @Component({
   selector: 'app-admin-collectors',

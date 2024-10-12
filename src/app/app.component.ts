@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from './services/auth.service';
-import { Users } from './models/users';
+import { Users } from './models/accounts/users';
 
 @Component({
   selector: 'app-root',
