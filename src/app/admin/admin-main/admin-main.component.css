@@ -7,6 +7,7 @@
   margin-right: 10px; /* Space between logo and title */
 }
 .nav-link:hover {
-  background-color: #444;
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.5);
+  background-color: #3a3a3a !important;
+  color: #fff !important;
+  transition: background-color 0.3s ease;
 }

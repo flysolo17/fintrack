@@ -2,36 +2,22 @@
   <!-- Dashboard Title -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="text-white fw-bold" style="font-family: 'Poppins', sans-serif">
-      Fintrack Loan System Admin Dashboard
+      Collectors Dashboard
     </h2>
-
-    <button (click)="logout()" class="btn btn-danger">Logout</button>
+    <button class="btn btn-primary">Add New Collector</button>
   </div>
 
-  <!-- Dashboard Overview Cards with Icons -->
+  <!-- Collectors Overview Cards -->
   <div class="row g-4 mb-5">
     <div class="col-md-3">
       <div
-        class="card bg-warning shadow-sm p-3 d-flex flex-row align-items-center"
+        class="card bg-light shadow-sm p-3 d-flex flex-row align-items-center"
       >
-        <i class="fas fa-users fa-2x text-dark me-3"></i>
+        <i class="fas fa-user-friends fa-2x text-secondary me-3"></i>
         <!-- Icon -->
         <div>
-          <h6 class="text-dark">Total Borrowers</h6>
-          <h3 class="text-dark fw-bold">320</h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3">
-      <div
-        class="card bg-primary shadow-sm p-3 d-flex flex-row align-items-center"
-      >
-        <i class="fas fa-file-alt fa-2x text-dark me-3"></i>
-        <!-- Icon -->
-        <div>
-          <h6 class="text-dark">Active Loans</h6>
-          <h3 class="text-dark fw-bold">150</h3>
+          <h6 class="text-secondary">Total Collectors</h6>
+          <h3 class="text-dark fw-bold">25</h3>
         </div>
       </div>
     </div>
@@ -40,25 +26,24 @@
       <div
         class="card bg-light shadow-sm p-3 d-flex flex-row align-items-center"
       >
-        <i class="fas fa-clock fa-2x text-secondary me-3"></i>
+        <i class="fas fa-user-check fa-2x text-secondary me-3"></i>
         <!-- Icon -->
         <div>
-          <h6 class="text-secondary">Pending Loan Approvals</h6>
-          <h3 class="text-dark fw-bold">12</h3>
+          <h6 class="text-secondary">Active Collectors</h6>
+          <h3 class="text-dark fw-bold">20</h3>
         </div>
       </div>
     </div>
 
     <div class="col-md-3">
       <div
-        class="card bg-success shadow-sm p-3 d-flex flex-row align-items-center"
+        class="card bg-light shadow-sm p-3 d-flex flex-row align-items-center"
       >
-        <span class="text-dark me-3" style="font-size: 2rem">₱</span>
+        <span class="text-secondary me-3" style="font-size: 2rem">₱</span>
         <!-- Peso Symbol -->
-        <!-- Icon -->
         <div>
-          <h6 class="text-dark">Total Loan Amount</h6>
-          <h3 class="text-dark fw-bold">₱450,000</h3>
+          <h6 class="text-secondary">Total Collections</h6>
+          <h3 class="text-dark fw-bold">₱500,000</h3>
         </div>
       </div>
     </div>
@@ -67,20 +52,21 @@
       <div
         class="card bg-light shadow-sm p-3 d-flex flex-row align-items-center"
       >
-        <span class="text-dark me-3" style="font-size: 2rem">₱</span>
+        <i class="fas fa-calendar-check fa-2x text-secondary me-3"></i>
+        <!-- Icon -->
         <div>
-          <h6 class="text-secondary">Interest Earned</h6>
-          <h3 class="text-dark fw-bold">₱23,500</h3>
+          <h6 class="text-secondary">Collections Today</h6>
+          <h3 class="text-dark fw-bold">₱15,000</h3>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Loan Listings Table -->
+  <!-- Collectors List Table -->
   <div class="card shadow-sm">
     <div class="card-header bg-primary text-white">
       <h5 class="mb-0" style="font-family: 'Poppins', sans-serif">
-        Loan Listings
+        Collectors List
       </h5>
     </div>
     <div class="card-body">
@@ -88,11 +74,11 @@
         <thead class="table-dark">
           <tr>
             <th>ID</th>
-            <th>Borrower Name</th>
-            <th>Loan Type</th>
-            <th>Amount</th>
+            <th>Collector Name</th>
+            <th>Total Loans Collected</th>
+            <th>Total Amount Collected</th>
             <th>Status</th>
-            <th>Due Date</th>
+            <th>Last Collection Date</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -100,11 +86,11 @@
           <!-- Example Row -->
           <tr>
             <td>1</td>
-            <td>Jane Smith</td>
-            <td>Personal Loan</td>
-            <td>$10,000</td>
+            <td>John Doe</td>
+            <td>50</td>
+            <td>₱100,000</td>
             <td><span class="badge bg-success">Active</span></td>
-            <td>2024-12-30</td>
+            <td>2024-10-12</td>
             <td>
               <button class="btn btn-sm btn-warning">Edit</button>
               <button class="btn btn-sm btn-danger">Delete</button>
@@ -112,11 +98,11 @@
           </tr>
           <tr>
             <td>2</td>
-            <td>Michael Johnson</td>
-            <td>Car Loan</td>
-            <td>$20,000</td>
-            <td><span class="badge bg-warning">Pending</span></td>
-            <td>2025-01-15</td>
+            <td>Maria Garcia</td>
+            <td>30</td>
+            <td>₱60,000</td>
+            <td><span class="badge bg-warning">Inactive</span></td>
+            <td>2024-10-10</td>
             <td>
               <button class="btn btn-sm btn-warning">Edit</button>
               <button class="btn btn-sm btn-danger">Delete</button>

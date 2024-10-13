@@ -26,6 +26,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { AdminCollectorsComponent } from './admin/admin-collectors/admin-collectors.component';
 import { CreateCollectorComponent } from './admin/modals/create-collector/create-collector.component';
+import { CollectorDashboardComponent } from './collector-dashboard/collector-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,8 @@ import { CreateCollectorComponent } from './admin/modals/create-collector/create
     AdminDashboardComponent,
     AdminCollectorsComponent,
     CreateCollectorComponent,
+    CollectorDashboardComponent,
+    CollectorDashboardComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, NgbModule, ReactiveFormsModule],
   providers: [
