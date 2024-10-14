@@ -12,6 +12,8 @@ import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard
 import { AdminCollectorsComponent } from './admin/admin-collectors/admin-collectors.component';
 import { CollectorHomeComponent } from './collector/collector-home/collector-home.component';
 import { CreateLoanComponent } from './collector/create-loan/create-loan.component';
+import { CollectorDashboardComponent } from './collector-dashboard/collector-dashboard.component';
+import { LoanTypeComponent } from './admin/loan-type/loan-type.component';
 
 const routes: Routes = [
   {
@@ -64,6 +66,15 @@ const routes: Routes = [
         path: 'collectors',
         component: AdminCollectorsComponent,
       },
+
+      {
+        path: 'borrower',
+        component: BorrowerMainComponent,
+      },
+      {
+        path: 'loan-type',
+        component: LoanTypeComponent,
+      },
     ],
   },
   {
@@ -86,6 +97,20 @@ const routes: Routes = [
       {
         path: 'create-loan',
         component: CreateLoanComponent,
+      },
+    ],
+  },
+  {
+    path: 'collector',
+    component: CollectorMainComponent,
+    children: [
+      {
+        path: '',
+        component: CollectorDashboardComponent,
+      },
+      {
+        path: 'dashboard',
+        component: CollectorDashboardComponent,
       },
     ],
   },

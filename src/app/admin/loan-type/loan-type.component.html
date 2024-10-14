@@ -1,0 +1,29 @@
+<div class="d-flex align-items-center justify-content-between p-3">
+  <h5>Loan Type</h5>
+  <button class="btn btn-light" (click)="create()">Create Loan Type</button>
+</div>
+
+<table class="table p-3">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Loan Type</th>
+      <th scope="col">Description</th>
+      <th scope="col">Discount</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of loanType$ | async; index as index">
+      <th scope="row">{{ index + 1 }}</th>
+      <td>{{ data.name }}</td>
+      <td>{{ data.description }}</td>
+      <td>{{ data.discount }} %</td>
+      <td>
+        <button class="btn btn-danger" (click)="deleteLoanType(data.id)">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

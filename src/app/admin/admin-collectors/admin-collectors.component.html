@@ -1,6 +1,18 @@
 <div class="d-flex align-items-center justify-content-between p-3">
-  <h5 class="text-primary fw-bold">Collectors</h5>
-  <button class="btn btn-success" (click)="createCollector()">
+  <!-- Title with modern typography -->
+  <h5
+    class="text-primary fw-bold"
+    style="font-family: 'Poppins', sans-serif; font-size: 1.5rem"
+  >
+    Collectors
+  </h5>
+
+  <!-- Modern button with icon and hover effect -->
+  <button
+    class="btn btn-success d-flex align-items-center px-4 py-2"
+    (click)="createCollector()"
+    style="border-radius: 30px; transition: all 0.3s ease"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"
@@ -14,27 +26,39 @@
         d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"
       />
     </svg>
-    new
+    New Collector
   </button>
 </div>
 
-<div class="card m-3">
-  <div class="card-header bg-dark">
-    <div class="d-flex align-items-center justify-content-between">
-      <form class="d-flex" role="search">
-        <input
-          class="form-control me-2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-        />
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-    </div>
+<!-- Modern card for content -->
+<div class="card m-3 shadow-sm" style="border-radius: 15px; border: none">
+  <!-- Card header with search functionality -->
+  <div
+    class="card-header bg-dark text-white d-flex justify-content-between align-items-center"
+    style="border-radius: 15px 15px 0 0"
+  >
+    <form class="d-flex" role="search">
+      <input
+        class="form-control me-2"
+        type="search"
+        placeholder="Search"
+        aria-label="Search"
+        style="border-radius: 30px"
+      />
+      <button
+        class="btn btn-outline-success"
+        type="submit"
+        style="border-radius: 30px"
+      >
+        Search
+      </button>
+    </form>
   </div>
-  <div class="card-body">
-    <table class="table table-hover table-borderless">
-      <thead>
+
+  <!-- Card body with modern table design -->
+  <div class="card-body p-4">
+    <table class="table table-hover table-borderless align-middle">
+      <thead class="table-light">
         <tr>
           <th scope="col">#</th>
           <th scope="col">Fullname</th>
@@ -47,20 +71,23 @@
       <tbody>
         <tr *ngFor="let user of collector$ | async; index as i">
           <td>{{ i + 1 }}</td>
-          <th scope="row">
-            <div class="d-flex gap-2 align-items-center">
+          <td scope="row">
+            <div class="d-flex gap-3 align-items-center">
               <img
                 [src]="user.profile"
-                width="40px"
-                height="40px"
-                class="rounded-circle"
+                width="40"
+                height="40"
+                class="rounded-circle shadow-sm"
               />
-              <h6>
-                {{ user.firstName }} {{ user.middleName[0] }}.
-                {{ user.lastName }}
-              </h6>
+              <div>
+                <h6 class="mb-0" style="font-family: 'Poppins', sans-serif">
+                  {{ user.firstName }} {{ user.middleName[0] }}.
+                  {{ user.lastName }}
+                </h6>
+                <small class="text-muted">{{ user.email }}</small>
+              </div>
             </div>
-          </th>
+          </td>
           <td>{{ user.username }}</td>
           <td>{{ user.email }}</td>
           <td>{{ user.phone }}</td>

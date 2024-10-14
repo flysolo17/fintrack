@@ -1,1 +1,115 @@
+<<<<<<< HEAD
+<div class="container-fluid vh-100 overflow-hidden p-0">
+  <div class="d-flex h-100 overflow-hidden">
+    <!-- Sidebar -->
+    <div
+      class="sidebar bg-dark overflow-auto p-3"
+      style="width: 250px; background-color: #1a1a1a"
+    >
+      <!-- Logo and Title -->
+      <div class="w-100 d-flex align-items-center justify-content-center mb-4">
+        <img
+          src="../../../assets/Logo.png"
+          alt="Logo"
+          class="logo"
+          style="width: 50px; height: 50px"
+        />
+        <h4
+          class="text-white ms-2"
+          style="font-family: 'Poppins', sans-serif; font-weight: 400"
+        >
+          Collector Dashboard
+        </h4>
+      </div>
+
+      <!-- Nav Links with Box Style and Left-Aligned Text -->
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item mb-3">
+          <a
+            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
+            routerLink="dashboard"
+            routerLinkActive
+            style="
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+              transition: all 0.3s;
+            "
+          >
+            <i class="fas fa-tachometer-alt me-2"></i>
+            <span style="font-family: 'Poppins', sans-serif">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item mb-3">
+          <a
+            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
+            routerLink="daily-payment"
+            routerLinkActive
+            style="
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+              transition: all 0.3s;
+            "
+          >
+            <i class="fas fa-calendar-day me-2"></i>
+            <span style="font-family: 'Poppins', sans-serif"
+              >Record Payment</span
+            >
+          </a>
+        </li>
+        <li class="nav-item mb-3">
+          <a
+            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
+            routerLink="borrower"
+            routerLinkActive
+            style="
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+              transition: all 0.3s;
+            "
+          >
+            <i class="fas fa-user me-2"></i>
+            <span style="font-family: 'Poppins', sans-serif"
+              >Payment History</span
+            >
+          </a>
+        </li>
+        <li class="nav-item mb-3">
+          <a
+            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
+            routerLink="loan-plan"
+            routerLinkActive
+            style="
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+              transition: all 0.3s;
+            "
+          >
+            <i class="fas fa-file-alt me-2"></i>
+            <span style="font-family: 'Poppins', sans-serif">Performance</span>
+          </a>
+        </li>
+        <li class="nav-item mb-3">
+          <a
+            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
+            routerLink="users"
+            routerLinkActive
+            style="
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+              transition: all 0.3s;
+            "
+          >
+            <i class="fas fa-user-cog me-2"></i>
+            <span style="font-family: 'Poppins', sans-serif">Profile</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Main content -->
+    <div
+      class="flex-grow-1 overflow-auto"
+      style="background-color: #333; color: #eee"
+    >
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+=======
 <router-outlet></router-outlet>
+>>>>>>> master

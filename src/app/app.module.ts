@@ -26,9 +26,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { AdminCollectorsComponent } from './admin/admin-collectors/admin-collectors.component';
 import { CreateCollectorComponent } from './admin/modals/create-collector/create-collector.component';
+
 import { CreateLoanComponent } from './collector/create-loan/create-loan.component';
 import { CollectorHomeComponent } from './collector/collector-home/collector-home.component';
 import { ImagePickerComponent } from './utils/image-picker/image-picker.component';
+import { CollectorDashboardComponent } from './collector-dashboard/collector-dashboard.component';
+import { CreateLoanTypeComponent } from './admin/modals/create-loan-type/create-loan-type.component';
+import { LoanTypeComponent } from './admin/loan-type/loan-type.component';
 
 @NgModule({
   declarations: [
@@ -48,9 +52,12 @@ import { ImagePickerComponent } from './utils/image-picker/image-picker.componen
     AdminDashboardComponent,
     AdminCollectorsComponent,
     CreateCollectorComponent,
+    CollectorDashboardComponent,
     CreateLoanComponent,
     CollectorHomeComponent,
     ImagePickerComponent,
+    CreateLoanTypeComponent,
+    LoanTypeComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, NgbModule, ReactiveFormsModule],
   providers: [

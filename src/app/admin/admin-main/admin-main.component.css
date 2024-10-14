@@ -6,3 +6,8 @@
 .sidebar .logo {
   margin-right: 10px; /* Space between logo and title */
 }
+.nav-link:hover {
+  background-color: #3a3a3a !important;
+  color: #fff !important;
+  transition: background-color 0.3s ease;
+}
