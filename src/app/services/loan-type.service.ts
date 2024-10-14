@@ -11,8 +11,9 @@ import {
   updateDoc,
   where,
 } from '@angular/fire/firestore';
-import { loanTypeConverter, LoanTypes } from '../models/loans/loan-types';
+
 import { Observable } from 'rxjs';
+import { loanTypeConverter, LoanTypes } from '../models/loans/loan-types';
 
 export const LOAN_TYPE_COLLECTION = 'loan-types';
 @Injectable({
