@@ -31,6 +31,8 @@ import { CreateLoanComponent } from './collector/create-loan/create-loan.compone
 import { CollectorHomeComponent } from './collector/collector-home/collector-home.component';
 import { ImagePickerComponent } from './utils/image-picker/image-picker.component';
 import { CollectorDashboardComponent } from './collector-dashboard/collector-dashboard.component';
+import { CreateLoanTypeComponent } from './admin/modals/create-loan-type/create-loan-type.component';
+import { LoanTypeComponent } from './admin/loan-type/loan-type.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +56,8 @@ import { CollectorDashboardComponent } from './collector-dashboard/collector-das
     CreateLoanComponent,
     CollectorHomeComponent,
     ImagePickerComponent,
+    CreateLoanTypeComponent,
+    LoanTypeComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, NgbModule, ReactiveFormsModule],
   providers: [

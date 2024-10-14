@@ -1,0 +1,69 @@
+<div class="modal-header">
+  <h6 class="modal-title">Create Loan Type</h6>
+</div>
+<div class="modal-body">
+  <form [formGroup]="loanTypeForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input
+        type="text"
+        id="name"
+        class="form-control"
+        formControlName="name"
+      />
+      <div
+        *ngIf="
+          loanTypeForm.get('name')?.invalid && loanTypeForm.get('name')?.touched
+        "
+        class="text-danger"
+      >
+        Name is required.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea
+        id="description"
+        class="form-control"
+        formControlName="description"
+      ></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="discount" class="form-label">Discount</label>
+      <input
+        type="number"
+        id="discount"
+        class="form-control"
+        formControlName="discount"
+      />
+      <div
+        *ngIf="
+          loanTypeForm.get('discount')?.invalid &&
+          loanTypeForm.get('discount')?.touched
+        "
+        class="text-danger"
+      >
+        Discount must be a valid number.
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="activeModal.dismiss('Cancel click')"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="loanTypeForm.invalid"
+      >
+        Create
+      </button>
+    </div>
+  </form>
+</div>
