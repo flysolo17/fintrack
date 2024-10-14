@@ -58,6 +58,7 @@ export class CreateCollectorComponent {
       username: username,
       password: password,
       createdAt: new Date(),
+      identification: null,
     };
 
     try {

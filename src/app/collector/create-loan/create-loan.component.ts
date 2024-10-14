@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Users } from '../../models/accounts/users';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-create-loan',
@@ -10,9 +12,14 @@ import { ActivatedRoute } from '@angular/router';
 export class CreateLoanComponent implements OnInit {
   accountID: string | undefined;
   accountInfoForm$: FormGroup;
-
   loanDetailsForm$: FormGroup;
-  constructor(private route: ActivatedRoute, private fb: FormBuilder) {
+  collector$: Users | null;
+  constructor(
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private authService: AuthService
+  ) {
+    this.collector$ = authService.users$;
     this.accountInfoForm$ = fb.nonNullable.group({
       firstName: ['', Validators.required],
       middleName: ['', Validators.required],

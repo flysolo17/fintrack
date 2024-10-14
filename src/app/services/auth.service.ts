@@ -5,6 +5,7 @@ import {
   doc,
   docData,
   Firestore,
+  getDoc,
   getDocs,
   limit,
   orderBy,
@@ -28,11 +29,15 @@ export const AUTH_COLLECTION = 'users';
   providedIn: 'root',
 })
 export class AuthService {
+  users$: Users | null = null;
   constructor(
     private firestore: Firestore,
     private storage: Storage,
     private encriptionService: EncryptionService
   ) {}
+  setUser(user: Users | null) {
+    this.users$ = user;
+  }
 
   async login(username: string, password: string): Promise<Users | null> {
     const q = query(
@@ -119,5 +124,18 @@ export class AuthService {
       orderBy('createdAt', 'desc')
     );
     return collectionData(q);
+  }
+
+  getUserByID(uid: string): Observable<Users | null> {
+    const docRef = doc(this.firestore, AUTH_COLLECTION, uid).withConverter(
+      userConverter
+    );
+    return docData(docRef) as Observable<Users | null>;
+  }
+
+  getUserData(uid: string) {
+    return getDoc(
+      doc(this.firestore, AUTH_COLLECTION, uid).withConverter(userConverter)
+    );
   }
 }
