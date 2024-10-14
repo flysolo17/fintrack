@@ -1,0 +1,19 @@
+<div
+  class="image-dropzone"
+  (dragover)="onDragOver($event)"
+  (drop)="onDrop($event)"
+  (click)="onClick()"
+  [class.drag-hover]="isDragging"
+>
+  <input
+    type="file"
+    (change)="onFileSelected($event)"
+    hidden
+    #fileInput
+    accept="image/*"
+  />
+  <p *ngIf="!selectedImage">
+    Drag & drop an image here, or click to select one
+  </p>
+  <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected image" />
+</div>

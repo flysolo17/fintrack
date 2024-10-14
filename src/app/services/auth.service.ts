@@ -5,6 +5,7 @@ import {
   doc,
   docData,
   Firestore,
+  getDoc,
   getDocs,
   limit,
   orderBy,
@@ -12,7 +13,7 @@ import {
   setDoc,
   where,
 } from '@angular/fire/firestore';
-import { userConverter, Users, UserType } from '../models/users';
+import { userConverter, Users, UserType } from '../models/accounts/users';
 import { EncryptionService } from './encryption.service';
 import { generateRandomString } from '../utils/Constants';
 import { User, user } from '@angular/fire/auth';
@@ -28,11 +29,15 @@ export const AUTH_COLLECTION = 'users';
   providedIn: 'root',
 })
 export class AuthService {
+  users$: Users | null = null;
   constructor(
     private firestore: Firestore,
     private storage: Storage,
     private encriptionService: EncryptionService
   ) {}
+  setUser(user: Users | null) {
+    this.users$ = user;
+  }
 
   async login(username: string, password: string): Promise<Users | null> {
     const q = query(
@@ -75,6 +80,7 @@ export class AuthService {
       return false;
     }
   }
+
   async createCollector(user: Users, file: File) {
     try {
       const encryptedPassword = this.encriptionService.encrypt(user.password);
@@ -118,5 +124,18 @@ export class AuthService {
       orderBy('createdAt', 'desc')
     );
     return collectionData(q);
+  }
+
+  getUserByID(uid: string): Observable<Users | null> {
+    const docRef = doc(this.firestore, AUTH_COLLECTION, uid).withConverter(
+      userConverter
+    );
+    return docData(docRef) as Observable<Users | null>;
+  }
+
+  getUserData(uid: string) {
+    return getDoc(
+      doc(this.firestore, AUTH_COLLECTION, uid).withConverter(userConverter)
+    );
   }
 }

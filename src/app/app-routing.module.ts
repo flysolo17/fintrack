@@ -10,6 +10,8 @@ import { LoginComponent } from './auth/login/login.component';
 import { CollectorMainComponent } from './collector/collector-main/collector-main.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { AdminCollectorsComponent } from './admin/admin-collectors/admin-collectors.component';
+import { CollectorHomeComponent } from './collector/collector-home/collector-home.component';
+import { CreateLoanComponent } from './collector/create-loan/create-loan.component';
 import { CollectorDashboardComponent } from './collector-dashboard/collector-dashboard.component';
 
 const routes: Routes = [
@@ -78,7 +80,20 @@ const routes: Routes = [
   {
     path: 'collector',
     component: CollectorMainComponent,
-    children: [],
+    children: [
+      {
+        path: '',
+        component: CollectorHomeComponent,
+      },
+      {
+        path: 'home',
+        component: CollectorHomeComponent,
+      },
+      {
+        path: 'create-loan',
+        component: CreateLoanComponent,
+      },
+    ],
   },
   {
     path: 'collector',

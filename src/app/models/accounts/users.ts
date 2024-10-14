@@ -11,6 +11,7 @@ export interface Users {
   email: string;
   username: string;
   password: string;
+  identification: string | null;
   createdAt: Date;
 }
 

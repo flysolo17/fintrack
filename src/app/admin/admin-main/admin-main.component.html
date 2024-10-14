@@ -1,24 +1,9 @@
 <div class="container-fluid vh-100 overflow-hidden p-0">
   <div class="d-flex h-100 overflow-hidden">
-    <!-- Sidebar -->
-    <div
-      class="sidebar bg-dark overflow-auto p-3"
-      style="width: 250px; background-color: #1a1a1a"
-    >
-      <!-- Logo and Title -->
-      <div class="w-100 d-flex align-items-center justify-content-center mb-4">
-        <img
-          src="../../../assets/logo.png"
-          alt="Logo"
-          class="logo"
-          style="width: 50px; height: 50px"
-        />
-        <h4
-          class="text-white ms-2"
-          style="font-family: 'Poppins', sans-serif; font-weight: 400"
-        >
-          Fintrack
-        </h4>
+    <div class="sidebar bg-dark overflow-auto p-3" style="width: 250px">
+      <div class="w-100 d-flex align-items-center mb-3">
+        <img src="../../../assets/logo.png" alt="Logo" class="logo" />
+        <h4 class="text-white ms-2">Fintrack</h4>
       </div>
 
       <!-- Nav Links with Box Style and Left-Aligned Text -->
@@ -123,6 +108,11 @@
             <span style="font-family: 'Poppins', sans-serif"
               >Account Settings</span
             >
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()">
+            <i class="fas fa-users"></i> Logout
           </a>
         </li>
       </ul>

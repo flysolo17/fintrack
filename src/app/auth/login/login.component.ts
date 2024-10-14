@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserType } from '../../models/users';
+import { UserType } from '../../models/accounts/users';
 import { Router } from '@angular/router';
 
 @Component({
@@ -25,6 +25,7 @@ export class LoginComponent {
       password: ['', Validators.required],
     });
   }
+
   async login() {
     if (this.loginForm$.invalid) {
       alert('Invalid username or password');
@@ -35,24 +36,14 @@ export class LoginComponent {
     try {
       const user = await this.authService.login(username, password);
       if (user) {
+        localStorage.setItem('uid', user.id);
         alert('Login successful!');
-        this.navigateToMainPage(user.type);
       } else {
         alert('Invalid username or password');
       }
     } catch (error) {
       console.error('Login error:', error);
       alert('An error occurred during login. Please try again.');
-    }
-  }
-
-  navigateToMainPage(type: UserType) {
-    if (type == UserType.ADMIN) {
-      this.router.navigate(['admin']);
-    } else if (type == UserType.COLLECTOR) {
-      this.router.navigate(['collector']);
-    } else {
-      this.router.navigate(['borrower']);
     }
   }
 }

@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Users, UserType } from '../../../models/users';
+import { Users, UserType } from '../../../models/accounts/users';
 import { generateRandomString } from '../../../utils/Constants';
 
 @Component({
@@ -58,6 +58,7 @@ export class CreateCollectorComponent {
       username: username,
       password: password,
       createdAt: new Date(),
+      identification: null,
     };
 
     try {
