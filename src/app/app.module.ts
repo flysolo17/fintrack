@@ -47,7 +47,6 @@ import { CollectorDashboardComponent } from './collector-dashboard/collector-das
     AdminCollectorsComponent,
     CreateCollectorComponent,
     CollectorDashboardComponent,
-    CollectorDashboardComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, NgbModule, ReactiveFormsModule],
   providers: [
