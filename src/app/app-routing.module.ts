@@ -14,6 +14,11 @@ import { CollectorHomeComponent } from './collector/collector-home/collector-hom
 import { CreateLoanComponent } from './collector/create-loan/create-loan.component';
 import { CollectorDashboardComponent } from './collector-dashboard/collector-dashboard.component';
 import { LoanTypeComponent } from './admin/loan-type/loan-type.component';
+import { PaymentRecordComponent } from './collector/payment-record/payment-record.component';
+import { PaymentHistoryComponent } from './collector/payment-history/payment-history.component';
+import { PerformanceComponent } from './collector/performance/performance.component';
+import { ProfileComponent } from './auth/profile/profile.component';
+import { BorrowersComponent } from './collector/borrowers/borrowers.component';
 
 const routes: Routes = [
   {
@@ -95,22 +100,28 @@ const routes: Routes = [
         component: CollectorHomeComponent,
       },
       {
+        path: 'borrowers',
+        component: BorrowersComponent,
+      },
+      {
         path: 'create-loan',
         component: CreateLoanComponent,
       },
-    ],
-  },
-  {
-    path: 'collector',
-    component: CollectorMainComponent,
-    children: [
       {
-        path: '',
-        component: CollectorDashboardComponent,
+        path: 'record',
+        component: PaymentRecordComponent,
       },
       {
-        path: 'dashboard',
-        component: CollectorDashboardComponent,
+        path: 'history',
+        component: PaymentHistoryComponent,
+      },
+      {
+        path: 'performance',
+        component: PerformanceComponent,
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
       },
     ],
   },

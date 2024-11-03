@@ -1,0 +1,146 @@
+<!-- <div class="modal-header">
+  <h6 class="modal-title">Create Borrower Account</h6>
+</div>
+<div class="modal-body">
+  <div class="container-fluid p-3">
+    <div class="account-info">
+      <form
+        class="row g-3 p-3"
+        [formGroup]="accountInfoForm$"
+        (submit)="submitAccountInfo()"
+      >
+        <div class="col-md-12 text-center">
+          <h4 class="fw-bold">Account Info</h4>
+        </div>
+        <div class="col-md-4">
+          <label for="firstname" class="form-label">Firstname</label>
+          <input
+            type="text"
+            class="form-control"
+            id="firstname"
+            formControlName="firstName"
+          />
+        </div>
+
+        <div class="col-md-4">
+          <label for="middlename" class="form-label">Middlename</label>
+          <input
+            type="text"
+            class="form-control"
+            id="middlename"
+            formControlName="middleName"
+          />
+        </div>
+
+        <div class="col-md-4">
+          <label for="lastname" class="form-label">Lastname</label>
+          <input
+            type="text"
+            class="form-control"
+            id="lastname"
+            formControlName="lastName"
+          />
+        </div>
+        <div class="col-md-4">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="example@gmail.com"
+            formControlName="email"
+          />
+        </div>
+
+        <div class="col-md-4">
+          <label for="phone" class="form-label">Phone</label>
+          <input
+            type="tel"
+            class="form-control"
+            id="phone"
+            placeholder="09665656478"
+            formControlName="phone"
+          />
+        </div>
+        <div class="col-md-4">
+          <label for="username" class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            readonly
+            formControlName="username"
+          />
+        </div>
+
+        <div class="col-md-12 text-end">
+          <button
+            class="btn btn-primary"
+            [disabled]="accountInfoForm$.invalid"
+            type="submit"
+          >
+            Next
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="account-identification">
+      <div class="row g-3 p-3">
+        <div class="col-md-12 text-center p-3">
+          <h4>Borrower IDs</h4>
+        </div>
+        <div class="col-md-4">
+          <h6 class="mb-3">1x1 ID picture</h6>
+          <app-image-picker
+            [selectedImage]="null"
+            (onSelected)="uploadSelected($event)"
+          ></app-image-picker>
+        </div>
+        <div class="col-md-4">
+          <h6 class="mb-3">2 pieces of 1x1 pictures</h6>
+          <div class="d-flex gap-3">
+            <app-image-picker
+              [selectedImage]="null"
+              (onSelected)="uploadSelected($event)"
+            ></app-image-picker>
+            <app-image-picker
+              [selectedImage]="null"
+              (onSelected)="uploadSelected($event)"
+            ></app-image-picker>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <h6 class="mb-3">Xerox copy of any government-issued ID</h6>
+          <app-image-picker
+            [selectedImage]="null"
+            (onSelected)="uploadSelected($event)"
+          ></app-image-picker>
+        </div>
+        <div class="col-md-4">
+          <h6 class="mb-3">Barangay business permit (for sari-sari stores)</h6>
+          <app-image-picker
+            [selectedImage]="null"
+            (onSelected)="uploadSelected($event)"
+          ></app-image-picker>
+        </div>
+
+        <div class="col-md-4">
+          <h6 class="mb-3">Cedula</h6>
+          <app-image-picker
+            [selectedImage]="null"
+            (onSelected)="uploadSelected($event)"
+          ></app-image-picker>
+        </div>
+
+        <div class="col-md-4">
+          <h6 class="mb-3">Proof of OMECO bill</h6>
+          <app-image-picker
+            [selectedImage]="null"
+            (onSelected)="uploadSelected($event)"
+          ></app-image-picker>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->

@@ -1,10 +1,6 @@
 <div class="container-fluid p-3">
   <div class="account-info">
-    <form
-      class="row g-3 p-3"
-      [formGroup]="accountInfoForm$"
-      (submit)="submitAccountInfo()"
-    >
+    <form class="row g-3 p-3" [formGroup]="accountInfoForm$">
       <div class="col-md-12 text-center">
         <h4 class="fw-bold">Account Info</h4>
       </div>
@@ -68,16 +64,6 @@
           formControlName="username"
         />
       </div>
-
-      <div class="col-md-12 text-end">
-        <button
-          class="btn btn-primary"
-          [disabled]="accountInfoForm$.invalid"
-          type="submit"
-        >
-          Next
-        </button>
-      </div>
     </form>
   </div>
 
@@ -90,7 +76,7 @@
         <h6 class="mb-3">1x1 ID picture</h6>
         <app-image-picker
           [selectedImage]="null"
-          (onSelected)="uploadSelected($event)"
+          (onSelected)="uploadSelected($event, 0)"
         ></app-image-picker>
       </div>
       <div class="col-md-4">
@@ -98,11 +84,11 @@
         <div class="d-flex gap-3">
           <app-image-picker
             [selectedImage]="null"
-            (onSelected)="uploadSelected($event)"
+            (onSelected)="uploadSelected($event, 1)"
           ></app-image-picker>
           <app-image-picker
             [selectedImage]="null"
-            (onSelected)="uploadSelected($event)"
+            (onSelected)="uploadSelected($event, 2)"
           ></app-image-picker>
         </div>
       </div>
@@ -110,14 +96,14 @@
         <h6 class="mb-3">Xerox copy of any government-issued ID</h6>
         <app-image-picker
           [selectedImage]="null"
-          (onSelected)="uploadSelected($event)"
+          (onSelected)="uploadSelected($event, 3)"
         ></app-image-picker>
       </div>
       <div class="col-md-4">
         <h6 class="mb-3">Barangay business permit (for sari-sari stores)</h6>
         <app-image-picker
           [selectedImage]="null"
-          (onSelected)="uploadSelected($event)"
+          (onSelected)="uploadSelected($event, 4)"
         ></app-image-picker>
       </div>
 
@@ -125,7 +111,7 @@
         <h6 class="mb-3">Cedula</h6>
         <app-image-picker
           [selectedImage]="null"
-          (onSelected)="uploadSelected($event)"
+          (onSelected)="uploadSelected($event, 5)"
         ></app-image-picker>
       </div>
 
@@ -133,17 +119,66 @@
         <h6 class="mb-3">Proof of OMECO bill</h6>
         <app-image-picker
           [selectedImage]="null"
-          (onSelected)="uploadSelected($event)"
+          (onSelected)="uploadSelected($event, 6)"
         ></app-image-picker>
       </div>
     </div>
   </div>
 
   <div class="loan-details">
-    <form class="row g-3 p-3">
+    <form class="row g-3 p-3" [formGroup]="loanDetailsForm$">
       <div class="col-md-12 text-center p-3">
         <h4>Loan Details</h4>
       </div>
+      <div class="col-4">
+        <div class="form-floating mb-3">
+          <select class="form-select" id="type" formControlName="type">
+            <option selected [value]="null">--Select Loan Type--</option>
+            <option *ngFor="let type of loanTypes" [value]="type.id">
+              {{ type.name }} (<b>Interest - {{ type.interest }}%</b>)
+            </option>
+          </select>
+          <label for="type">Select Loan type</label>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="form-floating mb-3">
+          <input class="form-control" formControlName="amount" type="number" />
+          <label for="amount">Loan Amount</label>
+
+          <div class="form-text text-white">
+            Enter the desired loan amount (<b>₱ 1,700 - ₱ 2,000</b>)
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4">
+        <div class="form-floating mb-3">
+          <input class="form-control" formControlName="days" type="number" />
+          <label for="days">Payable Days</label>
+
+          <div class="form-text text-white">
+            (40 - 60) days to pay -
+            <b class="text-danger">{{ payableDays }}</b>
+          </div>
+        </div>
+      </div>
     </form>
+  </div>
+  <div
+    class="d-flex align-items-center justify-content-end p-3"
+    (click)="submitApplication()"
+  >
+    <button
+      class="btn btn-primary"
+      [disabled]="
+        loanDetailsForm$.invalid || accountInfoForm$.invalid || isLoading
+      "
+    >
+      <div *ngIf="isLoading" class="spinner-border me-3" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      {{ isLoading ? "Loading....." : "Submit Application" }}
+    </button>
   </div>
 </div>

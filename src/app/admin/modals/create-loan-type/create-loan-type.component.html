@@ -30,22 +30,24 @@
       ></textarea>
     </div>
 
-    <div class="mb-3">
-      <label for="discount" class="form-label">Discount</label>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon1">%</span>
+
       <input
         type="number"
         id="discount"
+        placeholder="Interest"
         class="form-control"
-        formControlName="discount"
+        formControlName="interest"
       />
       <div
         *ngIf="
-          loanTypeForm.get('discount')?.invalid &&
-          loanTypeForm.get('discount')?.touched
+          loanTypeForm.get('interest')?.invalid &&
+          loanTypeForm.get('interest')?.touched
         "
         class="text-danger"
       >
-        Discount must be a valid number.
+        Interest must be a valid number.
       </div>
     </div>
 

@@ -33,7 +33,14 @@ import { ImagePickerComponent } from './utils/image-picker/image-picker.componen
 import { CollectorDashboardComponent } from './collector-dashboard/collector-dashboard.component';
 import { CreateLoanTypeComponent } from './admin/modals/create-loan-type/create-loan-type.component';
 import { LoanTypeComponent } from './admin/loan-type/loan-type.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { ToastrModule } from 'ngx-toastr';
+import { PaymentRecordComponent } from './collector/payment-record/payment-record.component';
+import { PaymentHistoryComponent } from './collector/payment-history/payment-history.component';
+import { PerformanceComponent } from './collector/performance/performance.component';
+import { BorrowersComponent } from './collector/borrowers/borrowers.component';
+import { CreateBorrowerComponent } from './collector/modals/create-borrower/create-borrower.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,8 +65,20 @@ import { LoanTypeComponent } from './admin/loan-type/loan-type.component';
     ImagePickerComponent,
     CreateLoanTypeComponent,
     LoanTypeComponent,
+    PaymentRecordComponent,
+    PaymentHistoryComponent,
+    PerformanceComponent,
+    BorrowersComponent,
+    CreateBorrowerComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, NgbModule, ReactiveFormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    NgbModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+  ],
   providers: [
     provideFirebaseApp(() => initializeApp(environment)),
     provideAuth(() => getAuth()),

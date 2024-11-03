@@ -4,7 +4,7 @@ export interface LoanTypes {
   id: string;
   name: string;
   description: string;
-  discount: number;
+  interest: number;
   createdAt: Date;
   updatedAt: Date;
 }

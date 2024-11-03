@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <div class="container-fluid vh-100 overflow-hidden p-0">
   <div class="d-flex h-100 overflow-hidden">
     <!-- Sidebar -->
@@ -9,7 +8,7 @@
       <!-- Logo and Title -->
       <div class="w-100 d-flex align-items-center justify-content-center mb-4">
         <img
-          src="../../../assets/Logo.png"
+          src="../../../assets/logo.png"
           alt="Logo"
           class="logo"
           style="width: 50px; height: 50px"
@@ -27,7 +26,7 @@
         <li class="nav-item mb-3">
           <a
             class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
-            routerLink="dashboard"
+            routerLink="home"
             routerLinkActive
             style="
               box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -38,10 +37,25 @@
             <span style="font-family: 'Poppins', sans-serif">Dashboard</span>
           </a>
         </li>
+
         <li class="nav-item mb-3">
           <a
             class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
-            routerLink="daily-payment"
+            routerLink="borrowers"
+            routerLinkActive
+            style="
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+              transition: all 0.3s;
+            "
+          >
+            <i class="fa-solid fa-user-group"></i>
+            <span style="font-family: 'Poppins', sans-serif">Loans</span>
+          </a>
+        </li>
+        <li class="nav-item mb-3">
+          <a
+            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
+            routerLink="record"
             routerLinkActive
             style="
               box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -57,7 +71,7 @@
         <li class="nav-item mb-3">
           <a
             class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
-            routerLink="borrower"
+            routerLink="history"
             routerLinkActive
             style="
               box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -73,7 +87,7 @@
         <li class="nav-item mb-3">
           <a
             class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
-            routerLink="loan-plan"
+            routerLink="performance"
             routerLinkActive
             style="
               box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -87,7 +101,7 @@
         <li class="nav-item mb-3">
           <a
             class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
-            routerLink="users"
+            routerLink="profile"
             routerLinkActive
             style="
               box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -110,6 +124,3 @@
     </div>
   </div>
 </div>
-=======
-<router-outlet></router-outlet>
->>>>>>> master

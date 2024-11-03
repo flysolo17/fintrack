@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   collection,
   collectionData,
+  deleteDoc,
   doc,
   docData,
   Firestore,
@@ -133,9 +134,27 @@ export class AuthService {
     return docData(docRef) as Observable<Users | null>;
   }
 
-  getUserData(uid: string) {
-    return getDoc(
-      doc(this.firestore, AUTH_COLLECTION, uid).withConverter(userConverter)
-    );
+  async getUserData(uid: string): Promise<Users | null> {
+    try {
+      const docRef = doc(
+        collection(this.firestore, AUTH_COLLECTION).withConverter(
+          userConverter
+        ),
+        uid
+      );
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        return docSnap.data() as Users;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error('Error getting user data: ', error);
+      return null;
+    }
+  }
+
+  deleteCollector(uid: string) {
+    return deleteDoc(doc(this.firestore, AUTH_COLLECTION, uid));
   }
 }

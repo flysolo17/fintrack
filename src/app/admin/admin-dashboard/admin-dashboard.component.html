@@ -98,31 +98,47 @@
         </thead>
         <tbody>
           <!-- Example Row -->
-          <tr>
-            <td>1</td>
-            <td>Jane Smith</td>
-            <td>Personal Loan</td>
-            <td>$10,000</td>
-            <td><span class="badge bg-success">Active</span></td>
-            <td>2024-12-30</td>
+          <tr
+            *ngFor="
+              let loan of loanWithBorrowerAndCollector | async;
+              index as index
+            "
+          >
+            <td>{{ index + 1 }}</td>
             <td>
-              <button class="btn btn-sm btn-warning">Edit</button>
-              <button class="btn btn-sm btn-danger">Delete</button>
+              {{ loan.borrower?.firstName }} {{ loan.borrower?.lastName }}
+            </td>
+            <td>{{ loan.loan?.loanType }}</td>
+            <td>{{ loan.loan?.loanTotal | currency : "PHP" }}</td>
+            <td>
+              <span
+                class="badge text-white"
+                [ngClass]="{
+                  '  text-bg-danger ': loan.loan?.status === 'DECLINED',
+                  '  text-bg-warning': loan.loan?.status === 'PENDING',
+                  '  text-bg-success':
+                    loan.loan?.status === 'CONFIRMED' ||
+                    loan.loan?.status === 'PAID'
+                }"
+              >
+                {{ loan.loan?.status?.toLocaleLowerCase() }}
+              </span>
+            </td>
+            <td>
+              {{ loan.loan?.createdAt | date : "short" }}
+            </td>
+            <td>
+              <div class="d-flex gap-3" *ngIf="loan.loan?.status === 'PENDING'">
+                <button class="btn btn-sm btn-danger">Delete</button>
+                <button
+                  class="btn btn-sm btn-success"
+                  (click)="acceptLoan(loan)"
+                >
+                  Accep Loan
+                </button>
+              </div>
             </td>
           </tr>
-          <tr>
-            <td>2</td>
-            <td>Michael Johnson</td>
-            <td>Car Loan</td>
-            <td>$20,000</td>
-            <td><span class="badge bg-warning">Pending</span></td>
-            <td>2025-01-15</td>
-            <td>
-              <button class="btn btn-sm btn-warning">Edit</button>
-              <button class="btn btn-sm btn-danger">Delete</button>
-            </td>
-          </tr>
-          <!-- More rows can be dynamically added here -->
         </tbody>
       </table>
     </div>

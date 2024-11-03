@@ -4,6 +4,7 @@ import {
   generateRandomString,
 } from '../../utils/Constants';
 import { Router } from '@angular/router';
+import { LoanService } from '../../services/loan.service';
 
 @Component({
   selector: 'app-collector-home',
@@ -11,10 +12,11 @@ import { Router } from '@angular/router';
   styleUrl: './collector-home.component.css',
 })
 export class CollectorHomeComponent {
-  constructor(private router: Router) {}
   get randomAccountNumber(): string {
     return generateRandomNumber();
   }
+
+  constructor(private loanService: LoanService, private router: Router) {}
 
   createLoan() {
     const extras = {

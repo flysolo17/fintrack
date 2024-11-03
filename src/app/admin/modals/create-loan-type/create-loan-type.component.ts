@@ -21,7 +21,7 @@ export class CreateLoanTypeComponent {
     this.loanTypeForm = this.fb.group({
       name: ['', Validators.required],
       description: [''],
-      discount: [0, Validators.required],
+      interest: [0, Validators.required],
     });
   }
   onSubmit() {

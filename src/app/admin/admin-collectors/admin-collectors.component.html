@@ -41,6 +41,7 @@
       <input
         class="form-control me-2"
         type="search"
+        [formControl]="searchControl"
         placeholder="Search"
         aria-label="Search"
         style="border-radius: 30px"
@@ -103,7 +104,9 @@
               </button>
               <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                 <button ngbDropdownItem>View Profile</button>
-                <button ngbDropdownItem>Delete Collector</button>
+                <button ngbDropdownItem (click)="deleteColletor(user.id)">
+                  Delete Collector
+                </button>
                 <button ngbDropdownItem>Change Password</button>
               </div>
             </div>

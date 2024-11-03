@@ -1,4 +1,5 @@
 import { QueryDocumentSnapshot } from '@angular/fire/firestore';
+import { Identifications } from './Identifications';
 
 export interface Users {
   id: string;
@@ -11,7 +12,6 @@ export interface Users {
   email: string;
   username: string;
   password: string;
-  identification: string | null;
   createdAt: Date;
 }
 
