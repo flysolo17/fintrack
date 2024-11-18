@@ -13,16 +13,16 @@ import {
 } from '@angular/fire/firestore';
 
 import { Observable } from 'rxjs';
-import { loanTypeConverter, LoanTypes } from '../models/loans/loan-types';
+import { loanTypeConverter, ProductLoan } from '../models/loans/loan-types';
 
-export const LOAN_TYPE_COLLECTION = 'loan-types';
+export const LOAN_TYPE_COLLECTION = 'product-loan';
 @Injectable({
   providedIn: 'root',
 })
 export class LoanTypeService {
   constructor(private firestore: Firestore) {}
 
-  createLoanType(type: LoanTypes) {
+  createLoanType(type: ProductLoan) {
     return setDoc(
       doc(this.firestore, LOAN_TYPE_COLLECTION, type.id).withConverter(
         loanTypeConverter
@@ -30,7 +30,7 @@ export class LoanTypeService {
       type
     );
   }
-  getAllLoanTypes(): Observable<LoanTypes[]> {
+  getAllLoanTypes(): Observable<ProductLoan[]> {
     const q = query(
       collection(this.firestore, LOAN_TYPE_COLLECTION).withConverter(
         loanTypeConverter
@@ -41,7 +41,7 @@ export class LoanTypeService {
     return collectionData(q);
   }
 
-  updateLoanType(type: LoanTypes) {
+  updateLoanType(type: ProductLoan) {
     return updateDoc(
       doc(this.firestore, LOAN_TYPE_COLLECTION, type.id).withConverter(
         loanTypeConverter

@@ -1,10 +1,11 @@
 import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 
 export interface LoanHistory {
-  id: String;
+  id: string;
   borrowerID: string;
   loanID: string;
   message: string;
+  amount: number;
   createdAt: Date;
 }
 export const historyConverter = {
@@ -12,7 +13,6 @@ export const historyConverter = {
   fromFirestore: (snap: QueryDocumentSnapshot) => {
     const data = snap.data() as LoanHistory;
     data.createdAt = (data.createdAt as any).toDate();
-
     return data;
   },
 };

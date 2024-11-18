@@ -128,7 +128,7 @@
   <div class="loan-details">
     <form class="row g-3 p-3" [formGroup]="loanDetailsForm$">
       <div class="col-md-12 text-center p-3">
-        <h4>Loan Details</h4>
+        <h4>Loan Account Details</h4>
       </div>
       <div class="col-4">
         <div class="form-floating mb-3">
@@ -143,24 +143,24 @@
       </div>
       <div class="col-4">
         <div class="form-floating mb-3">
-          <input class="form-control" formControlName="amount" type="number" />
-          <label for="amount">Loan Amount</label>
-
-          <div class="form-text text-white">
-            Enter the desired loan amount (<b>₱ 1,700 - ₱ 2,000</b>)
-          </div>
+          <input
+            class="form-control"
+            formControlName="amount"
+            type="number"
+            readonly
+          />
+          <label for="amount">Starting Loan Amount</label>
         </div>
       </div>
-
       <div class="col-4">
         <div class="form-floating mb-3">
-          <input class="form-control" formControlName="days" type="number" />
+          <input
+            class="form-control"
+            formControlName="days"
+            type="number"
+            readonly
+          />
           <label for="days">Payable Days</label>
-
-          <div class="form-text text-white">
-            (40 - 60) days to pay -
-            <b class="text-danger">{{ payableDays }}</b>
-          </div>
         </div>
       </div>
     </form>

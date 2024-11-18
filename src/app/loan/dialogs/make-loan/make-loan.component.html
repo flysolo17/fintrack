@@ -1,0 +1,72 @@
+<div class="modal-header">
+  <h6 class="modal-title">Create a loan</h6>
+</div>
+<div class="modal-body">
+  <div class="row g-3">
+    <div class="col-8">
+      <h6>Loan Account ID</h6>
+      <span class="text-muted fw-normal">{{ loanAccount.id }}</span>
+      <h6>Borrower</h6>
+      <span class="text-muted">
+        {{ user.firstName }}
+        {{ user.lastName }}
+      </span>
+      <h6>Available Loan</h6>
+      <span class="text-muted">
+        {{ loanAccount.name }}-{{ loanAccount.amount | currency : "PHP" }} ({{
+          loanAccount.interest
+        }}% interest)
+      </span>
+    </div>
+    <div class="col-4">
+      <h6>Profile</h6>
+      <img
+        [src]="user.profile ?? '../../../assets/profile.png'"
+        alt="user profile"
+        width="80px"
+        height="80px"
+        class="rounded-circle"
+      />
+    </div>
+    <div class="col-12 p-3" *ngIf="amountControl">
+      <div class="form-floating">
+        <input
+          class="form-control"
+          id="amount"
+          type="number"
+          placeholder="1000"
+          [formControl]="amountControl"
+        />
+        <label for="amount">Loan amount</label>
+        <div
+          *ngIf="amountControl.invalid && amountControl.touched"
+          class="text-danger"
+        >
+          <small *ngIf="amountControl.hasError('required')"
+            >Amount is required.</small
+          >
+          <small *ngIf="amountControl.hasError('max')"
+            >Amount exceeds available loan.</small
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-outline-secondary" (click)="activeModal.close()">
+      Cancel
+    </button>
+    <button
+      class="btn btn-dark"
+      (click)="submitLoan()"
+      [disabled]="
+        amountControl?.invalid || amountControl?.value == 0 || loading$
+      "
+    >
+      <div class="spinner-border" role="status" *ngIf="loading$">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      Submit
+    </button>
+  </div>
+</div>

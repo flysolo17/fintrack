@@ -4,6 +4,10 @@ import {
   collectionData,
   doc,
   Firestore,
+  getDoc,
+  getDocs,
+  increment,
+  limit,
   orderBy,
   query,
   setDoc,
@@ -23,7 +27,7 @@ import {
 } from '../models/accounts/Identifications';
 import { userConverter, Users } from '../models/accounts/users';
 
-import { AUTH_COLLECTION, AuthService } from './auth.service';
+import { AUTH_COLLECTION, AuthService, LOAN_ACCOUNT } from './auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { historyConverter, LoanHistory } from '../models/loans/loan-history';
 import { loanConverter, Loans, LoanStatus } from '../models/loans/loan';
@@ -31,8 +35,10 @@ import { LOAN_HISTORY_COLLECTION } from './history.service';
 import { EncryptionService } from './encryption.service';
 import {
   catchError,
+  delay,
   forkJoin,
   from,
+  lastValueFrom,
   map,
   mergeMap,
   Observable,
@@ -41,6 +47,12 @@ import {
 } from 'rxjs';
 import { LoanWithUser } from '../models/loans/LoanWithUser';
 import { LoanWithBorrowerAndCollector } from '../models/loans/LoanWithUserAndCollector';
+import {
+  LoanAccount,
+  loanAccountConverter,
+} from '../models/accounts/LoanAccount';
+import { LoanWithUserAndDocuments } from '../models/loans/LoanWithUserAndDocuments';
+import { User } from '@angular/fire/auth';
 export const IDENTIFICATION_COLLECTION = 'identifications';
 export const LOANS_COLLECTION = 'loans';
 
@@ -56,198 +68,94 @@ export class LoanService {
     private encryptionService: EncryptionService
   ) {}
 
-  acceptLoan(loan: LoanWithBorrowerAndCollector) {
+  acceptLoan(loan: Loans, history: LoanHistory, loanWithoutInterest: number) {
     const batch = writeBatch(this.firestore);
-    let loanRef = doc(
-      collection(this.firestore, LOANS_COLLECTION).withConverter(loanConverter),
-      loan.loan?.id
-    );
-
-    let historyID = generateRandomNumber(12);
-    let history: LoanHistory = {
-      id: historyID,
-      borrowerID: loan.borrower?.id ?? '',
-      loanID: loan.loan?.id ?? '',
-      message: `Congratulations ${loan.borrower?.firstName}! Your loan request for an amount of ${loan.loan?.amount} has been approved. We are excited to assist you with your financial needs!`,
-      createdAt: new Date(),
-    };
-
-    let historyRef = doc(
-      collection(this.firestore, LOAN_HISTORY_COLLECTION).withConverter(
-        historyConverter
+    const loanAccountRef = doc(
+      collection(this.firestore, LOAN_ACCOUNT).withConverter(
+        loanAccountConverter
       ),
-      historyID
+      loan.loanAccountID
     );
 
-    batch.set(historyRef, history);
-
-    batch.update(loanRef, {
-      status: LoanStatus.CONFIRMED,
+    batch.update(loanAccountRef, {
+      amount: increment(-loanWithoutInterest),
     });
-
-    return batch.commit();
-  }
-
-  getAllLoans(uid: string): Observable<LoanWithUser[]> {
-    const loanRef = collection(this.firestore, LOANS_COLLECTION).withConverter(
-      loanConverter
-    );
-    const q = query(
-      loanRef,
-      where('collectorID', '==', uid),
-      orderBy('createdAt', 'desc')
-    );
-    return collectionData(q).pipe(
-      switchMap((loans) =>
-        from(
-          Promise.all(
-            loans.map(async (loan) => {
-              const user = await this.authService.getUserData(loan.borrowerID);
-              return { loan, users: user };
-            })
-          )
-        )
-      )
-    );
-  }
-
-  getLoanWithBorrowerAndCollector(): Observable<
-    LoanWithBorrowerAndCollector[]
-  > {
-    const loanRef = collection(this.firestore, LOANS_COLLECTION).withConverter(
-      loanConverter
-    );
-    const q = query(loanRef, orderBy('createdAt', 'desc'));
-
-    return collectionData(q).pipe(
-      switchMap((loans) =>
-        from(
-          Promise.all(
-            loans.map(async (loan) => {
-              const borrower = await this.authService.getUserData(
-                loan.borrowerID
-              );
-              const collector = await this.authService.getUserData(
-                loan.collectorID
-              );
-              return { loan, collector: collector, borrower: borrower };
-            })
-          )
-        )
-      )
-    );
-  }
-
-  async saveIdentifications(uid: string, files: any[]) {
-    let identification: Identifications = {
-      accountID: uid,
-      first_id: null,
-      secound_id: null,
-      third_id: null,
-      gov_id: null,
-      cedula: null,
-      omeco_bill: null,
-      barangay_permit: null,
-    };
-
-    const uploadPromises = files.map(async (file, index) => {
-      var downloadURL = null;
-      if (file != null) {
-        downloadURL = await this.uploadID(uid, file);
-      }
-      switch (index) {
-        case 0:
-          identification.first_id = downloadURL;
-          break;
-        case 1:
-          identification.secound_id = downloadURL;
-          break;
-        case 2:
-          identification.third_id = downloadURL;
-          break;
-        case 3:
-          identification.gov_id = downloadURL;
-          break;
-        case 4:
-          identification.barangay_permit = downloadURL;
-          break;
-        case 5:
-          identification.cedula = downloadURL;
-          break;
-        case 6:
-          identification.omeco_bill = downloadURL;
-          break;
-        default:
-          console.warn(`Unexpected file index: ${index}`);
-      }
-    });
-
-    // Wait for all uploads to complete
-    await Promise.all(uploadPromises);
-
-    return identification;
-  }
-
-  async uploadID(uid: string, file: File) {
-    try {
-      const fireRef = ref(this.storage, `${uid}/${generateRandomNumber()}`);
-      await uploadBytes(fireRef, file);
-      const downloadURL = await getDownloadURL(fireRef);
-      return downloadURL;
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      throw error;
-    }
-  }
-
-  async createLoan(users: Users, loan: Loans, identifications: any[]) {
-    let isExist = await this.authService.checkUserIfExists(users.username);
-    if (isExist) {
-      this.toastr.error('User exists');
-      return;
-    }
-    const encryptedPassword = this.encryptionService.encrypt(users.password);
-    users.password = encryptedPassword;
-    let batch = writeBatch(this.firestore);
-    let identificationRef = doc(
-      collection(this.firestore, IDENTIFICATION_COLLECTION).withConverter(
-        identificationConverter
-      ),
-      users.id
-    );
-    let identification = await this.saveIdentifications(
-      users.id,
-      identifications
-    );
-    batch.set(identificationRef, identification);
-    let userRef = doc(
-      collection(this.firestore, AUTH_COLLECTION).withConverter(userConverter),
-      users.id
-    );
-
-    batch.set(userRef, users);
-    let historyID = generateRandomNumber(12);
-    let history: LoanHistory = {
-      id: historyID,
-      borrowerID: users.id,
-      loanID: loan.id,
-      message: `${users.username} requested a loan amount ${loan.amount}.`,
-      createdAt: new Date(),
-    };
-    let historyRef = doc(
-      collection(this.firestore, LOAN_HISTORY_COLLECTION).withConverter(
-        historyConverter
-      ),
-      historyID
-    );
-    batch.set(historyRef, history);
-
     let loanRef = doc(
       collection(this.firestore, LOANS_COLLECTION).withConverter(loanConverter),
       loan.id
     );
+
+    let historyRef = doc(
+      collection(this.firestore, LOAN_HISTORY_COLLECTION).withConverter(
+        historyConverter
+      ),
+      history.id
+    );
+
+    batch.set(historyRef, history);
+
     batch.set(loanRef, loan);
 
     return batch.commit();
+  }
+
+  async viewLoanAccount(id: string): Promise<LoanWithUserAndDocuments> {
+    const userRef = query(
+      collection(this.firestore, AUTH_COLLECTION).withConverter(userConverter),
+      where('username', '==', id),
+      limit(1)
+    );
+
+    const loanAccountRef = doc(this.firestore, LOAN_ACCOUNT, id).withConverter(
+      loanAccountConverter
+    );
+
+    const documentsRef = doc(
+      this.firestore,
+      IDENTIFICATION_COLLECTION,
+      id
+    ).withConverter(identificationConverter);
+
+    const userSnapshot = await getDocs(userRef);
+    const user = !userSnapshot.empty
+      ? (userSnapshot.docs[0].data() as Users)
+      : null;
+
+    const loanAccountSnapshot = await getDoc(loanAccountRef);
+    const loanAccount = loanAccountSnapshot.exists()
+      ? (loanAccountSnapshot.data() as LoanAccount)
+      : null;
+
+    const documentSnapshot = await getDoc(documentsRef);
+    const document = documentSnapshot.exists()
+      ? (documentSnapshot.data() as Identifications)
+      : null;
+
+    let data: LoanWithUserAndDocuments = {
+      user: user,
+      document: document,
+      loanAccount: loanAccount,
+    };
+    return data;
+  }
+  getHistory(id: string): Observable<LoanHistory[]> {
+    const historyQuery = query(
+      collection(this.firestore, LOAN_HISTORY_COLLECTION).withConverter(
+        historyConverter
+      ),
+      where('borrowerID', '==', id),
+      orderBy('createdAt', 'desc')
+    );
+    return collectionData(historyQuery);
+  }
+
+  getActiveLoans(id: string): Observable<Loans[]> {
+    const loanQuery = query(
+      collection(this.firestore, LOANS_COLLECTION).withConverter(loanConverter),
+      where('loanAccountID', '==', id),
+      where('status', '==', LoanStatus.CONFIRMED),
+      orderBy('createdAt', 'desc')
+    );
+    return collectionData(loanQuery);
   }
 }

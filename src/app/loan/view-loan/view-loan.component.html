@@ -1,0 +1,108 @@
+<div
+  *ngIf="data$ != null && !loading$"
+  class="container-fluid h-100 overflow-auto p-3"
+>
+  <div class="d-flex h-100 align-items-strech gap-2">
+    <div class="w-25 overflow-auto bg-white rounded-3 p-3">
+      <div class="d-flex gap-3">
+        <img
+          [src]="data$.user?.profile ?? '../../../assets/profile.png'"
+          class="rounded-circle"
+          width="80px"
+          height="80px"
+        />
+        <div>
+          <h6 class="text-dark">
+            {{ data$.user?.lastName }} {{ data$.user?.firstName }}
+            {{ data$.user?.middleName }}
+          </h6>
+          <span class="text-muted">{{ data$.user?.username }} </span>
+
+          <h6 class="text-dark">
+            Available Loan : {{ data$.loanAccount?.amount | currency : "PHP" }}
+          </h6>
+        </div>
+      </div>
+    </div>
+    <div class="w-75 overflow-auto bg-white rounded-3 p-3">
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="text-dark">Active Loans</h5>
+        <button
+          class="btn btn-dark"
+          (click)="createLoan(data$.user!!, data$.loanAccount!)"
+        >
+          Make a loan
+        </button>
+      </div>
+      <div class="row mb-3">
+        <div class="col" *ngFor="let loans of activeLoans$ | async">
+          <div class="card" style="width: 400px">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-6">
+                  <span class="text-muted">Loan ID</span>
+                  <h6>{{ loans.id }}</h6>
+                </div>
+                <div class="col-6">
+                  <span class="text-muted">Amount</span>
+                  <h6>{{ loans.amount | currency : "PHP" }}</h6>
+                </div>
+                <div class="col-6">
+                  <span class="text-muted">Interest </span>
+                  <h6>{{ loans.interest }} %</h6>
+                </div>
+                <div class="col-6">
+                  <span class="text-muted">Amount Paid </span>
+                  <h6>
+                    {{ loans.amountPaid }} / {{ loans.paymentSchedule.days }}
+                  </h6>
+                </div>
+                <div class="col-12">
+                  <span class="text-muted">Payment Schedule </span>
+                  <h6>
+                    {{ loans.paymentSchedule.startgDate | date : "short" }} -
+                    {{ loans.paymentSchedule.endDate | date : "short" }}
+                  </h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="text-dark">Loan History</h5>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" *ngFor="let history of histories$ | async">
+          <div class="d-flex gap-2 w-100 p-2 align-items-center">
+            <div class="flex-grow-1">
+              <p class="p-0 m-0">{{ history.message }}</p>
+              <span class="text-muted">{{
+                history.createdAt | date : "long"
+              }}</span>
+            </div>
+            <h6>
+              {{ history.amount | currency : "PHP" }}
+            </h6>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div
+  *ngIf="data$ == null && !loading$"
+  class="h-100 d-flex align-items-center justify-content-center"
+>
+  <h5 class="text-white">Loan Data not found!</h5>
+</div>
+
+<div
+  *ngIf="loading$"
+  class="d-flex align-items-center flex-column gap-3 justify-content-center h-100"
+>
+  <div class="spinner-border text-white" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  <h5>Getting loan account data..</h5>
+</div>

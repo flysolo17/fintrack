@@ -1,20 +1,20 @@
 import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 
-export interface ProductLoan {
+export interface LoanAccount {
   id: string;
+  productLoanID: string;
   name: string;
-  description: string;
-  startingAmount: number;
+  amount: number;
   interest: number;
+  creditScore: number;
   payableDays: number;
   createdAt: Date;
   updatedAt: Date;
 }
-
-export const loanTypeConverter = {
-  toFirestore: (data: ProductLoan) => data,
+export const loanAccountConverter = {
+  toFirestore: (data: LoanAccount) => data,
   fromFirestore: (snap: QueryDocumentSnapshot) => {
-    const data = snap.data() as ProductLoan;
+    const data = snap.data() as LoanAccount;
     data.createdAt = (data.createdAt as any).toDate();
     data.updatedAt = (data.updatedAt as any).toDate();
     return data;

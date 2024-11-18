@@ -27,7 +27,7 @@ import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard
 import { AdminCollectorsComponent } from './admin/admin-collectors/admin-collectors.component';
 import { CreateCollectorComponent } from './admin/modals/create-collector/create-collector.component';
 
-import { CreateLoanComponent } from './collector/create-loan/create-loan.component';
+import { CreateLoanComponent } from './loan/create-loan/create-loan.component';
 import { CollectorHomeComponent } from './collector/collector-home/collector-home.component';
 import { ImagePickerComponent } from './utils/image-picker/image-picker.component';
 import { CollectorDashboardComponent } from './collector-dashboard/collector-dashboard.component';
@@ -39,8 +39,12 @@ import { ToastrModule } from 'ngx-toastr';
 import { PaymentRecordComponent } from './collector/payment-record/payment-record.component';
 import { PaymentHistoryComponent } from './collector/payment-history/payment-history.component';
 import { PerformanceComponent } from './collector/performance/performance.component';
-import { BorrowersComponent } from './collector/borrowers/borrowers.component';
+import { BorrowersComponent } from './loan/borrowers/borrowers.component';
 import { CreateBorrowerComponent } from './collector/modals/create-borrower/create-borrower.component';
+import { LoanPlanComponent } from './admin/loan-plan/loan-plan.component';
+import { ViewLoanComponent } from './loan/view-loan/view-loan.component';
+import { MakeLoanComponent } from './loan/dialogs/make-loan/make-loan.component';
+import { ConfirmLoanComponent } from './loan/dialogs/confirm-loan/confirm-loan.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -70,6 +74,10 @@ import { CreateBorrowerComponent } from './collector/modals/create-borrower/crea
     PerformanceComponent,
     BorrowersComponent,
     CreateBorrowerComponent,
+    LoanPlanComponent,
+    ViewLoanComponent,
+    MakeLoanComponent,
+    ConfirmLoanComponent,
   ],
   imports: [
     BrowserModule,

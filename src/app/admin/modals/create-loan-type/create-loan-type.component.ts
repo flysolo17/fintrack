@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoanTypeService } from '../../../services/loan-type.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { LoanTypes } from '../../../models/loans/loan-types';
+import { ProductLoan } from '../../../models/loans/loan-types';
 import { generateRandomString } from '../../../utils/Constants';
 
 @Component({
@@ -21,14 +21,17 @@ export class CreateLoanTypeComponent {
     this.loanTypeForm = this.fb.group({
       name: ['', Validators.required],
       description: [''],
+      startingAmount: [0, Validators.required],
+      payableDays: [40, [Validators.required, Validators.min(40)]],
       interest: [0, Validators.required],
     });
   }
   onSubmit() {
     if (this.loanTypeForm.valid) {
-      const newLoanType: LoanTypes = {
+      const newLoanType: ProductLoan = {
         id: generateRandomString(10),
         ...this.loanTypeForm.value,
+
         createdAt: new Date(),
         updatedAt: new Date(),
       };

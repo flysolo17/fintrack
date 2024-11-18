@@ -1,0 +1,90 @@
+<div class="container-fluid p-3 h-100">
+  <div class="d-flex align-items-center p-3 justify-content-between">
+    <h5>Borrowers</h5>
+  </div>
+
+  <div class="container-fluid rounded-3 p-3 bg-white">
+    <div class="d-flex align-items-center justify-content-between">
+      <div
+        class="w-25 p-2 bg-secondary-subtle rounded-pill d-flex gap-3 align-items-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-search"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
+          />
+        </svg>
+        <input
+          class="flex-grow-1 border-0 bg-transparent"
+          placeholder="Search Components..."
+        />
+      </div>
+
+      <div class="d-flex gap-2">
+        <button class="btn btn-dark" (click)="createLoan()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-plus me-1"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"
+            />
+          </svg>
+          New
+        </button>
+      </div>
+    </div>
+    <table class="table table-borderless table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Loan Account</th>
+          <th scope="col">User</th>
+          <th scope="col">Type</th>
+
+          <th scope="col">Interest</th>
+          <th scope="col">Active Loan</th>
+          <th scope="col">Available Loan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let user of loans$"
+          (click)="makeAloan(user.loanAccount?.id ?? '')"
+        >
+          <td>{{ user.loanAccount?.id }}</td>
+          <td>
+            <div class="d-flex align-items-center gap-2 w-100">
+              <img
+                [src]="user.user?.profile ?? '../../../assets/profile.png'"
+                alt="user profile"
+                width="32px"
+                height="32px"
+                class="rounded-circle"
+              />
+              <span>
+                {{ user?.user?.firstName }}
+                {{ user.user?.lastName }}
+              </span>
+            </div>
+          </td>
+          <td>
+            {{ user.loanAccount?.name }}
+          </td>
+          <td>{{ user.loanAccount?.interest }}%</td>
+          <td>0</td>
+          <td>{{ user.loanAccount?.amount | currency : "PHP" }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

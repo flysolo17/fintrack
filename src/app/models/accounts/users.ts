@@ -27,5 +27,5 @@ export const userConverter = {
 export enum UserType {
   ADMIN = 'ADMIN',
   COLLECTOR = 'COLLECTOR',
-  BORROWWER = 'BORROWWER',
+  BORROWER = 'BORROWER',
 }

@@ -3,14 +3,16 @@
 </div>
 <div class="modal-body">
   <form [formGroup]="loanTypeForm" (ngSubmit)="onSubmit()">
-    <div class="mb-3">
-      <label for="name" class="form-label">Name</label>
+    <div class="form-floating mb-3">
       <input
         type="text"
-        id="name"
         class="form-control"
+        id="name"
         formControlName="name"
+        placeholder="Name"
+        required
       />
+      <label for="name">Name</label>
       <div
         *ngIf="
           loanTypeForm.get('name')?.invalid && loanTypeForm.get('name')?.touched
@@ -20,26 +22,66 @@
         Name is required.
       </div>
     </div>
-
-    <div class="mb-3">
-      <label for="description" class="form-label">Description</label>
-      <textarea
-        id="description"
+    <div class="form-floating mb-3">
+      <input
+        type="text"
         class="form-control"
+        id="description"
         formControlName="description"
-      ></textarea>
+        placeholder="Description"
+      />
+      <label for="description">Description</label>
     </div>
-
-    <div class="input-group mb-3">
-      <span class="input-group-text" id="basic-addon1">%</span>
-
+    <div class="form-floating mb-3">
       <input
         type="number"
-        id="discount"
-        placeholder="Interest"
         class="form-control"
-        formControlName="interest"
+        id="startingAmount"
+        formControlName="startingAmount"
+        placeholder="Starting Amount"
+        required
       />
+      <label for="startingAmount">Starting Amount</label>
+      <div
+        *ngIf="
+          loanTypeForm.get('startingAmount')?.invalid &&
+          loanTypeForm.get('startingAmount')?.touched
+        "
+        class="text-danger"
+      >
+        Starting amount is required.
+      </div>
+    </div>
+    <div class="form-floating mb-3">
+      <input
+        type="number"
+        class="form-control"
+        id="payableDays"
+        formControlName="payableDays"
+        placeholder="Payable Days"
+        required
+      />
+      <label for="payableDays">Payable Days</label>
+      <div
+        *ngIf="
+          loanTypeForm.get('payableDays')?.invalid &&
+          loanTypeForm.get('payableDays')?.touched
+        "
+        class="text-danger"
+      >
+        Payable days must be at least 40.
+      </div>
+    </div>
+    <div class="form-floating mb-3">
+      <input
+        type="number"
+        class="form-control"
+        id="interest"
+        formControlName="interest"
+        placeholder="Interest"
+        required
+      />
+      <label for="interest">Interest (%)</label>
       <div
         *ngIf="
           loanTypeForm.get('interest')?.invalid &&
@@ -47,25 +89,15 @@
         "
         class="text-danger"
       >
-        Interest must be a valid number.
+        Interest is required.
       </div>
     </div>
-
-    <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-light"
-        (click)="activeModal.dismiss('Cancel click')"
-      >
-        Cancel
-      </button>
-      <button
-        type="submit"
-        class="btn btn-primary"
-        [disabled]="loanTypeForm.invalid"
-      >
-        Create
-      </button>
-    </div>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="loanTypeForm.invalid"
+    >
+      Create
+    </button>
   </form>
 </div>

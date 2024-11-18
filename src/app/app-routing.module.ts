@@ -11,14 +11,16 @@ import { CollectorMainComponent } from './collector/collector-main/collector-mai
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { AdminCollectorsComponent } from './admin/admin-collectors/admin-collectors.component';
 import { CollectorHomeComponent } from './collector/collector-home/collector-home.component';
-import { CreateLoanComponent } from './collector/create-loan/create-loan.component';
+import { CreateLoanComponent } from './loan/create-loan/create-loan.component';
 import { CollectorDashboardComponent } from './collector-dashboard/collector-dashboard.component';
 import { LoanTypeComponent } from './admin/loan-type/loan-type.component';
 import { PaymentRecordComponent } from './collector/payment-record/payment-record.component';
 import { PaymentHistoryComponent } from './collector/payment-history/payment-history.component';
 import { PerformanceComponent } from './collector/performance/performance.component';
 import { ProfileComponent } from './auth/profile/profile.component';
-import { BorrowersComponent } from './collector/borrowers/borrowers.component';
+import { BorrowersComponent } from './loan/borrowers/borrowers.component';
+import { LoanPlanComponent } from './admin/loan-plan/loan-plan.component';
+import { ViewLoanComponent } from './loan/view-loan/view-loan.component';
 
 const routes: Routes = [
   {
@@ -73,8 +75,21 @@ const routes: Routes = [
       },
 
       {
-        path: 'borrower',
-        component: BorrowerMainComponent,
+        path: 'borrowers',
+        component: BorrowersComponent,
+      },
+      {
+        path: 'borrowers/:id',
+        component: ViewLoanComponent,
+      },
+      {
+        path: 'create-loan',
+        component: CreateLoanComponent,
+      },
+
+      {
+        path: 'loan-plan',
+        component: LoanPlanComponent,
       },
       {
         path: 'loan-type',
@@ -102,6 +117,10 @@ const routes: Routes = [
       {
         path: 'borrowers',
         component: BorrowersComponent,
+      },
+      {
+        path: 'borrowers/:id',
+        component: ViewLoanComponent,
       },
       {
         path: 'create-loan',

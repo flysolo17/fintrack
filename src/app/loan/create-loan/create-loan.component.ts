@@ -4,15 +4,19 @@ import { ActivatedRoute } from '@angular/router';
 import { Users, UserType } from '../../models/accounts/users';
 import { AuthService } from '../../services/auth.service';
 import { LoanTypeService } from '../../services/loan-type.service';
-import { BorrowerStatus, Loans, LoanStatus } from '../../models/loans/loan';
+import { Loans, LoanStatus } from '../../models/loans/loan';
 import { LoanService } from '../../services/loan.service';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { Location } from '@angular/common';
-import { LoanTypes } from '../../models/loans/loan-types';
+import { ProductLoan } from '../../models/loans/loan-types';
 import {
   generateRandomNumber,
   generateRandomString,
 } from '../../utils/Constants';
+import {
+  LoanAccount,
+  loanAccountConverter,
+} from '../../models/accounts/LoanAccount';
 
 @Component({
   selector: 'app-create-loan',
@@ -25,7 +29,7 @@ export class CreateLoanComponent implements OnInit {
   loanDetailsForm$: FormGroup;
   collector$: Users | null;
   selectedFiles: any[] = [null, null, null, null, null, null, null];
-  loanTypes: LoanTypes[] = [];
+  loanTypes: ProductLoan[] = [];
   isLoading = false;
   constructor(
     private route: ActivatedRoute,
@@ -46,13 +50,10 @@ export class CreateLoanComponent implements OnInit {
       username: ['', Validators.required],
     });
 
-    this.loanDetailsForm$ = fb.nonNullable.group({
-      amount: [
-        1700,
-        [Validators.required, Validators.min(1700), Validators.max(2000)],
-      ],
-      type: [null, [Validators.required]],
-      days: [40, [Validators.required, Validators.min(40), Validators.max(60)]],
+    this.loanDetailsForm$ = this.fb.group({
+      type: [null],
+      amount: [{ value: '', disabled: true }],
+      days: [{ value: '', disabled: true }],
     });
   }
   ngOnInit(): void {
@@ -63,8 +64,25 @@ export class CreateLoanComponent implements OnInit {
       this.accountID = params['account'];
       this.accountInfoForm$.controls['username'].setValue(this.accountID);
     });
+    this.loanDetailsForm$.get('type')?.valueChanges.subscribe((selectedId) => {
+      this.updateLoanDetails(selectedId);
+    });
   }
-
+  updateLoanDetails(selectedId: string) {
+    const selectedLoan = this.loanTypes.find((loan) => loan.id === selectedId);
+    if (selectedLoan) {
+      this.loanDetailsForm$.patchValue({
+        amount: selectedLoan.startingAmount,
+        days: selectedLoan.payableDays,
+      });
+    } else {
+      // Reset fields if no loan type is selected
+      this.loanDetailsForm$.patchValue({
+        amount: '',
+        days: '',
+      });
+    }
+  }
   async submitApplication() {
     if (this.accountInfoForm$.invalid || this.loanDetailsForm$.invalid) {
       this.toastr.error('Please fill in all required fields');
@@ -80,7 +98,7 @@ export class CreateLoanComponent implements OnInit {
       middleName: formValues.middleName,
       lastName: formValues.lastName,
       profile: null,
-      type: UserType.ADMIN,
+      type: UserType.BORROWER,
       phone: formValues.phone,
       email: formValues.email,
       username: formValues.username,
@@ -90,28 +108,29 @@ export class CreateLoanComponent implements OnInit {
 
     let type = this.getLoanType(loanValues.type);
 
-    let amount = loanValues.amount ?? 0;
+    let amount = type?.startingAmount ?? 0;
     let interest = type?.interest ?? 0;
 
-    const totalWithInterest = amount + (amount * interest) / 100;
-    let loan: Loans = {
-      id: generateRandomNumber(13),
-      borrowerID: users.id,
-      amount: loanValues.amount,
-      interest: type?.interest ?? 0,
-      loanTotal: totalWithInterest,
-      loanType: type?.name ?? 'No Loan Type',
-      status: LoanStatus.PENDING,
-      paymentDays: 30,
+    let loan: LoanAccount = {
+      id: users.username,
+      productLoanID: type?.id ?? '',
+      creditScore: 100,
+      amount: amount,
       createdAt: new Date(),
       updatedAt: new Date(),
-      borrowerStatus: BorrowerStatus.NEW,
-      collectorID: localStorage.getItem('uid') ?? '',
+      interest: interest,
+      name: type?.name ?? '',
+      payableDays: type?.payableDays ?? 0,
     };
 
     this.isLoading = true;
     try {
-      await this.loanService.createLoan(users, loan, this.selectedFiles);
+      await this.authService.createBorrower(
+        users,
+
+        this.selectedFiles,
+        loan
+      );
       this.toastr.success('Successfully submitted');
       this.location.back();
     } catch (err: any) {
@@ -123,7 +142,7 @@ export class CreateLoanComponent implements OnInit {
   uploadSelected(file: File, type: number) {
     this.selectedFiles[type] = file;
   }
-  getLoanType(id: string): LoanTypes | null {
+  getLoanType(id: string): ProductLoan | null {
     return this.loanTypes.find((type) => type.id === id) || null;
   }
 
