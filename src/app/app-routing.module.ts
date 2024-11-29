@@ -21,6 +21,8 @@ import { ProfileComponent } from './auth/profile/profile.component';
 import { BorrowersComponent } from './loan/borrowers/borrowers.component';
 import { LoanPlanComponent } from './admin/loan-plan/loan-plan.component';
 import { ViewLoanComponent } from './loan/view-loan/view-loan.component';
+import { BorrowerHomeComponent } from './borrower-home/borrower-home.component';
+import { DailyPaymentComponent } from './admin/daily-payment/daily-payment.component';
 
 const routes: Routes = [
   {
@@ -86,7 +88,10 @@ const routes: Routes = [
         path: 'create-loan',
         component: CreateLoanComponent,
       },
-
+      {
+        path: 'daily-payment',
+        component: DailyPaymentComponent,
+      },
       {
         path: 'loan-plan',
         component: LoanPlanComponent,
@@ -100,7 +105,13 @@ const routes: Routes = [
   {
     path: 'borrower',
     component: BorrowerMainComponent,
-    children: [],
+    children: [
+      {
+        path: '',
+        component: BorrowerHomeComponent,
+      },
+      
+    ],
   },
   {
     path: 'collector',

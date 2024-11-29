@@ -1,0 +1,15 @@
+/* payment-record.component.css */
+
+.card {
+    background-color: #fff;
+  }
+  
+  .card-header {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .form-group label {
+    font-weight: bold;
+  }
+  

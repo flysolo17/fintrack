@@ -1,113 +1,80 @@
 <div class="container-fluid vh-100 overflow-hidden p-0">
   <div class="d-flex h-100 overflow-hidden">
-    <div class="sidebar bg-dark overflow-auto p-3" style="width: 250px">
-      <div class="w-100 d-flex align-items-center mb-3">
-        <img src="../../../assets/logo.png" alt="Logo" class="logo" />
-        <h4 class="text-white ms-2">Fintrack</h4>
+    <!-- Sidebar Section -->
+    <div class="sidebar bg-dark text-white p-3" style="width: 250px; height: 100vh; overflow-y: auto;">
+      <div class="w-100 d-flex align-items-center mb-4">
+        <img src="../../../assets/logo.png" alt="Logo" class="logo" style="height: 40px;" />
       </div>
 
-      <!-- Nav Links with Box Style and Left-Aligned Text -->
-      <ul class="nav nav-pills flex-column">
+      <!-- Nav Links -->
+      <ul class="nav flex-column">
         <li class="nav-item mb-3">
-          <a
-            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
-            routerLink="dashboard"
-            routerLinkActive
-            style="
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-              transition: all 0.3s;
-            "
-          >
+          <a class="nav-link text-white d-flex align-items-center p-3 rounded" routerLink="dashboard" routerLinkActive="active-link">
             <i class="fas fa-tachometer-alt me-2"></i>
-            <span style="font-family: 'Poppins', sans-serif">Dashboard</span>
+            <span>Dashboard</span>
           </a>
         </li>
         <li class="nav-item mb-3">
-          <a
-            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
-            routerLink="collectors"
-            routerLinkActive
-            style="
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-              transition: all 0.3s;
-            "
-          >
+          <a class="nav-link text-white d-flex align-items-center p-3 rounded" routerLink="collectors" routerLinkActive="active-link">
             <i class="fas fa-users me-2"></i>
-            <span style="font-family: 'Poppins', sans-serif">Collectors</span>
+            <span>Collectors</span>
           </a>
         </li>
         <li class="nav-item mb-3">
-          <a
-            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
-            routerLink="daily-payment"
-            routerLinkActive
-            style="
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-              transition: all 0.3s;
-            "
-          >
+          <a class="nav-link text-white d-flex align-items-center p-3 rounded" routerLink="daily-payment" routerLinkActive="active-link">
             <i class="fas fa-calendar-day me-2"></i>
-            <span style="font-family: 'Poppins', sans-serif"
-              >Daily Payment</span
-            >
+            <span>Daily Payment</span>
           </a>
         </li>
+        <ul class="nav flex-column">
+          <!-- Borrowers Tab -->
+          <li class="nav-item mb-3">
+            <a 
+              class="nav-link text-white d-flex align-items-center p-3 rounded-3 w-100"
+              routerLink="borrowers" 
+              routerLinkActive="active-link"
+              [routerLinkActiveOptions]="{ exact: true }">
+              
+              <!-- Icon for Borrowers Tab -->
+              <i class="fas fa-user me-2"></i>
+              
+              <!-- Text for Borrowers Tab -->
+              <span class="d-inline-block">Borrowers</span>
+            </a>
+          </li>
+        
+          <!-- Create Borrower Tab -->
+          <li class="nav-item mb-3">
+            <a 
+              class="nav-link text-white d-flex align-items-center p-3 rounded-3 w-100"
+              routerLink="create-borrower" 
+              routerLinkActive="active-link"
+              [routerLinkActiveOptions]="{ exact: true }">
+              
+       
+              <i class="fas fa-user-plus me-2"></i>
+              
+           
+              <span class="d-inline-block">Create Borrower</span>
+            </a>
+          </li>
+        </ul>
         <li class="nav-item mb-3">
-          <a
-            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
-            routerLink="borrowers"
-            routerLinkActive
-            style="
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-              transition: all 0.3s;
-            "
-          >
-            <i class="fas fa-user me-2"></i>
-            <span style="font-family: 'Poppins', sans-serif">Borrower</span>
-          </a>
-        </li>
-        <li class="nav-item mb-3">
-          <a
-            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
-            routerLink="loan-plan"
-            routerLinkActive
-            style="
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-              transition: all 0.3s;
-            "
-          >
+          <a class="nav-link text-white d-flex align-items-center p-3 rounded" routerLink="loan-plan" routerLinkActive="active-link">
             <i class="fas fa-file-alt me-2"></i>
-            <span style="font-family: 'Poppins', sans-serif">Loan Plan</span>
+            <span>Loan Plan</span>
           </a>
         </li>
         <li class="nav-item mb-3">
-          <a
-            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
-            routerLink="loan-type"
-            routerLinkActive
-            style="
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-              transition: all 0.3s;
-            "
-          >
+          <a class="nav-link text-white d-flex align-items-center p-3 rounded" routerLink="loan-type" routerLinkActive="active-link">
             <i class="fas fa-file-invoice-dollar me-2"></i>
-            <span style="font-family: 'Poppins', sans-serif">Loan Type</span>
+            <span>Loan Type</span>
           </a>
         </li>
         <li class="nav-item mb-3">
-          <a
-            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
-            routerLink="users"
-            routerLinkActive
-            style="
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-              transition: all 0.3s;
-            "
-          >
+          <a class="nav-link text-white d-flex align-items-center p-3 rounded" routerLink="users" routerLinkActive="active-link">
             <i class="fas fa-user-cog me-2"></i>
-            <span style="font-family: 'Poppins', sans-serif"
-              >Account Settings</span
-            >
+            <span>Account Settings</span>
           </a>
         </li>
         <li class="nav-item">
@@ -118,11 +85,8 @@
       </ul>
     </div>
 
-    <!-- Main content -->
-    <div
-      class="flex-grow-1 overflow-auto"
-      style="background-color: #333; color: #eee"
-    >
+    <!-- Main Content Area -->
+    <div class="flex-grow-1 overflow-auto" style="background-color: #f4f4f4; color: #333;">
       <router-outlet></router-outlet>
     </div>
   </div>

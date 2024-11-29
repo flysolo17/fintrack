@@ -1,1 +1,53 @@
-<p>payment-history works!</p>
+<div class="container-fluid py-4">
+    <h3 class="text-center mb-4">Payment History</h3>
+    
+    <!-- Search Bar -->
+    <div class="mb-3 d-flex justify-content-between align-items-center">
+      <div class="w-50">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          class="form-control"
+          placeholder="Search by Name, Date, or Amount"
+          (input)="searchTable()"
+        />
+      </div>
+    </div>
+  
+    <!-- Card with Table -->
+    <div class="card shadow-sm rounded">
+      <div class="card-body">
+        <table class="table table-hover table-bordered" id="paymentHistoryTable">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Date</th>
+              <th scope="col">Amount</th> <!-- Currency Column -->
+              <th scope="col">Status</th>
+              <th scope="col">Method</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let payment of filteredPayments">
+              <th scope="row">{{ payment.id }}</th>
+              <td>{{ payment.name }}</td>
+              <td>{{ payment.date }}</td>
+              <td>₱{{ payment.amount | number:'1.2-2' }}</td>
+              <td>
+                <span class="badge" [ngClass]="{'bg-success': payment.status === 'Completed', 'bg-warning': payment.status === 'Pending', 'bg-danger': payment.status === 'Failed'}">
+                  {{ payment.status }}
+                </span>
+              </td>
+              <td>{{ payment.method }}</td>
+              <td>
+                <button class="btn btn-info btn-sm">View Details</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  

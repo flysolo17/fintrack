@@ -1,0 +1,32 @@
+.payment-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .payment-table th, .payment-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .filters {
+    margin-bottom: 20px;
+  }
+  
+  .filters input, .filters select {
+    padding: 5px;
+    margin: 5px;
+  }
+  
+  .status-paid {
+    color: green;
+  }
+  
+  .status-pending {
+    color: orange;
+  }
+  
+  .status-overdue {
+    color: red;
+  }
+  

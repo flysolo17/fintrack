@@ -1,66 +1,74 @@
-<div
-  class="container-fluid vh-100 d-flex align-items-center justify-content-center"
->
-  <div class="text-center mb-4">
-    <img src="../../../assets/icon_login.png" alt="Logo" class="logo" />
-  </div>
-  <div class="card w-50 shadow-lg">
-    <div class="card-header text-center">
-      <h6 class="text-uppercase">Login</h6>
+<div class="login-container">
+  <!-- Left Section -->
+  <div class="login-left">
+    <div class="text-center">
+      <img src="../../../assets/logo.png" alt="Logo" class="logo" />
     </div>
-    <div class="card-body">
-      <form class="w-100" [formGroup]="loginForm$" (submit)="login()">
-        <div class="mb-4">
-          <label for="username" class="form-label">Username</label>
-          <input
-            type="text"
-            class="form-control"
-            id="username"
-            formControlName="username"
-            placeholder="Enter E-mail"
-            aria-describedby="usernameHelp"
-          />
-          <div
-            *ngIf="
-              loginForm$.get('username')?.invalid &&
-              loginForm$.get('username')?.touched
-            "
-            class="text-danger"
-          >
-            Username is required and must be at least 3 characters long.
-          </div>
-        </div>
-        <div class="mb-4">
-          <label for="password" class="form-label">Password</label>
-          <div class="input-group">
-            <input
-              [type]="hidePassword$ ? 'password' : 'text'"
-              class="form-control"
-              id="password"
-              formControlName="password"
-              placeholder="*****"
-              aria-describedby="passwordHelp"
-            />
-            <button
-              type="button"
-              class="btn btn-outline-secondary"
-              (click)="togglePasswordVisibility()"
-            >
-              {{ hidePassword$ ? "Show" : "Hide" }}
-            </button>
-          </div>
-          <div
-            *ngIf="
-              loginForm$.get('password')?.invalid &&
-              loginForm$.get('password')?.touched
-            "
-            class="text-danger"
-          >
-            Password is required and must be at least 6 characters long.
-          </div>
-        </div>
-        <button class="btn btn-success w-100" type="submit">Login</button>
-      </form>
+    <h2>Welcome Back! 👋</h2>
+    <p>Sign in to continue.</p>
+    <form [formGroup]="loginForm$" (submit)="login()">
+      <label for="username">Email or Username</label>
+      <input
+        type="text"
+        id="username"
+        class="form-control"
+        formControlName="username"
+        placeholder="test@domain.com"
+      />
+      <div
+        *ngIf="
+          loginForm$.get('username')?.invalid &&
+          loginForm$.get('username')?.touched
+        "
+        class="text-danger"
+      >
+        Username is required and must be at least 3 characters long.
+      </div>
+
+      <label for="password">Password</label>
+      <div class="input-group">
+        <input
+          [type]="hidePassword$ ? 'password' : 'text'"
+          id="password"
+          class="form-control"
+          formControlName="password"
+          placeholder="******"
+        />
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          (click)="togglePasswordVisibility()"
+        >
+          {{ hidePassword$ ? "Show" : "Hide" }}
+        </button>
+      </div>
+      <div
+        *ngIf="
+          loginForm$.get('password')?.invalid &&
+          loginForm$.get('password')?.touched
+        "
+        class="text-danger"
+      >
+        Password is required and must be at least 6 characters long.
+      </div>
+
+      <button type="submit" class="btn btn-signin">Log In</button>
+    </form>
+    <p>
+      Don't have an account?
+      <a>Sign Up Now</a>
+    </p>
+  </div>
+
+  <!-- Right Section -->
+  <div class="login-right">
+    <div class="login-info">
+      <h3>Why should I login?</h3>
+      <p>
+        Access your personalized dashboard to manage your account, view your
+        profile, and explore additional features.
+      </p>
+      <img src="../../../assets/bg lend.jpg" alt="Dashboard example" />
     </div>
   </div>
 </div>

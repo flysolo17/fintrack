@@ -1,5 +1,69 @@
-.nav-link:hover {
-  background-color: #3a3a3a !important;
-  color: #fff !important;
-  transition: background-color 0.3s ease;
+/* Ensure the container takes up full height */
+.container-fluid {
+  height: 100vh;
+  padding: 0;
+}
+
+/* Flexbox for the layout */
+.d-flex {
+  display: flex;
+  height: 100%;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px; /* Sidebar width */
+  height: 100vh; /* Full height */
+  background-color: #343a40; /* Dark background for sidebar */
+  color: white;
+  padding-top: 20px; /* Space at the top */
+  overflow-y: auto; /* Allow scrolling inside the sidebar */
+  z-index: 1000; /* Ensure it's above the content */
+}
+
+/* Sidebar link styles */
+.nav-link {
+  color: white;
+  font-size: 16px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background-color: #007bff;
+  transform: translateX(5px);
+}
+
+.nav-item .fas {
+  margin-right: 10px;
+}
+
+/* Main Content Styling */
+.flex-grow-1 {
+  margin-left: 250px; /* Offset for sidebar */
+  padding: 20px;
+  height: 100vh;
+  overflow-y: auto; /* Make main content scrollable */
+  background-color: #f4f7fc;
+  color: #333;
+}
+
+/* Adjust layout for smaller screens */
+@media (max-width: 768px) {
+  .sidebar {
+    position: relative; /* Make sidebar stack with content on small screens */
+    width: 100%; /* Full width on mobile */
+    height: auto; /* Adjust height */
+    box-shadow: none;
+  }
+
+  .flex-grow-1 {
+    margin-left: 0; /* No margin for mobile */
+  }
 }

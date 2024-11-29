@@ -10,8 +10,8 @@ import { Router } from '@angular/router';
 export class AdminMainComponent {
   constructor(private authService: AuthService, private router: Router) {}
   logout() {
-    this.router.navigate(['/'], { replaceUrl: true }).then(() => {
-      window.location.replace('/');
+    this.router.navigateByUrl('/login', { replaceUrl: true }).then(() => {
+      this.router.resetConfig(this.router.config);
     });
   }
 }

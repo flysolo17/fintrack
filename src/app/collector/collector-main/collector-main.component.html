@@ -1,136 +1,90 @@
-<div class="container-fluid vh-100 overflow-hidden p-0">
-  <div class="d-flex h-100 overflow-hidden">
+<div class="container-fluid vh-100 p-0">
+  <div class="d-flex h-100">
     <!-- Sidebar -->
-    <div
-      class="sidebar bg-dark overflow-auto p-3"
-      style="width: 250px; background-color: #1a1a1a"
-    >
+    <div class="sidebar bg-dark p-3">
       <!-- Logo and Title -->
-      <div class="w-100 d-flex align-items-center justify-content-center mb-4">
+      <div class="w-100 text-center mb-4">
         <img
           src="../../../assets/logo.png"
           alt="Logo"
-          class="logo"
-          style="width: 50px; height: 50px"
+          class="logo mb-2"
+          style="max-width: 100%; height: auto; width: 140px;"
         />
-        <h4
-          class="text-white ms-2"
-          style="font-family: 'Poppins', sans-serif; font-weight: 400"
-        >
-          Collector Dashboard
-        </h4>
       </div>
+      
 
-      <!-- Nav Links with Box Style and Left-Aligned Text -->
-      <ul class="nav nav-pills flex-column">
+      <!-- Nav Links -->
+      <ul class="nav flex-column">
         <li class="nav-item mb-3">
           <a
-            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
+            class="nav-link text-white d-flex align-items-center p-3 rounded"
             routerLink="home"
-            routerLinkActive
-            style="
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-              transition: all 0.3s;
-            "
+            routerLinkActive="active"
           >
             <i class="fas fa-tachometer-alt me-2"></i>
-            <span style="font-family: 'Poppins', sans-serif">Dashboard</span>
+            <span class="fw-medium">Dashboard</span>
           </a>
         </li>
 
         <li class="nav-item mb-3">
           <a
-            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
+            class="nav-link text-white d-flex align-items-center p-3 rounded"
             routerLink="borrowers"
-            routerLinkActive
-            style="
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-              transition: all 0.3s;
-            "
+            routerLinkActive="active"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-people-fill me-2"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"
-              />
-            </svg>
-            <span style="font-family: 'Poppins', sans-serif">Borrowers</span>
+            <i class="fas fa-users me-2"></i>
+            <span class="fw-medium">Borrowers</span>
           </a>
         </li>
+
         <li class="nav-item mb-3">
           <a
-            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
+            class="nav-link text-white d-flex align-items-center p-3 rounded"
             routerLink="record"
-            routerLinkActive
-            style="
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-              transition: all 0.3s;
-            "
+            routerLinkActive="active"
           >
             <i class="fas fa-calendar-day me-2"></i>
-            <span style="font-family: 'Poppins', sans-serif"
-              >Record Payment</span
-            >
+            <span class="fw-medium">Record Payment</span>
           </a>
         </li>
+
         <li class="nav-item mb-3">
           <a
-            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
+            class="nav-link text-white d-flex align-items-center p-3 rounded"
             routerLink="history"
-            routerLinkActive
-            style="
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-              transition: all 0.3s;
-            "
+            routerLinkActive="active"
           >
-            <i class="fas fa-user me-2"></i>
-            <span style="font-family: 'Poppins', sans-serif"
-              >Payment History</span
-            >
+            <i class="fas fa-history me-2"></i>
+            <span class="fw-medium">Payment History</span>
           </a>
         </li>
+
         <li class="nav-item mb-3">
           <a
-            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
+            class="nav-link text-white d-flex align-items-center p-3 rounded"
             routerLink="performance"
-            routerLinkActive
-            style="
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-              transition: all 0.3s;
-            "
+            routerLinkActive="active"
           >
-            <i class="fas fa-file-alt me-2"></i>
-            <span style="font-family: 'Poppins', sans-serif">Performance</span>
+            <i class="fas fa-chart-line me-2"></i>
+            <span class="fw-medium">Performance</span>
           </a>
         </li>
+
         <li class="nav-item mb-3">
           <a
-            class="nav-link text-white d-flex justify-content-start align-items-center p-3 bg-secondary rounded"
+            class="nav-link text-white d-flex align-items-center p-3 rounded"
             routerLink="profile"
-            routerLinkActive
-            style="
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-              transition: all 0.3s;
-            "
+            routerLinkActive="active"
           >
             <i class="fas fa-user-cog me-2"></i>
-            <span style="font-family: 'Poppins', sans-serif">Profile</span>
+            <span class="fw-medium">Profile</span>
           </a>
         </li>
       </ul>
     </div>
 
-    <!-- Main content -->
-    <div
-      class="flex-grow-1 overflow-auto"
-      style="background-color: #333; color: #eee"
-    >
+    <!-- Main Content -->
+    <div class="flex-grow-1 bg-light text-dark">
       <router-outlet></router-outlet>
     </div>
   </div>

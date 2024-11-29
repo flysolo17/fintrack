@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -12,7 +11,6 @@ import { environment } from '../environments/environment.development';
 import { HomeComponent } from './landing-page/home/home.component';
 import { AboutComponent } from './landing-page/about/about.component';
 import { ContactComponent } from './landing-page/contact/contact.component';
-
 import { ProfileComponent } from './auth/profile/profile.component';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { ChangePasswordComponent } from './auth/change-password/change-password.component';
@@ -26,7 +24,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { AdminCollectorsComponent } from './admin/admin-collectors/admin-collectors.component';
 import { CreateCollectorComponent } from './admin/modals/create-collector/create-collector.component';
-
 import { CreateLoanComponent } from './loan/create-loan/create-loan.component';
 import { CollectorHomeComponent } from './collector/collector-home/collector-home.component';
 import { ImagePickerComponent } from './utils/image-picker/image-picker.component';
@@ -34,7 +31,6 @@ import { CollectorDashboardComponent } from './collector-dashboard/collector-das
 import { CreateLoanTypeComponent } from './admin/modals/create-loan-type/create-loan-type.component';
 import { LoanTypeComponent } from './admin/loan-type/loan-type.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { ToastrModule } from 'ngx-toastr';
 import { PaymentRecordComponent } from './collector/payment-record/payment-record.component';
 import { PaymentHistoryComponent } from './collector/payment-history/payment-history.component';
@@ -45,6 +41,12 @@ import { LoanPlanComponent } from './admin/loan-plan/loan-plan.component';
 import { ViewLoanComponent } from './loan/view-loan/view-loan.component';
 import { MakeLoanComponent } from './loan/dialogs/make-loan/make-loan.component';
 import { ConfirmLoanComponent } from './loan/dialogs/confirm-loan/confirm-loan.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MatCardModule } from '@angular/material/card';
+import { DailyPaymentComponent } from './admin/daily-payment/daily-payment.component';
+import { FormsModule } from '@angular/forms';
+import { TitlecasePipe } from './titlecase.pipe';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -62,6 +64,7 @@ import { ConfirmLoanComponent } from './loan/dialogs/confirm-loan/confirm-loan.c
     CollectorMainComponent,
     AdminDashboardComponent,
     AdminCollectorsComponent,
+    CreateBorrowerComponent,
     CreateCollectorComponent,
     CollectorDashboardComponent,
     CreateLoanComponent,
@@ -78,6 +81,8 @@ import { ConfirmLoanComponent } from './loan/dialogs/confirm-loan/confirm-loan.c
     ViewLoanComponent,
     MakeLoanComponent,
     ConfirmLoanComponent,
+
+
   ],
   imports: [
     BrowserModule,
@@ -86,12 +91,14 @@ import { ConfirmLoanComponent } from './loan/dialogs/confirm-loan/confirm-loan.c
     ReactiveFormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    FormsModule, 
   ],
   providers: [
     provideFirebaseApp(() => initializeApp(environment)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
+    provideAnimationsAsync(),
   ],
   bootstrap: [AppComponent],
 })

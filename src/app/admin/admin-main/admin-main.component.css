@@ -1,13 +1,71 @@
-.logo {
-  max-width: 40px; /* Adjust size based on your logo */
-  height: auto;
+.nav-link.active-link {
+  background-color: #007bff;
+  color: white;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+/* Sidebar */
+.sidebar {
+  background-color: #343a40; /* Dark sidebar */
+  color: white;
+  height: 100%;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.sidebar .logo {
-  margin-right: 10px; /* Space between logo and title */
+/* Sidebar Links */
+.nav-link {
+  color: #fff;
+  transition: all 0.3s ease;
 }
+
 .nav-link:hover {
-  background-color: #3a3a3a !important;
-  color: #fff !important;
-  transition: background-color 0.3s ease;
+  background-color: #495057;
+  color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Active Link */
+.nav-link.active-link {
+  background-color: #007bff;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
+}
+
+/* Main Content */
+.flex-grow-1 {
+  padding: 20px;
+}
+
+/* Logo */
+.logo {
+  max-height: 40px;
+  max-width: 40px;
+}
+/* Logo Styling */
+.logo {
+  height: 40px;    /* Set fixed height */
+  width: auto;     /* Maintain aspect ratio */
+  max-width: 100%; /* Ensure it doesn't overflow its container */
+}
+/* Custom scrollbar styling for the sidebar */
+.sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #333; /* thumb color and track color */
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background-color: #333;
+}
+.active-link {
+  background-color: #007bff; /* Blue background */
+  color: #fff;              /* White text */
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.3); /* Subtle shadow effect */
 }

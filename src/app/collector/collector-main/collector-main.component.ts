@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrl: './collector-main.component.css'
 })
 export class CollectorMainComponent {
+logout() {
+throw new Error('Method not implemented.');
+}
 
 }

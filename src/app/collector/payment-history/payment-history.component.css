@@ -1,0 +1,132 @@
+/* Clean table and layout styles */
+.table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 1rem;
+    margin: 0;
+  }
+  
+  .table th, .table td {
+    padding: 12px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #343a40;
+  }
+  
+  .table td {
+    background-color: #ffffff;
+    color: #495057;
+  }
+  
+  .table td:nth-child(4) {
+    font-weight: 600;
+    color: #007bff; /* Highlight amount column */
+  }
+  
+  .table .badge {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    border-radius: 50px;
+  }
+  
+  .table .badge.bg-success {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .table .badge.bg-warning {
+    background-color: #ffc107;
+    color: white;
+  }
+  
+  .table .badge.bg-danger {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  /* Hover effect for rows */
+  .table tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+  }
+  
+  /* Button style for "View Details" */
+  .btn-info {
+    background-color: #17a2b8;
+    color: white;
+    border-radius: 0.25rem;
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .btn-info:hover {
+    background-color: #138496;
+    color: white;
+  }
+  
+  /* Card Styling */
+  .card {
+    border: 1px solid #e3e6f0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+  }
+  
+  /* Styling the container for spacing */
+  .container-fluid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  /* Search Bar Styling */
+#searchBar {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid #ddd;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s;
+  }
+  
+  #searchBar:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  /* Table container */
+  .table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 1rem;
+    margin-top: 20px;
+  }
+  /* Payment History Table Styling */
+.card {
+    margin-top: 20px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  input.form-control {
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+  }
+  
+  button.btn {
+    font-size: 0.875rem;
+  }
+  
+  /* Table and badges */
+  .badge {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+  

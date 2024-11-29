@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AdminDashboardComponent } from './admin-dashboard.component';
+import { MatCardModule } from '@angular/material/card';
+
 
 describe('AdminDashboardComponent', () => {
   let component: AdminDashboardComponent;

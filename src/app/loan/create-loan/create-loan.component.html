@@ -1,9 +1,11 @@
-<div class="container-fluid p-3">
-  <div class="account-info">
-    <form class="row g-3 p-3" [formGroup]="accountInfoForm$">
-      <div class="col-md-12 text-center">
-        <h4 class="fw-bold">Account Info</h4>
+<div class="container-fluid p-4">
+  <!-- Account Info Section -->
+  <div class="account-info bg-light rounded-3 shadow-sm p-4 mb-4">
+    <form class="row g-3" [formGroup]="accountInfoForm$">
+      <div class="col-md-12 text-center mb-4">
+        <h4 class="fw-bold text-primary">Account Info</h4>
       </div>
+
       <div class="col-md-4">
         <label for="firstname" class="form-label">Firstname</label>
         <input
@@ -11,6 +13,7 @@
           class="form-control"
           id="firstname"
           formControlName="firstName"
+          placeholder="Enter your firstname"
         />
       </div>
 
@@ -21,6 +24,7 @@
           class="form-control"
           id="middlename"
           formControlName="middleName"
+          placeholder="Enter your middlename"
         />
       </div>
 
@@ -31,8 +35,10 @@
           class="form-control"
           id="lastname"
           formControlName="lastName"
+          placeholder="Enter your lastname"
         />
       </div>
+
       <div class="col-md-4">
         <label for="email" class="form-label">Email</label>
         <input
@@ -54,6 +60,7 @@
           formControlName="phone"
         />
       </div>
+
       <div class="col-md-4">
         <label for="username" class="form-label">Username</label>
         <input
@@ -62,75 +69,82 @@
           id="username"
           readonly
           formControlName="username"
+          placeholder="Your username"
         />
       </div>
     </form>
   </div>
+<!-- Borrower ID Section -->
+<div class="account-identification bg-light rounded-3 shadow-sm p-4 mb-4">
+  <div class="row g-4">
+    <div class="col-md-12 text-center mb-4">
+      <h4 class="fw-bold text-primary">Borrower IDs</h4>
+    </div>
 
-  <div class="account-identification">
-    <div class="row g-3 p-3">
-      <div class="col-md-12 text-center p-3">
-        <h4>Borrower IDs</h4>
-      </div>
-      <div class="col-md-4">
-        <h6 class="mb-3">1x1 ID picture</h6>
-        <app-image-picker
-          [selectedImage]="null"
-          (onSelected)="uploadSelected($event, 0)"
-        ></app-image-picker>
-      </div>
-      <div class="col-md-4">
-        <h6 class="mb-3">2 pieces of 1x1 pictures</h6>
-        <div class="d-flex gap-3">
-          <app-image-picker
-            [selectedImage]="null"
-            (onSelected)="uploadSelected($event, 1)"
-          ></app-image-picker>
-          <app-image-picker
-            [selectedImage]="null"
-            (onSelected)="uploadSelected($event, 2)"
-          ></app-image-picker>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <h6 class="mb-3">Xerox copy of any government-issued ID</h6>
-        <app-image-picker
-          [selectedImage]="null"
-          (onSelected)="uploadSelected($event, 3)"
-        ></app-image-picker>
-      </div>
-      <div class="col-md-4">
-        <h6 class="mb-3">Barangay business permit (for sari-sari stores)</h6>
-        <app-image-picker
-          [selectedImage]="null"
-          (onSelected)="uploadSelected($event, 4)"
-        ></app-image-picker>
-      </div>
+    <div class="col-md-4">
+      <h6 class="mb-3">1x1 ID picture</h6>
+      <app-image-picker
+        [selectedImage]="null"
+        (onSelected)="uploadSelected($event, 0)"
+      ></app-image-picker>
+    </div>
 
-      <div class="col-md-4">
-        <h6 class="mb-3">Cedula</h6>
+    <div class="col-md-4">
+      <h6 class="mb-3">2 pieces of 1x1 pictures</h6>
+      <div class="d-flex gap-3 flex-column">
         <app-image-picker
           [selectedImage]="null"
-          (onSelected)="uploadSelected($event, 5)"
+          (onSelected)="uploadSelected($event, 1)"
         ></app-image-picker>
-      </div>
-
-      <div class="col-md-4">
-        <h6 class="mb-3">Proof of OMECO bill</h6>
         <app-image-picker
           [selectedImage]="null"
-          (onSelected)="uploadSelected($event, 6)"
+          (onSelected)="uploadSelected($event, 2)"
         ></app-image-picker>
       </div>
     </div>
-  </div>
 
-  <div class="loan-details">
-    <form class="row g-3 p-3" [formGroup]="loanDetailsForm$">
-      <div class="col-md-12 text-center p-3">
-        <h4>Loan Account Details</h4>
+    <div class="col-md-4">
+      <h6 class="mb-3">Xerox copy of any government-issued ID</h6>
+      <app-image-picker
+        [selectedImage]="null"
+        (onSelected)="uploadSelected($event, 3)"
+      ></app-image-picker>
+    </div>
+
+    <div class="col-md-4">
+      <h6 class="mb-3">Barangay business permit (for sari-sari stores)</h6>
+      <app-image-picker
+        [selectedImage]="null"
+        (onSelected)="uploadSelected($event, 4)"
+      ></app-image-picker>
+    </div>
+
+    <div class="col-md-4">
+      <h6 class="mb-3">Cedula</h6>
+      <app-image-picker
+        [selectedImage]="null"
+        (onSelected)="uploadSelected($event, 5)"
+      ></app-image-picker>
+    </div>
+
+    <div class="col-md-4">
+      <h6 class="mb-3">Proof of OMECO bill</h6>
+      <app-image-picker
+        [selectedImage]="null"
+        (onSelected)="uploadSelected($event, 6)"
+      ></app-image-picker>
+    </div>
+  </div>
+</div>
+
+  <!-- Loan Details Section -->
+  <div class="loan-details bg-light rounded-3 shadow-sm p-4 mb-4">
+    <form class="row g-3" [formGroup]="loanDetailsForm$">
+      <div class="col-md-12 text-center mb-4">
+        <h4 class="fw-bold text-primary">Loan Account Details</h4>
       </div>
-      <div class="col-4">
+
+      <div class="col-md-4">
         <div class="form-floating mb-3">
           <select class="form-select" id="type" formControlName="type">
             <option selected [value]="null">--Select Loan Type--</option>
@@ -141,7 +155,8 @@
           <label for="type">Select Loan type</label>
         </div>
       </div>
-      <div class="col-4">
+
+      <div class="col-md-4">
         <div class="form-floating mb-3">
           <input
             class="form-control"
@@ -152,7 +167,8 @@
           <label for="amount">Starting Loan Amount</label>
         </div>
       </div>
-      <div class="col-4">
+
+      <div class="col-md-4">
         <div class="form-floating mb-3">
           <input
             class="form-control"
@@ -165,15 +181,15 @@
       </div>
     </form>
   </div>
+
+  <!-- Submit Button -->
   <div
     class="d-flex align-items-center justify-content-end p-3"
     (click)="submitApplication()"
   >
     <button
       class="btn btn-primary"
-      [disabled]="
-        loanDetailsForm$.invalid || accountInfoForm$.invalid || isLoading
-      "
+      [disabled]="loanDetailsForm$.invalid || accountInfoForm$.invalid || isLoading"
     >
       <div *ngIf="isLoading" class="spinner-border me-3" role="status">
         <span class="visually-hidden">Loading...</span>

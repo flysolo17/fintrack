@@ -1,0 +1,54 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+  }
+  
+  .card {
+    border-radius: 10px;
+  }
+  
+  .card-header {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  .table th, .table td {
+    vertical-align: middle;
+  }
+  
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2;
+  }
+  
+  .navbar {
+    border-bottom: 2px solid #e0e0e0;
+  }
+  
+  .table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .badge {
+    font-size: 0.875rem;
+  }
+  
+  .fas {
+    color: #007bff;
+  }
+  
+  .card-header.bg-primary {
+    background-color: #007bff !important;
+  }
+  
+  .text-muted {
+    color: #6c757d !important;
+  }
+  
+  .text-dark {
+    color: #343a40 !important;
+  }
+  

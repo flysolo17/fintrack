@@ -60,6 +60,9 @@ export const LOANS_COLLECTION = 'loans';
   providedIn: 'root',
 })
 export class LoanService {
+  calculateLoan(loanAmount: number, interestRate: number, loanTerm: number) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     private firestore: Firestore,
     private storage: Storage,

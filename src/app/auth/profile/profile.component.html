@@ -1,2 +1,59 @@
-<p>profile works! hhaa</p>
-<button class="btn btn-danger" (click)="logout()">Logout</button>
+<div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-3">
+        <div class="sidebar">
+          <h4 class="text-center">Profile Settings</h4>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="profile" routerLinkActive="active">
+                <i class="fas fa-user"></i> Personal Info
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="security" routerLinkActive="active">
+                <i class="fas fa-lock"></i> Security
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="preferences" routerLinkActive="active">
+                <i class="fas fa-cogs"></i> Preferences
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Profile Settings Form -->
+      <div class="col-md-9">
+        <div class="card">
+          <h3>Update Profile</h3>
+          <form>
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" placeholder="Enter your username" />
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="email" placeholder="Enter your email" />
+            </div>
+            <div class="mb-3">
+              <label for="phone" class="form-label">Phone Number</label>
+              <input type="text" class="form-control" id="phone" placeholder="Enter your phone number" />
+            </div>
+            <div class="mb-3">
+              <label for="address" class="form-label">Address</label>
+              <textarea class="form-control" id="address" rows="3" placeholder="Enter your address"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="profile-picture" class="form-label">Profile Picture</label>
+              <input type="file" class="form-control" id="profile-picture" />
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <button type="button" class="btn btn-danger" (click)="logout()">Logout</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
