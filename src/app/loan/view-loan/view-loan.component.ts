@@ -9,8 +9,14 @@ import { MakeLoanComponent } from '../dialogs/make-loan/make-loan.component';
 import { Users } from '../../models/accounts/users';
 import { Observable } from 'rxjs';
 import { LoanHistory } from '../../models/loans/loan-history';
-import { Loans } from '../../models/loans/loan';
+import { Loans, PaymentStatus } from '../../models/loans/loan';
 
+interface PaymentRow {
+  date: string;
+
+  amount: string;
+  status: PaymentStatus;
+}
 @Component({
   selector: 'app-view-loan',
   templateUrl: './view-loan.component.html',
@@ -18,10 +24,13 @@ import { Loans } from '../../models/loans/loan';
 })
 export class ViewLoanComponent implements OnInit {
   modalService = inject(NgbModal);
+  active = 1;
   data$: LoanWithUserAndDocuments | null = null;
   loading$: boolean = false;
   histories$: Observable<LoanHistory[]> | undefined;
   activeLoans$: Observable<Loans[]> | undefined;
+  filteredPayments: PaymentRow[] = [];
+  payments: PaymentRow[] = [];
   constructor(
     private auth: AuthService,
     private activatedRoute: ActivatedRoute,
@@ -34,8 +43,19 @@ export class ViewLoanComponent implements OnInit {
         this.loading$ = true;
         this.histories$ = this.loanService.getHistory(id);
         this.activeLoans$ = this.loanService.getActiveLoans(id);
-        this.histories$.subscribe((data) => console.log('history', data));
-        this.activeLoans$.subscribe((data) => console.log('Loans', data));
+
+        this.activeLoans$.subscribe((data: Loans[]) => {
+          data.forEach((e) => {
+            let schedules = e.paymentSchedule;
+            schedules.forEach((s) => {
+              this.payments.push({
+                date: this.formatDate(s.date),
+                amount: s.amount.toString(),
+                status: s.status,
+              });
+            });
+          });
+        });
         this.viewLoan(id);
       }
     });
@@ -55,5 +75,12 @@ export class ViewLoanComponent implements OnInit {
     const modal = this.modalService.open(MakeLoanComponent);
     modal.componentInstance.user = user;
     modal.componentInstance.loanAccount = loanAccount;
+  }
+
+  formatDate(date: Date): string {
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
   }
 }

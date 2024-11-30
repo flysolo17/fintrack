@@ -2,7 +2,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDropdownModule,
+  NgbModal,
+  NgbModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
@@ -42,10 +46,12 @@ import { ViewLoanComponent } from './loan/view-loan/view-loan.component';
 import { MakeLoanComponent } from './loan/dialogs/make-loan/make-loan.component';
 import { ConfirmLoanComponent } from './loan/dialogs/confirm-loan/confirm-loan.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { MatCardModule } from '@angular/material/card';
-import { DailyPaymentComponent } from './admin/daily-payment/daily-payment.component';
+
 import { FormsModule } from '@angular/forms';
-import { TitlecasePipe } from './titlecase.pipe';
+
+import { CommonModule } from '@angular/common';
+import { DailyPaymentComponent } from './admin/daily-payment/daily-payment.component';
+import { PaymentDialogComponent } from './admin/modals/payment-dialog/payment-dialog.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +78,7 @@ import { TitlecasePipe } from './titlecase.pipe';
     ImagePickerComponent,
     CreateLoanTypeComponent,
     LoanTypeComponent,
+    DailyPaymentComponent,
     PaymentRecordComponent,
     PaymentHistoryComponent,
     PerformanceComponent,
@@ -81,17 +88,18 @@ import { TitlecasePipe } from './titlecase.pipe';
     ViewLoanComponent,
     MakeLoanComponent,
     ConfirmLoanComponent,
-
-
+    PaymentDialogComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     ReactiveFormsModule,
+    NgbDropdownModule,
+    CommonModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    FormsModule, 
+    FormsModule,
   ],
   providers: [
     provideFirebaseApp(() => initializeApp(environment)),

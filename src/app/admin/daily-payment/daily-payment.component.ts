@@ -1,73 +1,83 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { LoanService } from '../../services/loan.service';
+import { PaymentStatus } from '../../models/loans/loan';
+import { LoanWithUser } from '../../models/loans/LoanWithUser';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PaymentDialogComponent } from '../modals/payment-dialog/payment-dialog.component';
+
 interface PaymentRow {
+  loanWithUser: LoanWithUser;
   date: string;
-  paymentId: string;
   customer: string;
-  method: string;
   amount: string;
-  status: string;
-  notes: string;
+  status: PaymentStatus;
 }
 
 @Component({
   selector: 'app-daily-payment',
   templateUrl: './daily-payment.component.html',
-  styleUrls: ['./daily-payment.component.css']
+  styleUrls: ['./daily-payment.component.css'],
 })
-export class DailyPaymentComponent implements AfterViewInit {
-  @ViewChild('dateFilter') dateFilter!: ElementRef;
-  @ViewChild('methodFilter') methodFilter!: ElementRef;
-  @ViewChild('statusFilter') statusFilter!: ElementRef;
-  @ViewChild('paymentTable') paymentTable!: ElementRef;
+export class DailyPaymentComponent implements OnInit {
+  modalService = inject(NgbModal);
+  selectedDate: Date = new Date();
+  filteredPayments: PaymentRow[] = [];
+  payments: PaymentRow[] = [];
 
-  payments: PaymentRow[] = [
-    { date: '11/29/2024', paymentId: '12345', customer: 'John D.', method: 'cash', amount: '$200', status: 'paid', notes: 'Service A' },
-    { date: '11/29/2024', paymentId: '12346', customer: 'Alice M.', method: 'credit', amount: '$150', status: 'pending', notes: 'Service B' },
-    { date: '11/29/2024', paymentId: '12347', customer: 'Bob S.', method: 'online', amount: '$300', status: 'paid', notes: 'Product X' },
-    { date: '11/29/2024', paymentId: '12348', customer: 'Emma R.', method: 'card', amount: '$100', status: 'overdue', notes: 'Service C' },
-  ];
+  constructor(private loanService: LoanService) {}
 
-  filteredPayments: PaymentRow[] = [...this.payments]; // Copy the payments array initially
-
-  ngAfterViewInit(): void {
-    this.addEventListeners();
-  }
-
-  addEventListeners(): void {
-    this.dateFilter.nativeElement.addEventListener('change', this.filterTable.bind(this));
-    this.methodFilter.nativeElement.addEventListener('change', this.filterTable.bind(this));
-    this.statusFilter.nativeElement.addEventListener('change', this.filterTable.bind(this));
-  }
-
-  filterTable(): void {
-    const dateFilterValue = this.dateFilter.nativeElement.value;
-    const methodFilterValue = this.methodFilter.nativeElement.value;
-    const statusFilterValue = this.statusFilter.nativeElement.value;
-
-    // Filter the payments array based on the values of the filters
-    this.filteredPayments = this.payments.filter(payment => {
-      const matchesDate = !dateFilterValue || payment.date === dateFilterValue;
-      const matchesMethod = methodFilterValue === 'all' || payment.method === methodFilterValue;
-      const matchesStatus = statusFilterValue === 'all' || payment.status === statusFilterValue;
-
-      return matchesDate && matchesMethod && matchesStatus;
+  ngOnInit(): void {
+    this.loanService.getPaymentsWithUser().subscribe((data) => {
+      console.log(data);
+      this.payments = [];
+      data.forEach((loan) => {
+        loan.loan?.paymentSchedule.forEach((payment) => {
+          this.payments.push({
+            loanWithUser: loan,
+            date: this.formatDate(payment.date),
+            customer: `${loan.users?.firstName} ${loan.users?.lastName}`,
+            amount: payment.amount.toString(),
+            status: payment.status,
+          });
+        });
+      });
+      console.log('Payments: ', this.payments);
+      this.filterPaymentsByDate();
     });
   }
 
-  // Function to add rows dynamically (can be used for adding new payments)
-  addRow(payment: PaymentRow): void {
-    this.payments.push(payment); // Add to the payments array
-    this.filterTable(); // Reapply filters
+  setSelectedDate(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input) {
+      this.selectedDate = new Date(input.value);
+      this.filterPaymentsByDate();
+    }
   }
-}
-import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({
-  name: 'titlecase'
-})
-export class TitlecasePipe implements PipeTransform {
-  transform(value: string): string {
-    if (!value) return value;
-    return value.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+  filterPaymentsByDate(): void {
+    const formattedSelectedDate = this.formatDate(this.selectedDate);
+    this.filteredPayments = this.payments.filter(
+      (payment) => payment.date === formattedSelectedDate
+    );
+  }
+
+  formatDate(date: Date): string {
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+  }
+
+  get formattedSelectedDate(): string {
+    const month = (new Date().getMonth() + 1).toString().padStart(2, '0');
+
+    const day = this.selectedDate.getDate().toString().padStart(2, '0');
+    const year = this.selectedDate.getFullYear();
+    return `${year}-${month}-${day}`;
+  }
+
+  pay(loanWithUser: LoanWithUser) {
+    const modal = this.modalService.open(PaymentDialogComponent);
+    modal.componentInstance.loanWithUser = loanWithUser;
   }
 }

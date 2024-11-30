@@ -4,10 +4,10 @@ import { Users } from '../../../models/accounts/users';
 import { LoanAccount } from '../../../models/accounts/LoanAccount';
 import { FormControl, NgModel, Validators } from '@angular/forms';
 import {
-  createPaymentSchedule,
   Loans,
   LoanStatus,
   PaymentSchedule,
+  PaymentStatus,
 } from '../../../models/loans/loan';
 import { generateRandomNumber } from '../../../utils/Constants';
 import { ConfirmLoanComponent } from '../confirm-loan/confirm-loan.component';
@@ -45,13 +45,12 @@ export class MakeLoanComponent implements OnInit {
       const interestAmount = amount * (this.loanAccount.interest / 100);
       const amountWithInterest = amount + interestAmount;
 
-      const sched = createPaymentSchedule(this.loanAccount.payableDays);
-      const paymentSchedule: PaymentSchedule = {
-        days: this.loanAccount.payableDays,
-        amount: amountWithInterest / this.loanAccount.payableDays,
-        startgDate: sched.startingDate,
-        endDate: sched.endDate,
-      };
+      const days = this.loanAccount.payableDays;
+
+      const paymentSchedule = this.createPaymentSchedule(
+        days,
+        amountWithInterest
+      );
 
       let loan: Loans = {
         id: generateRandomNumber(),
@@ -97,5 +96,29 @@ export class MakeLoanComponent implements OnInit {
         this.activeModal.close();
         this.loading$ = false;
       });
+  }
+
+  createPaymentSchedule(days: number, totalAmount: number): PaymentSchedule[] {
+    const schedules: PaymentSchedule[] = [];
+    const dailyAmount = totalAmount / days;
+
+    // Start from tomorrow
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + 1);
+    currentDate.setHours(0, 0, 0, 0); // Ensure the time is set to midnight
+
+    for (let i = 0; i < days; i++) {
+      schedules.push({
+        days: i + 1,
+        amount: parseFloat(dailyAmount.toFixed(2)), // Ensure proper rounding
+        date: new Date(currentDate), // Clone the current date
+        status: PaymentStatus.UNPAID, // Default status
+      });
+
+      // Increment date by 1 day
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return schedules;
   }
 }

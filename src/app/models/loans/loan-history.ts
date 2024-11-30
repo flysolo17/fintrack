@@ -5,6 +5,7 @@ export interface LoanHistory {
   borrowerID: string;
   loanID: string;
   message: string;
+
   amount: number;
   createdAt: Date;
 }

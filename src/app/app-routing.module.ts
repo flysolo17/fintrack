@@ -75,6 +75,10 @@ const routes: Routes = [
         path: 'collectors',
         component: AdminCollectorsComponent,
       },
+      {
+        path: 'create-loan',
+        component: CreateLoanComponent,
+      },
 
       {
         path: 'borrowers',
@@ -84,20 +88,14 @@ const routes: Routes = [
         path: 'borrowers/:id',
         component: ViewLoanComponent,
       },
-      {
-        path: 'create-loan',
-        component: CreateLoanComponent,
-      },
+
       {
         path: 'daily-payment',
         component: DailyPaymentComponent,
       },
+
       {
-        path: 'loan-plan',
-        component: LoanPlanComponent,
-      },
-      {
-        path: 'loan-type',
+        path: 'loan-product',
         component: LoanTypeComponent,
       },
     ],
@@ -110,7 +108,6 @@ const routes: Routes = [
         path: '',
         component: BorrowerHomeComponent,
       },
-      
     ],
   },
   {

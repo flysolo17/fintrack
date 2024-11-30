@@ -6,16 +6,23 @@ export interface Loans {
   amount: number;
   interest: number;
   amountPaid: number;
-  paymentSchedule: PaymentSchedule;
+  paymentSchedule: PaymentSchedule[];
   status: LoanStatus;
   createdAt: Date;
   updatedAt: Date;
 }
+
 export interface PaymentSchedule {
   days: number;
   amount: number;
-  startgDate: Date;
-  endDate: Date;
+  date: Date;
+  status: PaymentStatus;
+}
+
+export enum PaymentStatus {
+  UNPAID = 'UNPAID',
+  PAID = 'PAID',
+  OVERDUE = 'OVERDUE',
 }
 
 export const loanConverter = {
@@ -24,13 +31,9 @@ export const loanConverter = {
     const data = snap.data() as Loans;
     data.createdAt = (data.createdAt as any).toDate();
     data.updatedAt = (data.updatedAt as any).toDate();
-
-    data.paymentSchedule.startgDate = (
-      data.paymentSchedule.startgDate as any
-    ).toDate();
-    data.paymentSchedule.endDate = (
-      data.paymentSchedule.endDate as any
-    ).toDate();
+    data.paymentSchedule.forEach((e) => {
+      e.date = (e.date as any).toDate();
+    });
     return data;
   },
 };
@@ -42,14 +45,14 @@ export enum LoanStatus {
   PAID = 'PAID',
 }
 
-export function createPaymentSchedule(days: number): {
-  startingDate: Date;
-  endDate: Date;
-} {
-  const startingDate = new Date();
-  startingDate.setDate(startingDate.getDate() + 1);
+// export function createPaymentSchedule(days: number, startingDate: Date, payment: number): {
+//   startingDate: Date;
+//   endDate: Date;
+// } {
+//   const startingDate = new Date();
+//   startingDate.setDate(startingDate.getDate() + 1);
 
-  const endDate = new Date(startingDate);
-  endDate.setDate(startingDate.getDate() + days);
-  return { startingDate, endDate };
-}
+//   const endDate = new Date(startingDate);
+//   endDate.setDate(startingDate.getDate() + days);
+//   return { startingDate, endDate };
+// }

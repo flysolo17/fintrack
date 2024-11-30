@@ -11,6 +11,7 @@ import {
   orderBy,
   query,
   setDoc,
+  updateDoc,
   where,
   writeBatch,
 } from '@angular/fire/firestore';
@@ -30,7 +31,12 @@ import { userConverter, Users } from '../models/accounts/users';
 import { AUTH_COLLECTION, AuthService, LOAN_ACCOUNT } from './auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { historyConverter, LoanHistory } from '../models/loans/loan-history';
-import { loanConverter, Loans, LoanStatus } from '../models/loans/loan';
+import {
+  loanConverter,
+  Loans,
+  LoanStatus,
+  PaymentStatus,
+} from '../models/loans/loan';
 import { LOAN_HISTORY_COLLECTION } from './history.service';
 import { EncryptionService } from './encryption.service';
 import {
@@ -160,5 +166,116 @@ export class LoanService {
       orderBy('createdAt', 'desc')
     );
     return collectionData(loanQuery);
+  }
+
+  getPaymentsWithUser(): Observable<LoanWithUser[]> {
+    const loanQuery = query(
+      collection(this.firestore, LOANS_COLLECTION).withConverter(loanConverter),
+      where('status', '==', LoanStatus.CONFIRMED),
+      orderBy('createdAt', 'desc')
+    );
+
+    return collectionData(loanQuery).pipe(
+      switchMap((loans: Loans[]) => {
+        // Map over the loans and fetch users
+        const loanWithUserObservables = loans.map((loan) => {
+          const userQuery = query(
+            collection(this.firestore, AUTH_COLLECTION).withConverter(
+              userConverter
+            ),
+            where('username', '==', loan.loanAccountID),
+            limit(1)
+          );
+
+          // Return an observable for each loan's user data
+          return from(getDocs(userQuery)).pipe(
+            map((usersSnapshot) => ({
+              loan,
+              users:
+                usersSnapshot.docs.length > 0
+                  ? usersSnapshot.docs[0].data()
+                  : null,
+            }))
+          );
+        });
+
+        // Merge the results of all user queries into a single observable array
+        return forkJoin(loanWithUserObservables);
+      })
+    );
+  }
+
+  async updatePaymentStatusAndAmount(
+    loanID: string,
+
+    history: LoanHistory,
+    totalAmountPaid: number
+  ) {
+    const batch = writeBatch(this.firestore);
+    const loanRef = doc(
+      collection(this.firestore, LOANS_COLLECTION).withConverter(loanConverter),
+      loanID
+    );
+
+    try {
+      const loanDoc = await getDoc(loanRef);
+      if (!loanDoc.exists()) {
+        console.log('Loan not found');
+        return;
+      }
+
+      const loan = loanDoc.data();
+      const paymentIndex = 0;
+      var paymentAmount = loan.paymentSchedule[paymentIndex]?.amount;
+      if (paymentAmount == 0) {
+        for (let i = paymentIndex + 1; i < loan.paymentSchedule.length; i++) {
+          if (loan.paymentSchedule[i]?.amount > 0) {
+            paymentAmount = loan.paymentSchedule[i].amount;
+            break;
+          }
+        }
+      }
+
+      const numberOfPaymentsToUpdate = Math.floor(
+        totalAmountPaid / paymentAmount
+      );
+      let remainingAmount = totalAmountPaid;
+      let updatedPayments = 0;
+
+      loan.paymentSchedule.forEach((payment, index) => {
+        if (updatedPayments < numberOfPaymentsToUpdate) {
+          payment.status = PaymentStatus.PAID;
+          updatedPayments++;
+        } else if (
+          updatedPayments === numberOfPaymentsToUpdate &&
+          remainingAmount > 0
+        ) {
+          payment.status = PaymentStatus.PAID;
+          remainingAmount = 0;
+          updatedPayments++;
+        }
+      });
+
+      batch.update(loanRef, {
+        paymentSchedule: loan.paymentSchedule,
+        amountPaid: increment(totalAmountPaid),
+        updatedAt: new Date(),
+      });
+
+      const historyRef = doc(
+        collection(this.firestore, LOAN_HISTORY_COLLECTION).withConverter(
+          historyConverter
+        ),
+        history.id
+      );
+      batch.set(historyRef, history);
+
+      // Commit batch
+      await batch.commit();
+
+      console.log(`${updatedPayments} payments updated successfully.`);
+    } catch (error) {
+      console.error('Error updating payment status and amount:', error);
+    }
   }
 }
