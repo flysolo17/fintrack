@@ -53,31 +53,24 @@
   <div class="row mb-3">
     <div class="col-12">
       <h6>Payment Schedule:</h6>
-      <div class="ps-3">
-        <p>Days: {{ loan.paymentSchedule.days }}</p>
-        <p>
-          Amount per Day: {{ loan.paymentSchedule.amount | currency : "PHP" }}
-        </p>
-        <p>
-          Start Date:
-          {{ loan.paymentSchedule.startgDate | date : "MMM d, yyyy" }}
-        </p>
-        <p>
-          End Date: {{ loan.paymentSchedule.endDate | date : "MMM d, yyyy" }}
-        </p>
+      <div *ngFor="let schedule of loan.paymentSchedule" class="ps-3">
+        <p>Days: {{ schedule.days }}</p>
+        <p>Amount per Day: {{ schedule.amount | currency : "PHP" }}</p>
+        <p>Start Date: {{ schedule.startDate | date : "MMM d, yyyy" }}</p>
+        <p>End Date: {{ schedule.endDate | date : "MMM d, yyyy" }}</p>
       </div>
     </div>
   </div>
-</div>
-<div class="modal-footer">
-  <button
-    type="button"
-    class="btn btn-outline-secondary"
-    (click)="activeModal.dismiss()"
-  >
-    Cancel
-  </button>
-  <button type="button" class="btn btn-primary" (click)="confirmLoan()">
-    Confirm
-  </button>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="activeModal.dismiss()"
+    >
+      Cancel
+    </button>
+    <button type="button" class="btn btn-primary" (click)="confirmLoan()">
+      Confirm
+    </button>
+  </div>
 </div>
