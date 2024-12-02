@@ -11,9 +11,8 @@ import { Observable } from 'rxjs';
 import { LoanHistory } from '../../models/loans/loan-history';
 import { Loans, PaymentStatus } from '../../models/loans/loan';
 
-interface PaymentRow {
+export interface PaymentRow {
   date: string;
-
   amount: string;
   status: PaymentStatus;
 }

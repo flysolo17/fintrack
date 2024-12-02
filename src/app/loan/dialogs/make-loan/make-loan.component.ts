@@ -72,6 +72,11 @@ export class MakeLoanComponent implements OnInit {
   confirmLoan(loan: Loans, loanWithoutInterest: number) {
     const modal = this.modalService.open(ConfirmLoanComponent);
     modal.componentInstance.loan = loan;
+    modal.componentInstance.days = this.loanAccount.payableDays;
+    modal.componentInstance.start = loan.paymentSchedule[0].date.toDateString();
+    modal.componentInstance.end =
+      loan.paymentSchedule[loan.paymentSchedule.length - 1].date.toDateString();
+
     modal.result.then((data: any) => {
       if (data == 'YES') {
         this.saveLoan(loan, loanWithoutInterest);

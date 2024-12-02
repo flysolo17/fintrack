@@ -52,6 +52,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DailyPaymentComponent } from './admin/daily-payment/daily-payment.component';
 import { PaymentDialogComponent } from './admin/modals/payment-dialog/payment-dialog.component';
+import { BorrowerHomeComponent } from './borrower/borrower-home/borrower-home.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { PaymentDialogComponent } from './admin/modals/payment-dialog/payment-di
     CreateCollectorComponent,
     CollectorDashboardComponent,
     CreateLoanComponent,
+    BorrowerHomeComponent,
     CollectorHomeComponent,
     ImagePickerComponent,
     CreateLoanTypeComponent,
@@ -96,6 +98,7 @@ import { PaymentDialogComponent } from './admin/modals/payment-dialog/payment-di
     NgbModule,
     ReactiveFormsModule,
     NgbDropdownModule,
+
     CommonModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),

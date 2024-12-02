@@ -54,17 +54,16 @@
     <div class="col-12">
       <h6>Payment Schedule:</h6>
       <div class="ps-3">
-        <p>Days: {{ loan.paymentSchedule.days }}</p>
+        <p>Days: {{ days }}</p>
         <p>
-          Amount per Day: {{ loan.paymentSchedule.amount | currency : "PHP" }}
+          Amount per Day:
+          {{ loan.paymentSchedule[0].amount | currency : "PHP" }}
         </p>
         <p>
           Start Date:
-          {{ loan.paymentSchedule.startgDate | date : "MMM d, yyyy" }}
+          {{ start }}
         </p>
-        <p>
-          End Date: {{ loan.paymentSchedule.endDate | date : "MMM d, yyyy" }}
-        </p>
+        <p>End Date: {{ end }}</p>
       </div>
     </div>
   </div>

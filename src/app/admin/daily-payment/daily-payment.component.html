@@ -44,6 +44,7 @@
                 " -->
               <button
                 class="btn btn-sm btn-primary rounded-3"
+                [disabled]="payment.status == 'PAID'"
                 (click)="pay(payment.loanWithUser)"
               >
                 Pay now

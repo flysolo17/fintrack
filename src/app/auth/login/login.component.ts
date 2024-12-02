@@ -39,6 +39,7 @@ export class LoginComponent {
       const user = await this.authService.login(username, password);
       if (user) {
         localStorage.setItem('uid', user.id);
+
         this.toastr.success('Login successful!');
         this.navigateToMainPage(user.type);
       } else {

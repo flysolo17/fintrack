@@ -10,6 +10,9 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class ConfirmLoanComponent {
   activeModal = inject(NgbActiveModal);
   @Input() loan!: Loans;
+  @Input() days: string = '';
+  @Input() start: string = '';
+  @Input() end: string = '';
 
   confirmLoan() {
     this.activeModal.close('YES');
