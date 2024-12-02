@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center justify-content-between p-3">
   <h5>Loan Type</h5>
-  <button class="btn btn-light" (click)="create()">Create Loan Type</button>
+  <button class="btn btn-success" (click)="create()">Create Loan Type</button>
 </div>
 
 <table class="table p-3">
@@ -20,8 +20,13 @@
       <td>{{ data.description }}</td>
       <td>{{ data.interest }} %</td>
       <td>
-        <button class="btn btn-danger" (click)="deleteLoanType(data.id)">
+        <button
+          class="btn btn-danger d-flex align-items-center gap-1"
+          (click)="deleteLoanType(data.id)"
+          title="Delete Loan Type"
+        >
           <i class="fa-solid fa-trash"></i>
+          <span>Delete</span>
         </button>
       </td>
     </tr>

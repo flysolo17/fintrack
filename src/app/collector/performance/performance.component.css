@@ -1,0 +1,26 @@
+.under-development {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  color: #555;
+}
+
+.under-development-image {
+  width: 150px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #ff9800;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 1.2rem;
+  color: #757575;
+}

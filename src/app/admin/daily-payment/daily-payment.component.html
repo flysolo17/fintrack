@@ -1,18 +1,18 @@
-<div class="container-fluid p-3 h-100">
-  <div class="bg-white rounded-3 p-3">
-    <div class="d-flex align-items-center justify-content-between">
-      <h6>Daily Payment</h6>
+<div class="container-fluid py-3 h-100 bg-light">
+  <div class="bg-white shadow-sm rounded-3 p-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h6 class="fw-bold mb-0">Daily Payment</h6>
       <!-- Date Picker -->
       <input
         type="date"
         [value]="selectedDate | date : 'yyyy-MM-dd'"
         (change)="setSelectedDate($event)"
-        class="form-control w-auto"
+        class="form-control form-control-sm w-auto"
       />
     </div>
-    <div class="mt-4">
-      <table class="table table-borderless table-hover">
-        <thead>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
           <tr>
             <th>Date</th>
             <th>Customer</th>
@@ -25,34 +25,35 @@
           <tr *ngFor="let payment of filteredPayments">
             <td>{{ payment.date }}</td>
             <td>{{ payment.customer }}</td>
-            <td>{{ payment.amount }}</td>
+            <td>
+              <span class="text-peso"
+                >&#8369;{{ payment.amount | number : "1.2-2" }}</span
+              >
+            </td>
             <td>
               <span
                 class="badge"
                 [ngClass]="{
-                  'text-bg-success': payment.status === 'PAID',
-                  'text-bg-warning': payment.status === 'UNPAID',
-                  'text-bg-danger': payment.status === 'OVERDUE'
+                  'badge-success': payment.status === 'PAID',
+                  'badge-warning': payment.status === 'UNPAID',
+                  'badge-danger': payment.status === 'OVERDUE'
                 }"
               >
                 {{ payment.status }}
               </span>
             </td>
             <td>
-              <!-- [disabled]="
-                  formattedSelectedDate !== (payment.date | date : 'yyyy-MM-dd')
-                " -->
               <button
-                class="btn btn-sm btn-primary rounded-3"
+                class="btn btn-sm btn-outline-primary"
                 [disabled]="payment.status == 'PAID'"
                 (click)="pay(payment.loanWithUser)"
               >
-                Pay now
+                Pay Now
               </button>
             </td>
           </tr>
           <tr *ngIf="filteredPayments.length === 0">
-            <td colspan="5" class="text-center">
+            <td colspan="5" class="text-center text-muted">
               No payments found for the selected date.
             </td>
           </tr>

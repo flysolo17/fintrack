@@ -1,32 +1,62 @@
-.payment-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .payment-table th, .payment-table td {
-    padding: 8px;
-    border: 1px solid #ddd;
-    text-align: left;
-  }
-  
-  .filters {
-    margin-bottom: 20px;
-  }
-  
-  .filters input, .filters select {
-    padding: 5px;
-    margin: 5px;
-  }
-  
-  .status-paid {
-    color: green;
-  }
-  
-  .status-pending {
-    color: orange;
-  }
-  
-  .status-overdue {
-    color: red;
-  }
-  
+.container-fluid {
+  background-color: #f9f9f9;
+}
+
+.bg-white {
+  border-radius: 12px;
+}
+
+h6 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.table {
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+.table th {
+  font-weight: 500;
+  color: #555;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.badge-success {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+  color: #fff;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-outline-primary {
+  border: 1px solid #007bff;
+  color: #007bff;
+  transition: all 0.3s;
+}
+
+.btn-outline-primary:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+.text-peso {
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
