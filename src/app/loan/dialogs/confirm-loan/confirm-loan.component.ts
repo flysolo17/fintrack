@@ -5,7 +5,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-confirm-loan',
   templateUrl: './confirm-loan.component.html',
-  styleUrl: './confirm-loan.component.css',
+  styleUrls: ['./confirm-loan.component.css'],
 })
 export class ConfirmLoanComponent {
   activeModal = inject(NgbActiveModal);
