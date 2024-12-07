@@ -74,68 +74,68 @@
       </div>
     </form>
   </div>
-<!-- Borrower ID Section -->
-<div class="account-identification bg-light rounded-3 shadow-sm p-4 mb-4">
-  <div class="row g-4">
-    <div class="col-md-12 text-center mb-4">
-      <h4 class="fw-bold text-primary">Borrower IDs</h4>
-    </div>
+  <!-- Borrower ID Section -->
+  <div class="account-identification bg-light rounded-3 shadow-sm p-4 mb-4">
+    <div class="row g-4">
+      <div class="col-md-12 text-center mb-4">
+        <h4 class="fw-bold text-primary">Borrower IDs</h4>
+      </div>
 
-    <div class="col-md-4">
-      <h6 class="mb-3">1x1 ID picture</h6>
-      <app-image-picker
-        [selectedImage]="null"
-        (onSelected)="uploadSelected($event, 0)"
-      ></app-image-picker>
-    </div>
-
-    <div class="col-md-4">
-      <h6 class="mb-3">2 pieces of 1x1 pictures</h6>
-      <div class="d-flex gap-3 flex-column">
+      <div class="col-md-4">
+        <h6 class="mb-3">1x1 ID picture</h6>
         <app-image-picker
           [selectedImage]="null"
-          (onSelected)="uploadSelected($event, 1)"
+          (onSelected)="uploadSelected($event, 0)"
         ></app-image-picker>
+      </div>
+
+      <div class="col-md-4">
+        <h6 class="mb-3">2 pieces of 1x1 pictures</h6>
+        <div class="d-flex gap-3 flex-column">
+          <app-image-picker
+            [selectedImage]="null"
+            (onSelected)="uploadSelected($event, 1)"
+          ></app-image-picker>
+          <app-image-picker
+            [selectedImage]="null"
+            (onSelected)="uploadSelected($event, 2)"
+          ></app-image-picker>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <h6 class="mb-3">Xerox copy of any government-issued ID</h6>
         <app-image-picker
           [selectedImage]="null"
-          (onSelected)="uploadSelected($event, 2)"
+          (onSelected)="uploadSelected($event, 3)"
+        ></app-image-picker>
+      </div>
+
+      <div class="col-md-4">
+        <h6 class="mb-3">Barangay business permit (for sari-sari stores)</h6>
+        <app-image-picker
+          [selectedImage]="null"
+          (onSelected)="uploadSelected($event, 4)"
+        ></app-image-picker>
+      </div>
+
+      <div class="col-md-4">
+        <h6 class="mb-3">Cedula</h6>
+        <app-image-picker
+          [selectedImage]="null"
+          (onSelected)="uploadSelected($event, 5)"
+        ></app-image-picker>
+      </div>
+
+      <div class="col-md-4">
+        <h6 class="mb-3">Proof of OMECO bill</h6>
+        <app-image-picker
+          [selectedImage]="null"
+          (onSelected)="uploadSelected($event, 6)"
         ></app-image-picker>
       </div>
     </div>
-
-    <div class="col-md-4">
-      <h6 class="mb-3">Xerox copy of any government-issued ID</h6>
-      <app-image-picker
-        [selectedImage]="null"
-        (onSelected)="uploadSelected($event, 3)"
-      ></app-image-picker>
-    </div>
-
-    <div class="col-md-4">
-      <h6 class="mb-3">Barangay business permit (for sari-sari stores)</h6>
-      <app-image-picker
-        [selectedImage]="null"
-        (onSelected)="uploadSelected($event, 4)"
-      ></app-image-picker>
-    </div>
-
-    <div class="col-md-4">
-      <h6 class="mb-3">Cedula</h6>
-      <app-image-picker
-        [selectedImage]="null"
-        (onSelected)="uploadSelected($event, 5)"
-      ></app-image-picker>
-    </div>
-
-    <div class="col-md-4">
-      <h6 class="mb-3">Proof of OMECO bill</h6>
-      <app-image-picker
-        [selectedImage]="null"
-        (onSelected)="uploadSelected($event, 6)"
-      ></app-image-picker>
-    </div>
   </div>
-</div>
 
   <!-- Loan Details Section -->
   <div class="loan-details bg-light rounded-3 shadow-sm p-4 mb-4">
@@ -188,8 +188,10 @@
     (click)="submitApplication()"
   >
     <button
-      class="btn btn-primary"
-      [disabled]="loanDetailsForm$.invalid || accountInfoForm$.invalid || isLoading"
+      class="btn btn-success"
+      [disabled]="
+        loanDetailsForm$.invalid || accountInfoForm$.invalid || isLoading
+      "
     >
       <div *ngIf="isLoading" class="spinner-border me-3" role="status">
         <span class="visually-hidden">Loading...</span>

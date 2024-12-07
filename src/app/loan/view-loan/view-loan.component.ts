@@ -25,6 +25,9 @@ export class ViewLoanComponent implements OnInit {
   modalService = inject(NgbModal);
   active = 1;
   data$: LoanWithUserAndDocuments | null = null;
+  yung_mga_images = this.data$?.document ?? [];
+  yung_info_ng_user = this.data$?.user;
+  yung_loan_account_ng_user = this.data$?.loanAccount;
   loading$: boolean = false;
   histories$: Observable<LoanHistory[]> | undefined;
   activeLoans$: Observable<Loans[]> | undefined;

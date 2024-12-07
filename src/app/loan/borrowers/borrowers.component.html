@@ -50,22 +50,29 @@
         role="tabpanel"
         aria-labelledby="borrower-list-tab"
       >
-        <!-- Search Section -->
-        <div class="input-group mb-3">
-          <span class="input-group-text bg-light border-0">
+        <!-- Small Search Section with Custom Width -->
+        <div
+          class="input-group input-group-sm mb-2 rounded-pill shadow-sm overflow-hidden"
+          style="max-width: 300px"
+        >
+          <span class="input-group-text bg-primary text-white border-0">
             <i class="bi bi-search"></i>
           </span>
           <input
             type="text"
-            class="form-control border-0"
+            class="form-control form-control-sm border-0"
             placeholder="Search Borrowers..."
+            style="box-shadow: none"
           />
+          <button class="btn btn-primary btn-sm rounded-0 rounded-end">
+            Search
+          </button>
         </div>
 
         <!-- Borrowers Table -->
         <div class="table-responsive">
           <table class="table table-hover align-middle">
-            <thead class="table-light">
+            <thead class="table-light text-center">
               <tr>
                 <th>Loan Account</th>
                 <th>User</th>
@@ -73,15 +80,13 @@
                 <th>Interest</th>
                 <th>Active Loan</th>
                 <th>Available Loan</th>
+                <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr
-                *ngFor="let user of loans$"
-                class="cursor-pointer"
-                (click)="makeAloan(user.loanAccount?.id ?? '')"
-              >
-                <td class="fw-semibold text-primary">
+              <tr *ngFor="let user of loans$" class="cursor-pointer">
+                <td class="fw-semibold text-primary text-center">
                   {{ user.loanAccount?.id }}
                 </td>
                 <td>
@@ -95,19 +100,33 @@
                       height="36"
                       class="rounded-circle border"
                     />
-                    <span class="ms-2"
-                      >{{ user?.user?.firstName }}
-                      {{ user.user?.lastName }}</span
-                    >
+                    <span class="ms-2">
+                      {{ user?.user?.firstName }} {{ user.user?.lastName }}
+                    </span>
                   </div>
                 </td>
-                <td>{{ user.loanAccount?.name }}</td>
-                <td>{{ user.loanAccount?.interest }}%</td>
-                <td>0</td>
-                <td>{{ user.loanAccount?.amount | currency : "PHP" }}</td>
+                <td class="text-center">{{ user.loanAccount?.name }}</td>
+                <td class="text-center">{{ user.loanAccount?.interest }}%</td>
+                <td class="text-center">0</td>
+                <td class="text-center">
+                  {{ user.loanAccount?.amount | currency : "PHP" }}
+                </td>
+                <td class="text-center"></td>
+                <td>
+                  <div class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-success btn-sm">Approve</button>
+                    <button class="btn btn-danger btn-sm">Decline</button>
+                    <button
+                      class="btn btn-info btn-sm text-white"
+                      (click)="makeAloan(user.loanAccount?.id ?? '')"
+                    >
+                      View
+                    </button>
+                  </div>
+                </td>
               </tr>
               <tr *ngIf="loans$.length === 0">
-                <td colspan="6" class="text-center text-muted">
+                <td colspan="8" class="text-center text-muted">
                   No borrowers found.
                 </td>
               </tr>
