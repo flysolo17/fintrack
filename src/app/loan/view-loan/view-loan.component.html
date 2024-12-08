@@ -75,23 +75,18 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>ID Documents:</strong></td>
+            <td><strong>ID Document:</strong></td>
             <td>
-              <div class="d-flex flex-wrap gap-3">
-                <!-- Loop through uploaded images -->
-                <ng-container *ngIf="images.length > 0; else noImages">
-                  <img
-                    *ngFor="let image of images"
-                    [src]="image"
-                    class="img-thumbnail"
-                    alt="Uploaded ID"
-                    style="max-width: 150px; height: auto"
-                  />
-                </ng-container>
-                <ng-template #noImages>
-                  <span class="text-muted">No ID images available</span>
-                </ng-template>
-              </div>
+              <img
+                *ngIf="data$?.document?.first_id; else noImage"
+                [src]="data$?.document?.first_id"
+                class="img-thumbnail"
+                alt="Account ID"
+                style="max-width: 150px; height: auto"
+              />
+              <ng-template #noImage>
+                <span class="text-muted">No ID image available</span>
+              </ng-template>
             </td>
           </tr>
         </tbody>
