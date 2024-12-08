@@ -1,0 +1,69 @@
+/* Header Section */
+.loan-header {
+  border: 1px solid #ddd;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.loan-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* Button */
+.create-btn {
+  font-weight: 500;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.create-btn i {
+  font-size: 1rem;
+}
+
+/* Table Section */
+.table-container {
+  overflow-x: auto;
+}
+
+.table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table th,
+.table td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 12px;
+}
+
+.table th {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.table-dark {
+  background-color: #343a40;
+}
+
+.table-dark th {
+  font-size: 1rem;
+  color: #f8f9fa;
+}
+
+.btn-outline-danger {
+  border: 1px solid #dc3545;
+  color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: #fff;
+}

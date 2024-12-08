@@ -2,7 +2,10 @@
   <!-- Header Section -->
   <div class="d-flex align-items-center justify-content-between mb-4">
     <h5 class="fw-bold text-primary mb-0">Borrowers</h5>
-    <button class="btn btn-primary btn-sm px-4" (click)="createLoan()">
+    <button
+      class="btn btn-primary btn-sm px-4 shadow-sm"
+      (click)="createLoan()"
+    >
       <i class="bi bi-plus-lg me-1"></i>Create Account
     </button>
   </div>
@@ -11,7 +14,7 @@
   <div class="container-fluid rounded-3 p-4 bg-white shadow">
     <!-- Tab Navigation -->
     <ul class="nav nav-pills mb-4" id="borrowerTabs" role="tablist">
-      <li class="nav-item" role="presentation">
+      <li class="nav-item">
         <button
           class="nav-link active"
           id="borrower-list-tab"
@@ -25,7 +28,7 @@
           Borrower List
         </button>
       </li>
-      <li class="nav-item" role="presentation">
+      <li class="nav-item">
         <button
           class="nav-link"
           id="loan-details-tab"
@@ -50,23 +53,17 @@
         role="tabpanel"
         aria-labelledby="borrower-list-tab"
       >
-        <!-- Small Search Section with Custom Width -->
-        <div
-          class="input-group input-group-sm mb-2 rounded-pill shadow-sm overflow-hidden"
-          style="max-width: 300px"
-        >
+        <!-- Search Section -->
+        <div class="input-group input-group-sm mb-3" style="max-width: 300px">
           <span class="input-group-text bg-primary text-white border-0">
             <i class="bi bi-search"></i>
           </span>
           <input
             type="text"
-            class="form-control form-control-sm border-0"
+            class="form-control border-0"
             placeholder="Search Borrowers..."
-            style="box-shadow: none"
           />
-          <button class="btn btn-primary btn-sm rounded-0 rounded-end">
-            Search
-          </button>
+          <button class="btn btn-primary btn-sm">Search</button>
         </div>
 
         <!-- Borrowers Table -->
@@ -95,7 +92,7 @@
                       [src]="
                         user.user?.profile ?? '../../../assets/profile.png'
                       "
-                      alt="user profile"
+                      alt="User Profile"
                       width="36"
                       height="36"
                       class="rounded-circle border"

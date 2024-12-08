@@ -1,34 +1,53 @@
-<div class="d-flex align-items-center justify-content-between p-3">
-  <h5>Loan Type</h5>
-  <button class="btn btn-success" (click)="create()">Create Loan Type</button>
+<div
+  class="loan-header d-flex align-items-center justify-content-between p-3 shadow-sm rounded bg-light"
+>
+  <h5 class="loan-title mb-0 text-primary">
+    <i class="fa-solid fa-coins"></i> Loan Types
+  </h5>
+  <button class="btn btn-success create-btn" (click)="create()">
+    <i class="fa-solid fa-plus"></i> Create Loan Type
+  </button>
 </div>
 
-<table class="table p-3">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Loan Type</th>
-      <th scope="col">Description</th>
-      <th scope="col">Discount</th>
-      <th scope="col">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of loanType$ | async; index as index">
-      <th scope="row">{{ index + 1 }}</th>
-      <td>{{ data.name }}</td>
-      <td>{{ data.description }}</td>
-      <td>{{ data.interest }} %</td>
-      <td>
-        <button
-          class="btn btn-danger d-flex align-items-center gap-1"
-          (click)="deleteLoanType(data.id)"
-          title="Delete Loan Type"
-        >
-          <i class="fa-solid fa-trash"></i>
-          <span>Delete</span>
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="table-container p-3 shadow-sm rounded bg-white mt-3">
+  <table class="table table-hover align-middle">
+    <thead class="table-dark text-light">
+      <tr>
+        <th scope="col" class="text-center">#</th>
+        <th scope="col" class="text-start">
+          <i class="fa-solid fa-tag"></i> Loan Type
+        </th>
+        <th scope="col" class="text-start">
+          <i class="fa-solid fa-file-lines"></i> Description
+        </th>
+        <th scope="col" class="text-center">
+          <i class="fa-solid fa-percent"></i> Interest
+        </th>
+        <th scope="col" class="text-center">
+          <i class="fa-solid fa-gear"></i> Actions
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of loanType$ | async; index as index">
+        <th scope="row" class="text-center">{{ index + 1 }}</th>
+        <td class="text-start">
+          <strong>{{ data.name }}</strong>
+        </td>
+        <td class="text-start">{{ data.description }}</td>
+        <td class="text-center">{{ data.interest }} %</td>
+        <td class="text-center">
+          <div class="d-flex justify-content-center gap-2">
+            <button
+              class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1"
+              (click)="deleteLoanType(data.id)"
+              title="Delete Loan Type"
+            >
+              <i class="fa-solid fa-trash"></i> Delete
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -2,199 +2,232 @@
   *ngIf="data$ != null && !loading$"
   class="container-fluid h-100 overflow-auto p-3 bg-light"
 >
-  <div class="d-flex h-100 align-items-stretch gap-3">
-    <!-- User Profile Section -->
-    <div class="w-25 bg-white rounded shadow-sm p-3">
-      <div class="d-flex align-items-center gap-3">
-        <img
-          [src]="data$.user?.profile ?? '../../../assets/profile.png'"
-          class="rounded-circle border"
-          width="80"
-          height="80"
-        />
-        <div>
-          <h6 class="fw-bold text-primary">
-            {{ data$.user?.lastName }} {{ data$.user?.firstName }}
-            {{ data$.user?.middleName }}
-          </h6>
-          <small class="text-muted">{{ data$.user?.username }}</small>
-          <p class="mt-2 mb-0">
-            <strong class="text-dark">Available Loan:</strong>
-            <span class="text-success fw-bold">{{
-              data$.loanAccount?.amount | currency : "PHP"
-            }}</span>
-          </p>
-        </div>
-      </div>
+  <!-- Profile Header -->
+  <div class="d-flex align-items-center mb-4">
+    <img
+      [src]="data$.user?.profile ?? '../../../assets/profile.png'"
+      class="rounded-circle border shadow-sm me-3"
+      width="80"
+      height="80"
+    />
+    <h5 class="mb-0 fw-bold">
+      {{ data$.user?.firstName || "User" }}'s Account
+    </h5>
+  </div>
+
+  <!-- Combined Details Card -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Details Information</h5>
+    </div>
+    <div class="card-body">
+      <table class="table table-striped align-middle">
+        <thead class="table-light">
+          <tr>
+            <th colspan="2" class="text-primary">User Account Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>First Name:</strong></td>
+            <td>{{ data$?.user?.firstName || "Not Available" }}</td>
+          </tr>
+          <tr>
+            <td><strong>Last Name:</strong></td>
+            <td>{{ data$?.user?.lastName || "Not Available" }}</td>
+          </tr>
+          <tr>
+            <td><strong>Email:</strong></td>
+            <td>{{ data$?.user?.email || "Not Available" }}</td>
+          </tr>
+          <tr>
+            <td><strong>Username:</strong></td>
+            <td>{{ data$?.user?.username || "Not Available" }}</td>
+          </tr>
+          <tr>
+            <td><strong>Phone:</strong></td>
+            <td>{{ data$?.user?.phone || "Not Available" }}</td>
+          </tr>
+        </tbody>
+        <thead class="table-light">
+          <tr>
+            <th colspan="2" class="text-primary">Loan Account Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Loan Name:</strong></td>
+            <td>{{ data$?.loanAccount?.name || "Not Available" }}</td>
+          </tr>
+          <tr>
+            <td><strong>Amount:</strong></td>
+            <td>{{ data$?.loanAccount?.amount || "Not Available" }}</td>
+          </tr>
+          <tr>
+            <td><strong>Status:</strong></td>
+            <td>{{ data$?.loanAccount?.status || "Not Available" }}</td>
+          </tr>
+        </tbody>
+        <thead class="table-light">
+          <tr>
+            <th colspan="2" class="text-primary">User Documents</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ID Documents:</strong></td>
+            <td>
+              <div class="d-flex flex-wrap gap-3">
+                <!-- Loop through uploaded images -->
+                <ng-container *ngIf="images.length > 0; else noImages">
+                  <img
+                    *ngFor="let image of images"
+                    [src]="image"
+                    class="img-thumbnail"
+                    alt="Uploaded ID"
+                    style="max-width: 150px; height: auto"
+                  />
+                </ng-container>
+                <ng-template #noImages>
+                  <span class="text-muted">No ID images available</span>
+                </ng-template>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Loan Management Section -->
+  <div class="w-100 bg-white rounded shadow-sm p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h5 class="fw-bold text-dark">Active Loans</h5>
+      <button
+        class="btn btn-primary px-4"
+        (click)="createLoan(data$.user!!, data$.loanAccount!)"
+      >
+        Make a Loan
+      </button>
     </div>
 
-    <!-- Loan Management Section -->
-    <div class="w-75 bg-white rounded shadow-sm p-3">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h5 class="fw-bold text-dark">Active Loans</h5>
-        <button
-          class="btn btn-primary px-4"
-          (click)="createLoan(data$.user!!, data$.loanAccount!)"
-        >
-          Make a Loan
-        </button>
-      </div>
-
-      <!-- Active Loans List -->
-      <div class="row g-3">
-        <div class="col-md-6" *ngFor="let loan of activeLoans$ | async">
-          <div class="card border-0 shadow-sm">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-6">
-                  <small class="text-muted">Loan ID</small>
-                  <h6 class="fw-bold">{{ loan.id }}</h6>
-                </div>
-                <div class="col-6">
-                  <small class="text-muted">Amount</small>
-                  <h6 class="fw-bold text-success">
-                    {{ loan.amount | currency : "PHP" }}
-                  </h6>
-                </div>
-                <div class="col-6">
-                  <small class="text-muted">Interest</small>
-                  <h6>{{ loan.interest }}%</h6>
-                </div>
-                <div class="col-6">
-                  <small class="text-muted">Amount Paid</small>
-                  <h6 class="text-info">
-                    {{ loan.amountPaid | currency : "PHP" }}
-                  </h6>
-                </div>
-                <div class="col-12 mt-3">
-                  <small class="text-muted">Payment Schedule</small>
-                </div>
+    <!-- Active Loans List -->
+    <div class="row g-3">
+      <div class="col-md-6" *ngFor="let loan of activeLoans$ | async">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6">
+                <small class="text-muted">Loan ID</small>
+                <h6 class="fw-bold">{{ loan.id }}</h6>
               </div>
+              <div class="col-6">
+                <small class="text-muted">Amount</small>
+                <h6 class="fw-bold text-success">
+                  {{ loan.amount | currency : "PHP" }}
+                </h6>
+              </div>
+              <div class="col-6">
+                <small class="text-muted">Interest</small>
+                <h6>{{ loan.interest }}%</h6>
+              </div>
+              <div class="col-6">
+                <small class="text-muted">Amount Paid</small>
+                <h6 class="text-info">
+                  {{ loan.amountPaid | currency : "PHP" }}
+                </h6>
+              </div>
+              <!-- Tab Navigation -->
+              <ul
+                ngbNav
+                #nav="ngbNav"
+                [(activeId)]="active"
+                class="nav nav-tabs mt-4"
+              >
+                <li [ngbNavItem]="1">
+                  <button ngbNavLink class="nav-link">Payment Schedule</button>
+                  <ng-template ngbNavContent>
+                    <table class="table table-hover mt-3">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Date</th>
+                          <th>Amount</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let payment of payments">
+                          <td>{{ payment.date }}</td>
+                          <td>{{ payment.amount }}</td>
+                          <td>
+                            <span
+                              class="badge"
+                              [ngClass]="{
+                                'bg-success': payment.status === 'PAID',
+                                'bg-warning': payment.status === 'UNPAID',
+                                'bg-danger': payment.status === 'OVERDUE'
+                              }"
+                            >
+                              {{ payment.status }}
+                            </span>
+                          </td>
+                        </tr>
+                        <tr *ngIf="payments.length === 0">
+                          <td colspan="3" class="text-center text-muted">
+                            No payments found.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </ng-template>
+                </li>
+                <li [ngbNavItem]="2">
+                  <button ngbNavLink class="nav-link">Loan History</button>
+                  <ng-template ngbNavContent>
+                    <ul class="list-group mt-3">
+                      <li
+                        class="list-group-item d-flex justify-content-between align-items-center"
+                        *ngFor="let history of histories$ | async"
+                      >
+                        <div>
+                          <p class="mb-1 text-dark fw-bold">
+                            {{ history.message }}
+                          </p>
+                          <small class="text-muted">{{
+                            history.createdAt | date : "long"
+                          }}</small>
+                        </div>
+                        <span class="fw-bold text-primary">{{
+                          history.amount | currency : "PHP"
+                        }}</span>
+                      </li>
+                    </ul>
+                  </ng-template>
+                </li>
+              </ul>
+              <div [ngbNavOutlet]="nav" class="mt-3"></div>
             </div>
+          </div>
+
+          <!-- Loading State -->
+          <div
+            *ngIf="loading$"
+            class="d-flex flex-column justify-content-center align-items-center h-100"
+          >
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <h5 class="mt-3 text-primary">Getting loan account data...</h5>
+          </div>
+          <!-- No Data State -->
+          <div
+            *ngIf="data$ == null && !loading$"
+            class="d-flex justify-content-center align-items-center h-100"
+          >
+            <h5 class="text-muted">Loan data not found!</h5>
           </div>
         </div>
       </div>
-
-      <!-- Tab Navigation -->
-      <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav nav-tabs mt-4">
-        <li [ngbNavItem]="1">
-          <button ngbNavLink class="nav-link">Payment Schedule</button>
-          <ng-template ngbNavContent>
-            <table class="table table-hover mt-3">
-              <thead class="table-light">
-                <tr>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let payment of payments">
-                  <td>{{ payment.date }}</td>
-                  <td>{{ payment.amount }}</td>
-                  <td>
-                    <span
-                      class="badge"
-                      [ngClass]="{
-                        'bg-success': payment.status === 'PAID',
-                        'bg-warning': payment.status === 'UNPAID',
-                        'bg-danger': payment.status === 'OVERDUE'
-                      }"
-                    >
-                      {{ payment.status }}
-                    </span>
-                  </td>
-                </tr>
-                <tr *ngIf="payments.length === 0">
-                  <td colspan="3" class="text-center text-muted">
-                    No payments found.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </ng-template>
-        </li>
-        <li [ngbNavItem]="2">
-          <button ngbNavLink class="nav-link">Loan History</button>
-          <ng-template ngbNavContent>
-            <ul class="list-group mt-3">
-              <li
-                class="list-group-item d-flex justify-content-between align-items-center"
-                *ngFor="let history of histories$ | async"
-              >
-                <div>
-                  <p class="mb-1 text-dark fw-bold">{{ history.message }}</p>
-                  <small class="text-muted">{{
-                    history.createdAt | date : "long"
-                  }}</small>
-                </div>
-                <span class="fw-bold text-primary">{{
-                  history.amount | currency : "PHP"
-                }}</span>
-              </li>
-            </ul>
-          </ng-template>
-        </li>
-      </ul>
-      <div [ngbNavOutlet]="nav" class="mt-3"></div>
     </div>
   </div>
-</div>
-
-<!-- Loading State -->
-<div
-  *ngIf="loading$"
-  class="d-flex flex-column justify-content-center align-items-center h-100"
->
-  <div class="spinner-border text-primary" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
-  <h5 class="mt-3 text-primary">Getting loan account data...</h5>
-</div>
-t
-<!-- No Data State -->
-<div
-  *ngIf="data$ == null && !loading$"
-  class="d-flex justify-content-center align-items-center h-100"
->
-  <h5 class="text-muted">Loan data not found!</h5>
-</div>
-
-<!-- may atlong klaseng na data model dito  -->
-
-<div class="container-fluid p-3 m-3">
-  <!-- user account eto yung account na nilologin mo  -->
-  <h1>User account</h1>
-  <!-- eto yung data nya -->
-
-  <pre><code>{{ data$?.user | json }}</code></pre>
-  <!-- 
-  ganito naman idisplay kunware ididisplay mo yung firstName -->
-  <h1>{{ data$?.user?.firstName }}</h1>
-</div>
-
-<!-- second data is loan account -->
-<div class="container-fluid p-3 m-3">
-  <h1>Eto naman loan account</h1>
-
-  <!-- eto para makita mo lahat ng karga ng loan account -->
-  <pre><code>{{ data$?.loanAccount | json }}</code></pre>
-
-  <!-- example ulit kung gusto mo mag display ng data sa loan account -->
-  <h1>{{ data$?.loanAccount?.name }}</h1>
-</div>
-
-<!-- third data is yung documents  -->
-<!-- eto yung mga images ng ids nya  -->
-
-<div class="container-fluid p-3 m-3">
-  <!-- kunware gusto mo magdisplay ng image ng id nya  -->
-  <h1>Eto yung mga ids nya</h1>
-  <pre><code>{{ data$?.document| json }}</code></pre>
-  <img
-    [src]="data$?.document?.first_id"
-    width="100px"
-    height="100px"
-    alt="Account ID"
-  />
 </div>

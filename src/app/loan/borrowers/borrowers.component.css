@@ -1,33 +1,36 @@
-.table-hover tr {
-  transition: background-color 0.2s;
+.container-fluid {
+  font-family: "Arial", sans-serif;
 }
 
-.table-hover tr:hover {
+.nav-pills .nav-link {
+  border-radius: 20px;
+  padding: 10px 20px;
+}
+
+.table-hover tbody tr:hover {
   background-color: #f9f9f9;
 }
 
-.cursor-pointer {
-  cursor: pointer;
+.badge {
+  font-size: 0.85rem;
+  padding: 0.4em 0.6em;
+  border-radius: 20px;
 }
 
-.input-group-text {
-  font-size: 1rem;
+.input-group {
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.table thead {
+  background: linear-gradient(to right, #007bff, #6610f2);
+  color: #fff;
 }
 
 .btn {
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.3s ease-in-out;
 }
 
 .btn:hover {
-  transform: scale(1.02);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-.input-group .form-control:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-.input-group .btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
+  transform: scale(1.05);
 }
