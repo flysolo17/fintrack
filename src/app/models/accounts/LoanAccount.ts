@@ -6,11 +6,22 @@ export interface LoanAccount {
   name: string;
   amount: number;
   interest: number;
+  status: LoanAccountStatus;
   creditScore: number;
   payableDays: number;
   createdAt: Date;
   updatedAt: Date;
 }
+
+export enum LoanAccountStatus {
+  PENDING = 'PENDING',
+  DECLINED = 'DECLINED',
+  ACCEPTED = 'ACCEPTED',
+  CLOSED = 'CLOSED',
+  DEFAULTED = 'DEFAULTED',
+  CANCELLED = 'CANCELLED',
+}
+
 export const loanAccountConverter = {
   toFirestore: (data: LoanAccount) => data,
   fromFirestore: (snap: QueryDocumentSnapshot) => {

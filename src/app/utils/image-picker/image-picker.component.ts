@@ -9,6 +9,7 @@ import {
 
 @Component({
   selector: 'app-image-picker',
+
   templateUrl: './image-picker.component.html',
   styleUrl: './image-picker.component.css',
 })

@@ -16,6 +16,7 @@ import {
 import {
   LoanAccount,
   loanAccountConverter,
+  LoanAccountStatus,
 } from '../../models/accounts/LoanAccount';
 
 @Component({
@@ -121,6 +122,7 @@ export class CreateLoanComponent implements OnInit {
       interest: interest,
       name: type?.name ?? '',
       payableDays: type?.payableDays ?? 0,
+      status: LoanAccountStatus.PENDING,
     };
 
     this.isLoading = true;

@@ -151,11 +151,50 @@
   </div>
   <h5 class="mt-3 text-primary">Getting loan account data...</h5>
 </div>
-
+t
 <!-- No Data State -->
 <div
   *ngIf="data$ == null && !loading$"
   class="d-flex justify-content-center align-items-center h-100"
 >
   <h5 class="text-muted">Loan data not found!</h5>
+</div>
+
+<!-- may atlong klaseng na data model dito  -->
+
+<div class="container-fluid p-3 m-3">
+  <!-- user account eto yung account na nilologin mo  -->
+  <h1>User account</h1>
+  <!-- eto yung data nya -->
+
+  <pre><code>{{ data$?.user | json }}</code></pre>
+  <!-- 
+  ganito naman idisplay kunware ididisplay mo yung firstName -->
+  <h1>{{ data$?.user?.firstName }}</h1>
+</div>
+
+<!-- second data is loan account -->
+<div class="container-fluid p-3 m-3">
+  <h1>Eto naman loan account</h1>
+
+  <!-- eto para makita mo lahat ng karga ng loan account -->
+  <pre><code>{{ data$?.loanAccount | json }}</code></pre>
+
+  <!-- example ulit kung gusto mo mag display ng data sa loan account -->
+  <h1>{{ data$?.loanAccount?.name }}</h1>
+</div>
+
+<!-- third data is yung documents  -->
+<!-- eto yung mga images ng ids nya  -->
+
+<div class="container-fluid p-3 m-3">
+  <!-- kunware gusto mo magdisplay ng image ng id nya  -->
+  <h1>Eto yung mga ids nya</h1>
+  <pre><code>{{ data$?.document| json }}</code></pre>
+  <img
+    [src]="data$?.document?.first_id"
+    width="100px"
+    height="100px"
+    alt="Account ID"
+  />
 </div>

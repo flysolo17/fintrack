@@ -111,11 +111,29 @@
                 <td class="text-center">
                   {{ user.loanAccount?.amount | currency : "PHP" }}
                 </td>
-                <td class="text-center"></td>
+                <td class="text-center">{{ user.loanAccount?.status }}</td>
                 <td>
                   <div class="d-flex justify-content-center gap-2">
-                    <button class="btn btn-success btn-sm">Approve</button>
-                    <button class="btn btn-danger btn-sm">Decline</button>
+                    <button
+                      class="btn btn-success btn-sm"
+                      *ngIf="
+                        user.loanAccount?.status === 'PENDING' &&
+                        user$?.type === 'ADMIN'
+                      "
+                      (click)="acceptLoanAccount(user.loanAccount?.id ?? '')"
+                    >
+                      Approve
+                    </button>
+                    <button
+                      class="btn btn-danger btn-sm"
+                      *ngIf="
+                        user.loanAccount?.status === 'PENDING' &&
+                        user$?.type === 'ADMIN'
+                      "
+                      (click)="declineLoanAccount(user.loanAccount?.id ?? '')"
+                    >
+                      Decline
+                    </button>
                     <button
                       class="btn btn-info btn-sm text-white"
                       (click)="makeAloan(user.loanAccount?.id ?? '')"

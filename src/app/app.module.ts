@@ -40,7 +40,7 @@ import { PaymentRecordComponent } from './collector/payment-record/payment-recor
 import { PaymentHistoryComponent } from './collector/payment-history/payment-history.component';
 import { PerformanceComponent } from './collector/performance/performance.component';
 import { BorrowersComponent } from './loan/borrowers/borrowers.component';
-import { CreateBorrowerComponent } from './collector/modals/create-borrower/create-borrower.component';
+
 import { LoanPlanComponent } from './admin/loan-plan/loan-plan.component';
 import { ViewLoanComponent } from './loan/view-loan/view-loan.component';
 import { MakeLoanComponent } from './loan/dialogs/make-loan/make-loan.component';
@@ -71,13 +71,13 @@ import { BorrowerHomeComponent } from './borrower/borrower-home/borrower-home.co
     CollectorMainComponent,
     AdminDashboardComponent,
     AdminCollectorsComponent,
-    CreateBorrowerComponent,
+
     CreateCollectorComponent,
     CollectorDashboardComponent,
     CreateLoanComponent,
     BorrowerHomeComponent,
     CollectorHomeComponent,
-    ImagePickerComponent,
+
     CreateLoanTypeComponent,
     LoanTypeComponent,
     DailyPaymentComponent,
@@ -85,12 +85,13 @@ import { BorrowerHomeComponent } from './borrower/borrower-home/borrower-home.co
     PaymentHistoryComponent,
     PerformanceComponent,
     BorrowersComponent,
-    CreateBorrowerComponent,
+
     LoanPlanComponent,
     ViewLoanComponent,
     MakeLoanComponent,
     ConfirmLoanComponent,
     PaymentDialogComponent,
+    ImagePickerComponent,
   ],
   imports: [
     BrowserModule,
@@ -98,7 +99,6 @@ import { BorrowerHomeComponent } from './borrower/borrower-home/borrower-home.co
     NgbModule,
     ReactiveFormsModule,
     NgbDropdownModule,
-
     CommonModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),

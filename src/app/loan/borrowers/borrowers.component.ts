@@ -8,6 +8,7 @@ import { UserWithLoanAccount } from '../../models/accounts/UserWithLoanAccount';
 import { Users } from '../../models/accounts/users';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MakeLoanComponent } from '../dialogs/make-loan/make-loan.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-borrowers',
@@ -15,24 +16,20 @@ import { MakeLoanComponent } from '../dialogs/make-loan/make-loan.component';
   styleUrl: './borrowers.component.css',
 })
 export class BorrowersComponent implements OnInit {
-data$: any;
-viewLoanAccount(arg0: string) {
-throw new Error('Method not implemented.');
-}
-  filteredLoans(): any {
-    throw new Error('Method not implemented.');
-  }
-  approveLoan(arg0: any) {
-    throw new Error('Method not implemented.');
-  }
+  data$: any;
+
   modalService = inject(NgbModal);
   loans$: UserWithLoanAccount[] = [];
   loanStatus: any;
   user$: Users | null = null;
   loanService: any;
-  toastr: any;
+
   searchQuery: any;
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private toastr: ToastrService
+  ) {}
   ngOnInit(): void {
     let uid = localStorage.getItem('uid') ?? '';
     this.authService.getUserData(uid).then((data) => {
@@ -45,7 +42,6 @@ throw new Error('Method not implemented.');
       },
       (error) => {
         console.error('Error fetching user with loan account:', error);
-        // Handle the error (e.g., show a notification or set a flag)
       }
     );
   }
@@ -63,27 +59,23 @@ throw new Error('Method not implemented.');
     const user = this.user$?.type.toLocaleLowerCase();
     this.router.navigate([`${user}/borrowers/${id}`]);
   }
-  declineLoan(loanId: string): void {
-    if (!loanId) return;
 
-    this.loanService.declineLoan(loanId).subscribe({
-      next: (response: any) => {
-        console.log('Declined loan:', response);
-        this.toastr.success('Loan declined successfully', 'Success');
-        this.refreshLoans(); // Refresh the loans list
-      },
-      error: (err: any) => {
-        console.error('Error declining loan:', err);
-        this.toastr.error('Failed to decline loan', 'Error');
-      },
-    });
+  declineLoanAccount(loanAccountID: string): void {
+    this.authService
+      .defaultLoanAccount(loanAccountID)
+      .then(() => {
+        this.toastr.success('Loan account is declined!');
+      })
+      .catch((err) => {
+        this.toastr.error(err['message']);
+      });
   }
 
   viewLoan(loanId: string): void {
     if (!loanId) return;
 
     console.log('Navigating to view loan:', loanId);
-    this.router.navigate(['/loans', loanId]); // Navigate to a detailed view page
+    this.router.navigate(['/loans', loanId]);
   }
 
   refreshLoans(): void {
@@ -96,41 +88,14 @@ throw new Error('Method not implemented.');
       },
     });
   }
-}
-const loans$ = [
-  {
-    loanAccount: {
-      id: '12345',
-      name: 'Personal',
-      interest: 5,
-      amount: 10000,
-      status: 'Approved', // Add status
-    },
-    user: {
-      firstName: 'John',
-      lastName: 'Doe',
-      profile: 'path-to-profile-image',
-    },
-  },
-  {
-    loanAccount: {
-      id: '67890',
-      name: 'Business',
-      interest: 3,
-      amount: 50000,
-      status: 'Pending', // Add status
-    },
-    user: {
-      firstName: 'Jane',
-      lastName: 'Smith',
-      profile: null, // Default profile will be used
-    },
-  },
-];
-export interface LoanAccount {
-  id: string;
-  name: string;
-  interest: number;
-  amount: number;
-  status?: string; // Optional property
+  acceptLoanAccount(loanAccountID: string) {
+    this.authService
+      .acceptLoanAccount(loanAccountID)
+      .then(() => {
+        this.toastr.success('Loan account is accepted!');
+      })
+      .catch((err) => {
+        this.toastr.error(err['message']);
+      });
+  }
 }

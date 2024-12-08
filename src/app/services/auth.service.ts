@@ -12,6 +12,7 @@ import {
   orderBy,
   query,
   setDoc,
+  updateDoc,
   where,
   writeBatch,
 } from '@angular/fire/firestore';
@@ -43,6 +44,7 @@ import { IDENTIFICATION_COLLECTION } from './loan.service';
 import {
   LoanAccount,
   loanAccountConverter,
+  LoanAccountStatus,
 } from '../models/accounts/LoanAccount';
 import { UserWithLoanAccount } from '../models/accounts/UserWithLoanAccount';
 export const AUTH_COLLECTION = 'users';
@@ -331,5 +333,78 @@ export class AuthService {
           .catch((error) => console.error('Error deleting document: ', error));
       });
     });
+  }
+
+  acceptLoanAccount(loanAccountID: string) {
+    return updateDoc(
+      doc(this.firestore, LOAN_ACCOUNT, loanAccountID).withConverter(
+        loanAccountConverter
+      ),
+      {
+        status: LoanAccountStatus.ACCEPTED,
+        updatedAt: new Date(),
+      }
+    );
+  }
+
+  declineLoanAccount(loanAccountID: string) {
+    return updateDoc(
+      doc(this.firestore, LOAN_ACCOUNT, loanAccountID).withConverter(
+        loanAccountConverter
+      ),
+      {
+        status: LoanAccountStatus.DECLINED,
+        updatedAt: new Date(),
+      }
+    );
+  }
+
+  closeLoanAccount(loanAccountID: string) {
+    return updateDoc(
+      doc(this.firestore, LOAN_ACCOUNT, loanAccountID).withConverter(
+        loanAccountConverter
+      ),
+      {
+        status: LoanAccountStatus.CLOSED,
+        updatedAt: new Date(),
+      }
+    );
+  }
+
+  defaultLoanAccount(loanAccountID: string) {
+    return updateDoc(
+      doc(this.firestore, LOAN_ACCOUNT, loanAccountID).withConverter(
+        loanAccountConverter
+      ),
+      {
+        status: LoanAccountStatus.DEFAULTED,
+        updatedAt: new Date(),
+      }
+    );
+  }
+
+  cancelLoanAccount(loanAccountID: string) {
+    return updateDoc(
+      doc(this.firestore, LOAN_ACCOUNT, loanAccountID).withConverter(
+        loanAccountConverter
+      ),
+      {
+        status: LoanAccountStatus.CANCELLED,
+        updatedAt: new Date(),
+      }
+    );
+  }
+
+  // Revert loan status back to pending (if applicable)
+  revertLoanToPending(loanAccountID: string) {
+    return updateDoc(
+      doc(this.firestore, LOAN_ACCOUNT, loanAccountID).withConverter(
+        loanAccountConverter
+      ),
+      {
+        status: LoanAccountStatus.PENDING,
+        updatedAt: new Date(),
+      }
+    );
   }
 }
