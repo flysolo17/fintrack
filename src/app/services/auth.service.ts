@@ -81,6 +81,7 @@ export class AuthService {
     const decryptedPassword = this.encriptionService.decrypt(user.password);
 
     if (decryptedPassword === password) {
+      localStorage.setItem('uid', user.id);
       return user;
     } else {
       return null;

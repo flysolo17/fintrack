@@ -21,7 +21,7 @@ import {
   Storage,
   uploadBytes,
 } from '@angular/fire/storage';
-import { generateRandomNumber } from '../utils/Constants';
+import { generateRandomNumber, processPayment } from '../utils/Constants';
 import {
   identificationConverter,
   Identifications,
@@ -35,6 +35,7 @@ import {
   loanConverter,
   Loans,
   LoanStatus,
+  PaymentSchedule,
   PaymentStatus,
 } from '../models/loans/loan';
 import { LOAN_HISTORY_COLLECTION } from './history.service';
@@ -108,6 +109,31 @@ export class LoanService {
     return batch.commit();
   }
 
+  updateLoan(loanID: string, status: LoanStatus, history: LoanHistory) {
+    const batch = writeBatch(this.firestore);
+
+    let loanRef = doc(
+      collection(this.firestore, LOANS_COLLECTION).withConverter(loanConverter),
+      loanID
+    );
+
+    let historyRef = doc(
+      collection(this.firestore, LOAN_HISTORY_COLLECTION).withConverter(
+        historyConverter
+      ),
+      history.id
+    );
+
+    batch.set(historyRef, history);
+
+    batch.update(loanRef, {
+      status: status,
+      updatedAt: new Date(),
+    });
+
+    return batch.commit();
+  }
+
   async viewLoanAccount(id: string): Promise<LoanWithUserAndDocuments> {
     const userRef = query(
       collection(this.firestore, AUTH_COLLECTION).withConverter(userConverter),
@@ -162,22 +188,20 @@ export class LoanService {
     const loanQuery = query(
       collection(this.firestore, LOANS_COLLECTION).withConverter(loanConverter),
       where('loanAccountID', '==', id),
-      where('status', '==', LoanStatus.CONFIRMED),
+      orderBy('updatedAt', 'desc'),
       orderBy('createdAt', 'desc')
     );
     return collectionData(loanQuery);
   }
 
-  getPaymentsWithUser(): Observable<LoanWithUser[]> {
+  getRecentLoans() {
     const loanQuery = query(
       collection(this.firestore, LOANS_COLLECTION).withConverter(loanConverter),
-      where('status', '==', LoanStatus.CONFIRMED),
+      orderBy('updatedAt', 'desc'),
       orderBy('createdAt', 'desc')
     );
-
     return collectionData(loanQuery).pipe(
       switchMap((loans: Loans[]) => {
-        // Map over the loans and fetch users
         const loanWithUserObservables = loans.map((loan) => {
           const userQuery = query(
             collection(this.firestore, AUTH_COLLECTION).withConverter(
@@ -186,8 +210,6 @@ export class LoanService {
             where('username', '==', loan.loanAccountID),
             limit(1)
           );
-
-          // Return an observable for each loan's user data
           return from(getDocs(userQuery)).pipe(
             map((usersSnapshot) => ({
               loan,
@@ -198,8 +220,37 @@ export class LoanService {
             }))
           );
         });
+        return forkJoin(loanWithUserObservables);
+      })
+    );
+  }
+  getPaymentsWithUser(): Observable<LoanWithUser[]> {
+    const loanQuery = query(
+      collection(this.firestore, LOANS_COLLECTION).withConverter(loanConverter),
+      where('status', '==', LoanStatus.CONFIRMED),
+      orderBy('createdAt', 'desc')
+    );
 
-        // Merge the results of all user queries into a single observable array
+    return collectionData(loanQuery).pipe(
+      switchMap((loans: Loans[]) => {
+        const loanWithUserObservables = loans.map((loan) => {
+          const userQuery = query(
+            collection(this.firestore, AUTH_COLLECTION).withConverter(
+              userConverter
+            ),
+            where('username', '==', loan.loanAccountID),
+            limit(1)
+          );
+          return from(getDocs(userQuery)).pipe(
+            map((usersSnapshot) => ({
+              loan,
+              users:
+                usersSnapshot.docs.length > 0
+                  ? usersSnapshot.docs[0].data()
+                  : null,
+            }))
+          );
+        });
         return forkJoin(loanWithUserObservables);
       })
     );
@@ -207,60 +258,51 @@ export class LoanService {
 
   async updatePaymentStatusAndAmount(
     loanID: string,
-
-    history: LoanHistory,
-    totalAmountPaid: number
+    amount: number,
+    history: LoanHistory
   ) {
     const batch = writeBatch(this.firestore);
     const loanRef = doc(
       collection(this.firestore, LOANS_COLLECTION).withConverter(loanConverter),
       loanID
     );
+    const today = new Date();
 
     try {
       const loanDoc = await getDoc(loanRef);
       if (!loanDoc.exists()) {
-        console.log('Loan not found');
+        console.log(`Loan not found: ${loanID}`);
         return;
       }
 
       const loan = loanDoc.data();
-      const paymentIndex = 0;
-      var paymentAmount = loan.paymentSchedule[paymentIndex]?.amount;
-      if (paymentAmount == 0) {
-        for (let i = paymentIndex + 1; i < loan.paymentSchedule.length; i++) {
-          if (loan.paymentSchedule[i]?.amount > 0) {
-            paymentAmount = loan.paymentSchedule[i].amount;
-            break;
-          }
-        }
+
+      const updatedLoan = processPayment(loan, amount);
+      batch.update(loanRef, updatedLoan);
+
+      let overdueCount = loan.paymentSchedule.reduce((count, e) => {
+        const scheduleDate = new Date(e.date);
+        return (
+          count +
+          (e.status !== 'PAID' &&
+          scheduleDate < today &&
+          scheduleDate.getDate() !== today.getDate()
+            ? 1
+            : 0)
+        );
+      }, 0);
+
+      if (overdueCount > 0) {
+        const loanAccountRef = doc(
+          this.firestore,
+          LOAN_ACCOUNT,
+          loan.loanAccountID
+        );
+        batch.update(loanAccountRef, {
+          creditScore: increment(-overdueCount),
+          updatedAt: new Date(),
+        });
       }
-
-      const numberOfPaymentsToUpdate = Math.floor(
-        totalAmountPaid / paymentAmount
-      );
-      let remainingAmount = totalAmountPaid;
-      let updatedPayments = 0;
-
-      loan.paymentSchedule.forEach((payment, index) => {
-        if (updatedPayments < numberOfPaymentsToUpdate) {
-          payment.status = PaymentStatus.PAID;
-          updatedPayments++;
-        } else if (
-          updatedPayments === numberOfPaymentsToUpdate &&
-          remainingAmount > 0
-        ) {
-          payment.status = PaymentStatus.PAID;
-          remainingAmount = 0;
-          updatedPayments++;
-        }
-      });
-
-      batch.update(loanRef, {
-        paymentSchedule: loan.paymentSchedule,
-        amountPaid: increment(totalAmountPaid),
-        updatedAt: new Date(),
-      });
 
       const historyRef = doc(
         collection(this.firestore, LOAN_HISTORY_COLLECTION).withConverter(
@@ -268,14 +310,36 @@ export class LoanService {
         ),
         history.id
       );
-      batch.set(historyRef, history);
+      batch.set(historyRef, {
+        ...history,
+        createdAt: new Date(),
+      });
 
-      // Commit batch
       await batch.commit();
 
-      console.log(`${updatedPayments} payments updated successfully.`);
+      console.log('Payments updated successfully.');
     } catch (error) {
       console.error('Error updating payment status and amount:', error);
     }
+  }
+
+  increaseLimit(loanAccountID: string, limit: number, history: LoanHistory) {
+    const batch = writeBatch(this.firestore);
+    const loanAcccountRef = doc(
+      collection(this.firestore, LOAN_ACCOUNT).withConverter(
+        loanAccountConverter
+      ),
+      loanAccountID
+    );
+    batch.update(loanAcccountRef, {
+      amount: increment(limit),
+      updatedAt: new Date(),
+    });
+
+    batch.set(
+      doc(this.firestore, LOAN_HISTORY_COLLECTION, history.id),
+      history
+    );
+    return batch.commit();
   }
 }

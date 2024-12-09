@@ -1,0 +1,59 @@
+<div class="modal-header">
+  <h6 class="modal-title">Increase Limit</h6>
+</div>
+<div class="modal-body">
+  <div class="mb-3">
+    <label for="accountName" class="form-label"
+      ><strong>Loan Account Name:</strong></label
+    >
+    <p id="accountName">{{ account.name }}</p>
+  </div>
+
+  <div class="mb-3">
+    <label for="currentAmount" class="form-label"
+      ><strong>Current Amount:</strong></label
+    >
+    <p id="currentAmount">{{ account.amount | currency : "PHP" }}</p>
+  </div>
+
+  <div class="mb-3">
+    <label for="interest" class="form-label"
+      ><strong>Interest Rate:</strong></label
+    >
+    <p id="interest">{{ account.interest }}%</p>
+  </div>
+
+  <div class="mb-3">
+    <label for="creditScore" class="form-label"
+      ><strong>Credit Score:</strong></label
+    >
+    <p id="creditScore">{{ account.creditScore }}</p>
+  </div>
+
+  <div class="mb-3">
+    <label for="increaseAmount" class="form-label"
+      ><strong>Increase Amount:</strong></label
+    >
+    <input
+      type="number"
+      id="increaseAmount"
+      class="form-control"
+      [(ngModel)]="increaseAmount"
+      placeholder="Enter additional amount"
+      min="0"
+    />
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.close()">
+    Cancel
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    [disabled]="!increaseAmount"
+    (click)="increaseLimit()"
+  >
+    Increase
+  </button>
+</div>

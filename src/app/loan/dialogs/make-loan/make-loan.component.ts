@@ -14,6 +14,8 @@ import { ConfirmLoanComponent } from '../confirm-loan/confirm-loan.component';
 import { LoanHistory } from '../../../models/loans/loan-history';
 import { LoanService } from '../../../services/loan.service';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../../services/auth.service';
+import { PdfGenerationService } from '../../../services/pdf-generation.service';
 
 @Component({
   selector: 'app-make-loan',
@@ -26,13 +28,18 @@ export class MakeLoanComponent implements OnInit {
   @Input() user!: Users;
   @Input() loanAccount!: LoanAccount;
   loading$ = false;
+  collector: Users | null = null;
+
   constructor(
     private loanService: LoanService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService,
+    private pdfService: PdfGenerationService
   ) {}
 
   amountControl: FormControl | undefined;
   ngOnInit(): void {
+    this.collector = this.authService.users$;
     this.amountControl = new FormControl(0, [
       Validators.required,
       Validators.max(this.loanAccount.amount),
@@ -59,7 +66,7 @@ export class MakeLoanComponent implements OnInit {
         interest: this.loanAccount.interest,
         amountPaid: 0,
         paymentSchedule: paymentSchedule,
-        status: LoanStatus.CONFIRMED,
+        status: LoanStatus.PENDING,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -83,21 +90,27 @@ export class MakeLoanComponent implements OnInit {
       }
     });
   }
+
+  generatePDF(loan: Loans, office: Users | null) {
+    this.pdfService.createPDF(loan, office);
+  }
   saveLoan(loan: Loans, loanWithoutInterest: number) {
     this.loading$ = true;
     const history: LoanHistory = {
       id: generateRandomNumber(),
       borrowerID: this.user.username,
       loanID: loan.id,
-      message: `Loan Approved`,
+      message: `Your loan is being process and waiting for appproval`,
       createdAt: new Date(),
       amount: loan.amount,
+      collectorID: this.collector?.id ?? '',
     };
     this.loanService
       .acceptLoan(loan, history, loanWithoutInterest)
       .then(() => this.toastr.success('Loan success'))
       .catch((err) => this.toastr.error(err['message']))
       .finally(() => {
+        this.generatePDF(loan, this.collector);
         this.activeModal.close();
         this.loading$ = false;
       });

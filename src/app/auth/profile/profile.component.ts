@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 export class ProfileComponent {
   constructor(private router: Router) {}
   logout() {
+    localStorage.clear();
     this.router.navigateByUrl('/login', { replaceUrl: true }).then(() => {
       this.router.resetConfig(this.router.config);
     });

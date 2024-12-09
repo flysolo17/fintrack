@@ -16,15 +16,12 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './borrowers.component.css',
 })
 export class BorrowersComponent implements OnInit {
-  data$: any;
-
   modalService = inject(NgbModal);
   loans$: UserWithLoanAccount[] = [];
   loanStatus: any;
   user$: Users | null = null;
   loanService: any;
 
-  searchQuery: any;
   constructor(
     private router: Router,
     private authService: AuthService,

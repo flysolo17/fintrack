@@ -53,6 +53,10 @@ import { CommonModule } from '@angular/common';
 import { DailyPaymentComponent } from './admin/daily-payment/daily-payment.component';
 import { PaymentDialogComponent } from './admin/modals/payment-dialog/payment-dialog.component';
 import { BorrowerHomeComponent } from './borrower/borrower-home/borrower-home.component';
+import { LoansComponent } from './admin/loans/loans.component';
+
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { IncreateLimitComponent } from './loan/dialogs/increate-limit/increate-limit.component';
 
 @NgModule({
   declarations: [
@@ -92,6 +96,8 @@ import { BorrowerHomeComponent } from './borrower/borrower-home/borrower-home.co
     ConfirmLoanComponent,
     PaymentDialogComponent,
     ImagePickerComponent,
+    LoansComponent,
+    IncreateLimitComponent,
   ],
   imports: [
     BrowserModule,
@@ -99,6 +105,7 @@ import { BorrowerHomeComponent } from './borrower/borrower-home/borrower-home.co
     NgbModule,
     ReactiveFormsModule,
     NgbDropdownModule,
+    NgbPaginationModule,
     CommonModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),

@@ -23,6 +23,7 @@ import { LoanPlanComponent } from './admin/loan-plan/loan-plan.component';
 import { ViewLoanComponent } from './loan/view-loan/view-loan.component';
 import { BorrowerHomeComponent } from './borrower/borrower-home/borrower-home.component';
 import { DailyPaymentComponent } from './admin/daily-payment/daily-payment.component';
+import { LoansComponent } from './admin/loans/loans.component';
 
 const routes: Routes = [
   {
@@ -70,6 +71,10 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: AdminDashboardComponent,
+      },
+      {
+        path: 'loans',
+        component: LoansComponent,
       },
       {
         path: 'collectors',

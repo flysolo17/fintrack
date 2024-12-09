@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { Users, UserType } from './models/accounts/users';
 import { Router } from '@angular/router';
+import { PdfGenerationService } from './services/pdf-generation.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,12 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
   title = 'fintrack';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private pdfGenerationService: PdfGenerationService
+  ) {}
+
   ngOnInit(): void {
     let uid = localStorage.getItem('uid');
     if (uid !== null) {

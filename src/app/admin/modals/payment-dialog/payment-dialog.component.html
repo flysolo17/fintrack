@@ -4,15 +4,57 @@
 
 <div class="modal-body">
   <div class="form-group">
+    <label for="schedule">Schedule</label>
+    <h6 class="mb-3">
+      {{ schedule.date | date : "short" }}
+    </h6>
     <label for="amountPaid">Amount Paid</label>
-    <input
-      type="number"
-      id="amountPaid"
-      class="form-control"
-      [(ngModel)]="totalAmountPaid"
-      placeholder="Enter payment amount"
-      min="1"
-    />
+    <h6 class="mb-3">
+      {{ loanWithUser.loan?.amountPaid | currency : "PHP" }} of
+      {{ loanWithUser.loan?.amount | currency : "PHP" }}
+    </h6>
+
+    <div class="row">
+      <!-- Card to pay exact amount for payment schedule -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Pay Exact Amount</h5>
+            <h6 class="card-text">{{ exactAmount | currency : "PHP" }}</h6>
+            <button class="btn btn-primary" (click)="payExactAmount()">
+              Pay
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card to pay the full remaining balance -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Pay Full Balance</h5>
+            <h6 class="card-text">{{ fullAmmount | currency : "PHP" }}</h6>
+            <button class="btn btn-primary" (click)="payFullBalance()">
+              Pay
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input field for custom payment amount -->
+    <div class="form-group mt-3">
+      <label for="amountPaid">Enter Custom Amount</label>
+      <input
+        type="number"
+        id="amountPaid"
+        class="form-control"
+        [(ngModel)]="totalAmountPaid"
+        placeholder="Enter payment amount"
+        min="1"
+        [max]="maxAmount"
+      />
+    </div>
   </div>
 </div>
 

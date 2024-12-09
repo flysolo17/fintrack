@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LoanService } from '../../services/loan.service';
-import { PaymentStatus } from '../../models/loans/loan';
+import { PaymentSchedule, PaymentStatus } from '../../models/loans/loan';
 import { LoanWithUser } from '../../models/loans/LoanWithUser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaymentDialogComponent } from '../modals/payment-dialog/payment-dialog.component';
@@ -11,6 +11,7 @@ interface PaymentRow {
   customer: string;
   amount: string;
   status: PaymentStatus;
+  schedule: PaymentSchedule;
 }
 
 @Component({
@@ -38,6 +39,7 @@ export class DailyPaymentComponent implements OnInit {
             customer: `${loan.users?.firstName} ${loan.users?.lastName}`,
             amount: payment.amount.toString(),
             status: payment.status,
+            schedule: payment,
           });
         });
       });
@@ -76,8 +78,19 @@ export class DailyPaymentComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  pay(loanWithUser: LoanWithUser) {
+  pay(loanWithUser: LoanWithUser, schedule: PaymentSchedule) {
     const modal = this.modalService.open(PaymentDialogComponent);
     modal.componentInstance.loanWithUser = loanWithUser;
+    modal.componentInstance.schedule = schedule;
+  }
+  isScheduledToday(schedule: PaymentSchedule): boolean {
+    const today = new Date();
+    const scheduledDate = new Date(schedule.date);
+
+    return (
+      today.getFullYear() === scheduledDate.getFullYear() &&
+      today.getMonth() === scheduledDate.getMonth() &&
+      today.getDate() === scheduledDate.getDate()
+    );
   }
 }

@@ -3,9 +3,9 @@ import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 export interface LoanHistory {
   id: string;
   borrowerID: string;
+  collectorID: string;
   loanID: string;
   message: string;
-
   amount: number;
   createdAt: Date;
 }

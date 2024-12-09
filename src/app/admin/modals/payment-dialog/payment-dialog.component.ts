@@ -7,6 +7,7 @@ import { generateRandomNumber } from '../../../utils/Constants';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../services/auth.service';
 import { Users } from '../../../models/accounts/users';
+import { PaymentSchedule } from '../../../models/loans/loan';
 
 @Component({
   selector: 'app-payment-dialog',
@@ -16,8 +17,11 @@ import { Users } from '../../../models/accounts/users';
 export class PaymentDialogComponent implements OnInit {
   activeModal = inject(NgbActiveModal);
   @Input() loanWithUser!: LoanWithUser;
+  @Input() schedule!: PaymentSchedule;
   totalAmountPaid: number = 0;
   users: Users | null = null;
+  maxAmount: number = 0;
+
   constructor(
     private loanService: LoanService,
     private toastr: ToastrService,
@@ -26,6 +30,22 @@ export class PaymentDialogComponent implements OnInit {
   ngOnInit(): void {
     this.users = this.authService.users$;
     console.log(this.users);
+  }
+
+  payExactAmount() {
+    const paymentSchedule = this.loanWithUser.loan?.paymentSchedule.find(
+      (schedule) => schedule.status !== 'PAID'
+    );
+    if (paymentSchedule) {
+      this.totalAmountPaid = paymentSchedule.amount;
+    }
+  }
+
+  payFullBalance() {
+    this.maxAmount =
+      (this.loanWithUser.loan?.amount ?? 0) -
+      (this.loanWithUser.loan?.amountPaid ?? 0);
+    this.totalAmountPaid = this.maxAmount;
   }
 
   submitLoan() {
@@ -37,22 +57,22 @@ export class PaymentDialogComponent implements OnInit {
     let history: LoanHistory = {
       id: generateRandomNumber(10),
       borrowerID: this.loanWithUser.users?.username ?? '',
+      collectorID: this.users?.id ?? '',
       loanID: this.loanWithUser?.loan?.id ?? '',
       message: `Payment update collected by ${this.users?.username} amounted ${this.totalAmountPaid}`,
       amount: this.totalAmountPaid,
       createdAt: new Date(),
     };
 
-    // Call the function to update the payment status and amount
     this.loanService
       .updatePaymentStatusAndAmount(
         this.loanWithUser.loan?.id ?? '',
-        history,
-        this.totalAmountPaid
+        this.totalAmountPaid,
+        history
       )
       .then(() => {
         this.toastr.success('Payment updated successfully!');
-        this.activeModal.close('payment-updated'); // Close the modal after success
+        this.activeModal.close('payment-updated');
       })
       .catch((error) => {
         this.toastr.error('Error updating payment: ' + error.message);
@@ -60,5 +80,16 @@ export class PaymentDialogComponent implements OnInit {
       .finally(() => {
         this.activeModal.close();
       });
+  }
+
+  get exactAmount(): number {
+    return this.schedule.amount;
+  }
+
+  get fullAmmount(): number {
+    let maxAmount =
+      (this.loanWithUser.loan?.amount ?? 0) -
+      (this.loanWithUser.loan?.amountPaid ?? 0);
+    return maxAmount;
   }
 }

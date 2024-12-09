@@ -18,6 +18,7 @@ import {
   loanAccountConverter,
   LoanAccountStatus,
 } from '../../models/accounts/LoanAccount';
+import { PdfGenerationService } from '../../services/pdf-generation.service';
 
 @Component({
   selector: 'app-create-loan',
@@ -39,7 +40,8 @@ export class CreateLoanComponent implements OnInit {
     private loantypeService: LoanTypeService,
     private loanService: LoanService,
     private toastr: ToastrService,
-    private location: Location
+    private location: Location,
+    private pdfService: PdfGenerationService
   ) {
     this.collector$ = authService.users$;
     this.accountInfoForm$ = fb.nonNullable.group({
@@ -69,6 +71,7 @@ export class CreateLoanComponent implements OnInit {
       this.updateLoanDetails(selectedId);
     });
   }
+
   updateLoanDetails(selectedId: string) {
     const selectedLoan = this.loanTypes.find((loan) => loan.id === selectedId);
     if (selectedLoan) {

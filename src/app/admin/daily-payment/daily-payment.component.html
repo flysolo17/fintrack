@@ -43,10 +43,12 @@
               </span>
             </td>
             <td>
+              <!-- ||
+                  !isScheduledToday(payment.schedule) -->
               <button
                 class="btn btn-sm btn-outline-primary"
                 [disabled]="payment.status == 'PAID'"
-                (click)="pay(payment.loanWithUser)"
+                (click)="pay(payment.loanWithUser, payment.schedule)"
               >
                 Pay Now
               </button>

@@ -6,10 +6,13 @@ import { LoanWithUserAndDocuments } from '../../models/loans/LoanWithUserAndDocu
 import { LoanAccount } from '../../models/accounts/LoanAccount';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MakeLoanComponent } from '../dialogs/make-loan/make-loan.component';
-import { Users } from '../../models/accounts/users';
+import { Users, UserType } from '../../models/accounts/users';
 import { Observable } from 'rxjs';
 import { LoanHistory } from '../../models/loans/loan-history';
-import { Loans, PaymentStatus } from '../../models/loans/loan';
+import { Loans, LoanStatus, PaymentStatus } from '../../models/loans/loan';
+import { PdfGenerationService } from '../../services/pdf-generation.service';
+import { Toast, ToastrService } from 'ngx-toastr';
+import { IncreateLimitComponent } from '../dialogs/increate-limit/increate-limit.component';
 
 export interface PaymentRow {
   date: string;
@@ -25,37 +28,59 @@ export class ViewLoanComponent implements OnInit {
   modalService = inject(NgbModal);
   active = 1;
   data$: LoanWithUserAndDocuments | null = null;
-  yung_mga_images = this.data$?.document ?? [];
-  yung_info_ng_user = this.data$?.user;
-  yung_loan_account_ng_user = this.data$?.loanAccount;
   loading$: boolean = false;
   histories$: Observable<LoanHistory[]> | undefined;
-  activeLoans$: Observable<Loans[]> | undefined;
+  activeLoans$: Loans[] = [];
   filteredPayments: PaymentRow[] = [];
   payments: PaymentRow[] = [];
+  user$: Users | null = null;
+  loans$: Loans[] = [];
   constructor(
     private auth: AuthService,
     private activatedRoute: ActivatedRoute,
-    private loanService: LoanService
+    private loanService: LoanService,
+    private pdfGenerator: PdfGenerationService,
+    private toastr: ToastrService
   ) {}
+
+  createPdf(loan: Loans) {
+    this.pdfGenerator.createPDF(loan);
+  }
+  increaseLimit(account: LoanAccount | null, admin: Users | null) {
+    if (admin === null || admin.type !== UserType.ADMIN) {
+      this.toastr.error('Invalid user');
+      return;
+    }
+    const modal = this.modalService.open(IncreateLimitComponent);
+    modal.componentInstance.account = account;
+    modal.componentInstance.admin = account;
+  }
   ngOnInit(): void {
+    this.user$ = this.auth.users$;
     this.activatedRoute.paramMap.subscribe((params) => {
       let id = params.get('id');
       if (id !== null) {
         this.loading$ = true;
         this.histories$ = this.loanService.getHistory(id);
-        this.activeLoans$ = this.loanService.getActiveLoans(id);
 
-        this.activeLoans$.subscribe((data: Loans[]) => {
+        this.loanService.getActiveLoans(id).subscribe((data: Loans[]) => {
+          this.loans$ = data;
+          this.activeLoans$ = [];
           data.forEach((e) => {
-            let schedules = e.paymentSchedule;
-            schedules.forEach((s) => {
-              this.payments.push({
-                date: this.formatDate(s.date),
-                amount: s.amount.toString(),
-                status: s.status,
+            if (
+              e.status === LoanStatus.CONFIRMED ||
+              e.status === LoanStatus.PENDING
+            ) {
+              this.activeLoans$.push(e);
+              let schedules = e.paymentSchedule;
+              schedules.forEach((s) => {
+                this.payments.push({
+                  date: this.formatDate(s.date),
+                  amount: s.amount.toString(),
+                  status: s.status,
+                });
               });
-            });
+            }
           });
         });
         this.viewLoan(id);

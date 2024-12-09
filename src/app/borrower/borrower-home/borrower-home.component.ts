@@ -57,6 +57,7 @@ export class BorrowerHomeComponent implements OnInit {
   }
 
   logout() {
+    localStorage.clear();
     this.router.navigateByUrl('/login', { replaceUrl: true }).then(() => {
       this.router.resetConfig(this.router.config);
     });

@@ -1,59 +1,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Admin Dashboard - Fintrack System</title>
-<link
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-  rel="stylesheet"
-/>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f9;
-  }
-  .container {
-    padding: 30px;
-  }
-  .overview-cards {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-  }
-  .card {
-    width: 22%;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    padding: 20px;
-  }
-  .card h5 {
-    font-size: 2rem;
-    margin-top: 10px;
-  }
-  .card-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-  }
-  .chart-container {
-    margin-top: 40px;
-  }
-  h3 {
-    margin-bottom: 20px;
-    font-size: 2rem;
-    font-weight: 600;
-  }
-  .table-container {
-    margin-top: 40px;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  table th,
-  table td {
-    text-align: center;
-  }
-</style>
 
 <body>
   <div class="container">
@@ -78,21 +25,28 @@
 
   <!-- Overview Cards Section -->
   <div class="overview-cards">
+    <!-- Total Loans -->
     <div class="card bg-primary text-white">
       <div class="card-title">Total Loans</div>
-      <h5></h5>
+      <h5>{{ (loan$ | async)?.length }}</h5>
     </div>
+
+    <!-- Active Loans (Approved and Paid) -->
     <div class="card bg-success text-white">
       <div class="card-title">Active Loans</div>
-      <h5></h5>
+      <h5>{{ (approved$ | async)?.length }}</h5>
     </div>
+
+    <!-- Pending Loans -->
     <div class="card bg-warning text-white">
       <div class="card-title">Pending Loans</div>
-      <h5></h5>
+      <h5>{{ (pending$ | async)?.length }}</h5>
     </div>
+
+    <!-- Defaulted Loans (Rejected) -->
     <div class="card bg-danger text-white">
       <div class="card-title">Defaulted Loans</div>
-      <h5></h5>
+      <h5>{{ (rejected$ | async)?.length }}</h5>
     </div>
   </div>
 
@@ -111,37 +65,22 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>L001</td>
-          <td>sample</td>
-          <td>5,000</td>
-          <td>Approved</td>
-          <td>2024-01-15</td>
-          <td>2025-01-15</td>
-        </tr>
-        <tr>
-          <td>L002</td>
-          <td>Jane Smith</td>
-          <td>3,500</td>
-          <td>Pending</td>
-          <td>2024-02-01</td>
-          <td>2025-02-01</td>
-        </tr>
-        <tr>
-          <td>L003</td>
-          <td>Samuel Adams</td>
-          <td>7,200</td>
-          <td>Rejected</td>
-          <td>2024-03-05</td>
-          <td>2025-03-05</td>
-        </tr>
-        <tr>
-          <td>L004</td>
-          <td>Alice Green</td>
-          <td>4,800</td>
-          <td>Approved</td>
-          <td>2024-04-10</td>
-          <td>2025-04-10</td>
+        <tr *ngFor="let loan of loan$ | async">
+          <td>{{ loan.loan?.id }}</td>
+          <td>
+            {{ loan.users?.firstName }} {{ loan.users?.middleName }}
+            {{ loan.users?.lastName }}
+          </td>
+          <td>{{ loan.loan?.amount | currency : "PHP" }}</td>
+          <td>{{ loan.loan?.status }}</td>
+          <td>{{ loan.loan!!.paymentSchedule[0].date | date : "short" }}</td>
+          <td>
+            {{
+              loan.loan!!.paymentSchedule[
+                loan.loan!!.paymentSchedule.length - 1
+              ].date | date : "short"
+            }}
+          </td>
         </tr>
       </tbody>
     </table>

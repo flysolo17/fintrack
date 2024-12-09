@@ -75,11 +75,16 @@
           <td scope="row">
             <div class="d-flex gap-3 align-items-center">
               <img
-                [src]="user.profile"
-                width="40"
-                height="40"
+                [src]="
+                  user.profile && user.profile.trim() !== ''
+                    ? user.profile
+                    : '../../../assets/profile.png'
+                "
+                width="40px"
+                height="40px"
                 class="rounded-circle shadow-sm"
               />
+
               <div>
                 <h6 class="mb-0" style="font-family: 'Poppins', sans-serif">
                   {{ user.firstName }} {{ user.middleName[0] }}.
@@ -116,6 +121,3 @@
     </table>
   </div>
 </div>
-
-
-
