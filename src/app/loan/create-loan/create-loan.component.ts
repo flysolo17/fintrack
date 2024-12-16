@@ -48,6 +48,7 @@ export class CreateLoanComponent implements OnInit {
       firstName: ['', Validators.required],
       middleName: ['', Validators.required],
       lastName: ['', Validators.required],
+      address: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.maxLength(11)]],
       username: ['', Validators.required],
@@ -126,6 +127,7 @@ export class CreateLoanComponent implements OnInit {
       name: type?.name ?? '',
       payableDays: type?.payableDays ?? 0,
       status: LoanAccountStatus.PENDING,
+      address: formValues.address,
     };
 
     this.isLoading = true;

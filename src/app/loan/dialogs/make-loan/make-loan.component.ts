@@ -69,6 +69,7 @@ export class MakeLoanComponent implements OnInit {
         status: LoanStatus.PENDING,
         createdAt: new Date(),
         updatedAt: new Date(),
+        collectorID: this.collector?.id ?? '',
       };
       this.confirmLoan(loan, amount);
     } else {

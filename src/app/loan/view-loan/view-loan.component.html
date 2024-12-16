@@ -17,6 +17,9 @@
           {{ data$.user?.lastName }} {{ data$.user?.firstName }}
           {{ data$.user?.middleName }}
         </h6>
+        <p class="text-muted">
+          {{ data$.loanAccount?.address }}
+        </p>
         <p class="text-muted fw-bold text-dark">
           Credit Score : {{ data$.loanAccount?.creditScore }}
         </p>
@@ -76,13 +79,19 @@
                     {{ loan.amountPaid | currency : "PHP" }}
                   </h6>
                 </div>
-                <div class="col-12 mt-3">
+                <div class="col-6 mt-3">
                   <button
                     class="btn btn-primary btn-sm"
                     (click)="createPdf(loan)"
                   >
                     Download
                   </button>
+                </div>
+                <div class="col-6 mt-3">
+                  <small class="text-muted">Remaining Balance </small>
+                  <h6 class="text-danger">
+                    {{ loan.amount - loan.amountPaid | currency : "PHP" }}
+                  </h6>
                 </div>
               </div>
             </div>
@@ -190,6 +199,82 @@
                 }}</span>
               </li>
             </ul>
+          </ng-template>
+        </li>
+
+        <li [ngbNavItem]="4">
+          <button ngbNavLink class="nav-link">Documents</button>
+          <ng-template ngbNavContent>
+            <div class="row g-3 p-3">
+              <div class="col">
+                <img
+                  [src]="data$.document?.first_id"
+                  width="200"
+                  height="200"
+                  alt="idsz"
+                  class="rounded-3"
+                />
+              </div>
+              <div class="col">
+                <img
+                  [src]="data$.document?.secound_id"
+                  width="200"
+                  height="200"
+                  alt="idsz"
+                  class="rounded-3"
+                />
+              </div>
+
+              <div class="col">
+                <img
+                  [src]="data$.document?.third_id"
+                  width="200"
+                  height="200"
+                  alt="idsz"
+                  class="rounded-3"
+                />
+              </div>
+
+              <div class="col">
+                <img
+                  [src]="data$.document?.gov_id"
+                  width="200"
+                  height="200"
+                  alt="idsz"
+                  class="rounded-3"
+                />
+              </div>
+
+              <div class="col">
+                <img
+                  [src]="data$.document?.barangay_permit"
+                  width="200"
+                  height="200"
+                  alt="idsz"
+                  class="rounded-3"
+                />
+              </div>
+
+              <div class="col">
+                <img
+                  [src]="data$.document?.omeco_bill"
+                  width="200"
+                  height="200"
+                  alt="idsz"
+                  class="rounded-3"
+                />
+              </div>
+
+              <div class="col">
+                <img
+                  [src]="data$.document?.cedula"
+                  width="200"
+                  height="200"
+                  alt="idsz"
+                  class="rounded-3"
+                />
+              </div>
+            </div>
           </ng-template>
         </li>
       </ul>

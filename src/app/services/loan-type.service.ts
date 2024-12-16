@@ -5,6 +5,7 @@ import {
   deleteDoc,
   doc,
   Firestore,
+  getDocs,
   orderBy,
   query,
   setDoc,
@@ -12,8 +13,11 @@ import {
   where,
 } from '@angular/fire/firestore';
 
-import { Observable } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { loanTypeConverter, ProductLoan } from '../models/loans/loan-types';
+import { ProductWithAvailed } from '../models/products/ProductWithAvailed';
+import { LOAN_ACCOUNT } from './auth.service';
+import { loanAccountConverter } from '../models/accounts/LoanAccount';
 
 export const LOAN_TYPE_COLLECTION = 'product-loan';
 @Injectable({
@@ -21,6 +25,38 @@ export const LOAN_TYPE_COLLECTION = 'product-loan';
 })
 export class LoanTypeService {
   constructor(private firestore: Firestore) {}
+
+  getProductsAvailed(): Observable<ProductWithAvailed[]> {
+    const q = query(
+      collection(this.firestore, LOAN_TYPE_COLLECTION).withConverter(
+        loanTypeConverter
+      ),
+      orderBy('createdAt', 'desc'),
+      orderBy('updatedAt', 'desc')
+    );
+
+    return collectionData(q).pipe(
+      switchMap((products) =>
+        // Map over the products to fetch availed accounts
+        forkJoin(
+          products.map((product) => {
+            const accountsQuery = query(
+              collection(this.firestore, LOAN_ACCOUNT).withConverter(
+                loanAccountConverter
+              ),
+              where('productLoanID', '==', product.id)
+            );
+
+            return getDocs(accountsQuery).then((snapshot) => ({
+              id: product.id,
+              name: product.name,
+              availed: snapshot.size,
+            }));
+          })
+        )
+      )
+    );
+  }
 
   createLoanType(type: ProductLoan) {
     return setDoc(

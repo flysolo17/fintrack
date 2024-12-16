@@ -6,8 +6,13 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { LoanService } from '../../services/loan.service';
 import { LoanStatus } from '../../models/loans/loan';
-import { combineLatest, map, Observable } from 'rxjs';
+import { combineLatest, map, Observable, of } from 'rxjs';
 import { LoanWithUser } from '../../models/loans/LoanWithUser';
+import { ProductLoan } from '../../models/loans/loan-types';
+import { LoanTypeService } from '../../services/loan-type.service';
+import { ProductWithAvailed } from '../../models/products/ProductWithAvailed';
+import { HistoryService } from '../../services/history.service';
+import { CollectorWithData } from '../../models/accounts/CollectorWithData';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -15,8 +20,8 @@ import { LoanWithUser } from '../../models/loans/LoanWithUser';
   styleUrls: ['./admin-dashboard.component.css'],
 })
 export class AdminDashboardComponent implements OnInit {
-  chartOptions: any;
-
+  topCollectorsData: any[] = [];
+  topCollectorOptions: any;
   loan$: Observable<LoanWithUser[]> = this.loanService.getRecentLoans();
 
   approved$: Observable<LoanWithUser[]> = this.loan$.pipe(
@@ -42,8 +47,42 @@ export class AdminDashboardComponent implements OnInit {
       loans.filter((loan) => loan.loan?.status === LoanStatus.DECLINED)
     )
   );
+  productsLoansAvailed$: Observable<ProductWithAvailed[]> =
+    this.loanTypeService.getProductsAvailed();
 
-  constructor(private router: Router, private loanService: LoanService) {}
+  chartData$: Observable<{ labels: string[]; data: number[] }> =
+    this.productsLoansAvailed$.pipe(
+      map((products) => ({
+        labels: products.map((p) => p.name),
+        data: products.map((p) => p.availed),
+      }))
+    );
+
+  chartOptions$: Observable<any> = this.productsLoansAvailed$.pipe(
+    map((products) => ({
+      animationEnabled: true,
+      title: {
+        text: 'Products Distributions',
+      },
+      data: [
+        {
+          type: 'pie',
+          dataPoints: products.map((product) => ({
+            y: product.availed,
+            label: product.name,
+          })),
+        },
+      ],
+    }))
+  );
+  topCollectors: CollectorWithData[] = [];
+
+  constructor(
+    private router: Router,
+    private loanService: LoanService,
+    private loanTypeService: LoanTypeService,
+    private historyService: HistoryService
+  ) {}
 
   loanStatusData$: Observable<{ label: string; y: number }[]> = combineLatest([
     this.approved$,
@@ -63,36 +102,31 @@ export class AdminDashboardComponent implements OnInit {
     this.loanStatusData$.subscribe((data) => {
       this.renderPieChart(data);
     });
-    this.renderBarChart();
-  }
+    this.historyService.getTopCollectors().subscribe((data) => {
+      this.topCollectorsData = data.map((collector) => ({
+        label: collector.name,
+        y: collector.totalAmountCollected,
+      }));
+      this.topCollectors = data;
+      console.log(data);
+    });
 
-  renderBarChart() {
-    const barChart = new CanvasJS.Chart('barChartContainer', {
+    this.topCollectorOptions = {
       animationEnabled: true,
       title: {
-        text: 'Loan Amount Over Time',
+        text: 'Top Collectors',
       },
       axisY: {
-        title: 'Loan Amount',
-        includeZero: true,
+        title: 'Total Amount Collected',
+        prefix: '$',
       },
       data: [
         {
-          type: 'column', // Bar chart type
-          indexLabel: '{y}',
-          dataPoints: [
-            { x: 1, y: 10000 },
-            { x: 2, y: 12000 },
-            { x: 3, y: 15000 },
-            { x: 4, y: 17000 },
-            { x: 5, y: 18000 },
-            { x: 6, y: 20000 },
-            { x: 7, y: 22000 },
-          ],
+          type: 'column', // Choose the chart type (column, bar, line, etc.)
+          dataPoints: this.topCollectorsData,
         },
       ],
-    });
-    barChart.render();
+    };
   }
 
   renderPieChart(dataPoints: { label: string; y: number }[]) {

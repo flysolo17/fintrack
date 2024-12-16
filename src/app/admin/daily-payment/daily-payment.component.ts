@@ -4,6 +4,8 @@ import { PaymentSchedule, PaymentStatus } from '../../models/loans/loan';
 import { LoanWithUser } from '../../models/loans/LoanWithUser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaymentDialogComponent } from '../modals/payment-dialog/payment-dialog.component';
+import { Users } from '../../models/accounts/users';
+import { AuthService } from '../../services/auth.service';
 
 interface PaymentRow {
   loanWithUser: LoanWithUser;
@@ -24,10 +26,14 @@ export class DailyPaymentComponent implements OnInit {
   selectedDate: Date = new Date();
   filteredPayments: PaymentRow[] = [];
   payments: PaymentRow[] = [];
-
-  constructor(private loanService: LoanService) {}
+  users$: Users | null = null;
+  constructor(
+    private loanService: LoanService,
+    private autService: AuthService
+  ) {}
 
   ngOnInit(): void {
+    this.users$ = this.autService.users$;
     this.loanService.getPaymentsWithUser().subscribe((data) => {
       console.log(data);
       this.payments = [];

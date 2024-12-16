@@ -57,6 +57,7 @@ import { LoansComponent } from './admin/loans/loans.component';
 
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { IncreateLimitComponent } from './loan/dialogs/increate-limit/increate-limit.component';
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 
 @NgModule({
   declarations: [
@@ -108,6 +109,8 @@ import { IncreateLimitComponent } from './loan/dialogs/increate-limit/increate-l
     NgbPaginationModule,
     CommonModule,
     BrowserAnimationsModule,
+
+    CanvasJSAngularChartsModule,
     ToastrModule.forRoot(),
     FormsModule,
   ],

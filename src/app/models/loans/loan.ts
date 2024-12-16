@@ -3,6 +3,7 @@ import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 export interface Loans {
   id: string;
   loanAccountID: string;
+  collectorID: string;
   amount: number;
   interest: number;
   amountPaid: number;

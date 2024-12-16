@@ -35,6 +35,7 @@ export class ViewLoanComponent implements OnInit {
   payments: PaymentRow[] = [];
   user$: Users | null = null;
   loans$: Loans[] = [];
+
   constructor(
     private auth: AuthService,
     private activatedRoute: ActivatedRoute,

@@ -22,13 +22,53 @@ export function generateRandomNumber(size: number = 15) {
   return result;
 }
 
+// export function processPayment(loan: Loans, amount: number): Loans {
+//   const today = new Date();
+//   let remainingPayment = amount;
+//   loan.paymentSchedule.forEach((schedule) => {
+//     const scheduleDate = new Date(schedule.date);
+//     if (
+//       schedule.status !== 'PAID' &&
+//       scheduleDate < today &&
+//       scheduleDate.getDate() !== today.getDate()
+//     ) {
+//       schedule.status = PaymentStatus.OVERDUE;
+//     }
+//   });
+
+//   const sortedSchedules = loan.paymentSchedule
+//     .filter((schedule) => schedule.status !== PaymentStatus.PAID)
+//     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+//   let totalPaid = 0;
+
+//   for (const schedule of sortedSchedules) {
+//     if (remainingPayment <= 0) break;
+//     const paymentForThisSchedule = Math.min(schedule.amount, remainingPayment);
+//     schedule.amount -= paymentForThisSchedule;
+//     remainingPayment -= paymentForThisSchedule;
+//     totalPaid += paymentForThisSchedule;
+
+//     if (schedule.amount === 0) {
+//       schedule.status = PaymentStatus.PAID;
+//     }
+//   }
+
+//   loan.amountPaid += totalPaid;
+//   loan.updatedAt = new Date();
+
+//   return loan;
+// }
+
 export function processPayment(loan: Loans, amount: number): Loans {
   const today = new Date();
   let remainingPayment = amount;
+
+  // Update schedule status to OVERDUE if applicable
   loan.paymentSchedule.forEach((schedule) => {
     const scheduleDate = new Date(schedule.date);
     if (
-      schedule.status !== 'PAID' &&
+      schedule.status !== PaymentStatus.PAID &&
       scheduleDate < today &&
       scheduleDate.getDate() !== today.getDate()
     ) {
@@ -44,6 +84,7 @@ export function processPayment(loan: Loans, amount: number): Loans {
 
   for (const schedule of sortedSchedules) {
     if (remainingPayment <= 0) break;
+
     const paymentForThisSchedule = Math.min(schedule.amount, remainingPayment);
     schedule.amount -= paymentForThisSchedule;
     remainingPayment -= paymentForThisSchedule;

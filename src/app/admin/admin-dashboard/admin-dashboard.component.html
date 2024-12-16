@@ -1,100 +1,128 @@
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Admin Dashboard - Fintrack System</title>
 
-<body>
-  <div class="container">
-    <!-- Header Section -->
-    <div class="text-center mb-5">
-      <h1 class="display-4 text-primary">
-        <i class="fas fa-tachometer-alt"></i> Admin Fintrack Dashboard
-      </h1>
-      <p class="lead text-muted">
-        <i class="fas fa-cogs"></i> Monitor and manage loan applications,
-        repayments, and financial analytics.
-        <br />
-      </p>
-    </div>
+<div class="container">
+  <!-- Header Section -->
+  <div class="text-center mb-5">
+    <h1 class="display-4 text-primary">
+      <i class="fas fa-tachometer-alt"></i> Admin Fintrack Dashboard
+    </h1>
+    <p class="lead text-muted">
+      <i class="fas fa-cogs"></i> Monitor and manage loan applications,
+      repayments, and financial analytics.
+      <br />
+    </p>
   </div>
-  <head>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-      rel="stylesheet"
-    />
-  </head>
+</div>
+<head>
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    rel="stylesheet"
+  />
+</head>
 
-  <!-- Overview Cards Section -->
-  <div class="overview-cards">
-    <!-- Total Loans -->
-    <div class="card bg-primary text-white">
-      <div class="card-title">Total Loans</div>
-      <h5>{{ (loan$ | async)?.length }}</h5>
-    </div>
-
-    <!-- Active Loans (Approved and Paid) -->
-    <div class="card bg-success text-white">
-      <div class="card-title">Active Loans</div>
-      <h5>{{ (approved$ | async)?.length }}</h5>
-    </div>
-
-    <!-- Pending Loans -->
-    <div class="card bg-warning text-white">
-      <div class="card-title">Pending Loans</div>
-      <h5>{{ (pending$ | async)?.length }}</h5>
-    </div>
-
-    <!-- Defaulted Loans (Rejected) -->
-    <div class="card bg-danger text-white">
-      <div class="card-title">Defaulted Loans</div>
-      <h5>{{ (rejected$ | async)?.length }}</h5>
-    </div>
+<!-- Overview Cards Section -->
+<div class="overview-cards">
+  <!-- Total Loans -->
+  <div class="card bg-primary text-white">
+    <div class="card-title">Total Loans</div>
+    <h5>{{ (loan$ | async)?.length }}</h5>
   </div>
 
-  <!-- Loan Listings Section -->
-  <div class="table-container">
-    <h3>Loan Listings</h3>
-    <table class="table table-striped table-bordered">
-      <thead>
-        <tr>
-          <th>Loan ID</th>
-          <th>Applicant Name</th>
-          <th>Loan Amount</th>
-          <th>Status</th>
-          <th>Start Date</th>
-          <th>End Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let loan of loan$ | async">
-          <td>{{ loan.loan?.id }}</td>
-          <td>
-            {{ loan.users?.firstName }} {{ loan.users?.middleName }}
-            {{ loan.users?.lastName }}
-          </td>
-          <td>{{ loan.loan?.amount | currency : "PHP" }}</td>
-          <td>{{ loan.loan?.status }}</td>
-          <td>{{ loan.loan!!.paymentSchedule[0].date | date : "short" }}</td>
-          <td>
-            {{
-              loan.loan!!.paymentSchedule[
-                loan.loan!!.paymentSchedule.length - 1
-              ].date | date : "short"
-            }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Bar Chart Section -->
-    <div id="barChartContainer" style="height: 370px; width: 100%"></div>
-
-    <!-- Pie Chart Section -->
-    <div
-      id="pieChartContainer"
-      style="height: 370px; width: 100%; margin-top: 50px"
-    ></div>
+  <!-- Active Loans (Approved and Paid) -->
+  <div class="card bg-success text-white">
+    <div class="card-title">Active Loans</div>
+    <h5>{{ (approved$ | async)?.length }}</h5>
   </div>
-  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
-  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-</body>
+  <!-- Pending Loans -->
+  <div class="card bg-warning text-white">
+    <div class="card-title">Pending Loans</div>
+    <h5>{{ (pending$ | async)?.length }}</h5>
+  </div>
+
+  <!-- Defaulted Loans (Rejected) -->
+  <div class="card bg-danger text-white">
+    <div class="card-title">Defaulted Loans</div>
+    <h5>{{ (rejected$ | async)?.length }}</h5>
+  </div>
+</div>
+
+<div class="container-fluid p-3 rounded bg-white">
+  <div class="row g-3">
+    <div class="col-7">
+      <h2>Top Collectors</h2>
+      <canvasjs-chart [options]="topCollectorOptions"></canvasjs-chart>
+    </div>
+
+    <div class="col-5">
+      <table class="table table-borderless table-hover">
+        <thead>
+          <tr>
+            <th>Collector</th>
+            <th>Loan Purchases</th>
+            <th>Amount Collected</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let collector of topCollectors">
+            <td class="text-start">
+              {{ collector.name }}
+            </td>
+            <td>
+              {{ collector.totalAmountLoanPurchases | currency : "PHP" }}
+            </td>
+            <td>
+              {{ collector.totalAmountCollected | currency : "PHP" }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-6">
+      <div id="pieChartContainer" style="height: 400; width: 400"></div>
+    </div>
+    <div class="col-6">
+      <div *ngIf="chartOptions$ | async as chartOptions">
+        <canvasjs-chart
+          [options]="chartOptions"
+          style="height: 370px; width: 100%"
+        ></canvasjs-chart>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loan Listings Section -->
+<div class="table-container">
+  <h3>Loan Listings</h3>
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Loan ID</th>
+        <th>Applicant Name</th>
+        <th>Loan Amount</th>
+        <th>Status</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let loan of loan$ | async">
+        <td>{{ loan.loan?.id }}</td>
+        <td>
+          {{ loan.users?.firstName }} {{ loan.users?.middleName }}
+          {{ loan.users?.lastName }}
+        </td>
+        <td>{{ loan.loan?.amount | currency : "PHP" }}</td>
+        <td>{{ loan.loan?.status }}</td>
+        <td>{{ loan.loan!!.paymentSchedule[0].date | date : "short" }}</td>
+        <td>
+          {{
+            loan.loan!!.paymentSchedule[loan.loan!!.paymentSchedule.length - 1]
+              .date | date : "short"
+          }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

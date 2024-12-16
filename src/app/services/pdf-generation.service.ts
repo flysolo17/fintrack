@@ -60,17 +60,16 @@ export class PdfGenerationService {
       doc.text(`Loan Officer: ${fullname}`, 15, y + imgHeight + 25);
     }
 
-    // Add a table for the payment schedule
     const tableData = loan.paymentSchedule.map((schedule) => ({
       Days: schedule.days,
-      Amount: `$${schedule.amount.toFixed(2)}`,
+      Amount: `$${schedule.amount.toFixed(2)}`, //dito lagay mo peso sign
       Date: schedule.date.toLocaleDateString(),
       Status: schedule.status,
     }));
 
     autoTable(doc, {
-      startY: y + imgHeight + 80, // Start below the loan details
-      head: [['Days', 'Amount', 'Date', 'Status']], // Table headers
+      startY: y + imgHeight + 80,
+      head: [['Days', 'Amount', 'Date', 'Status']],
       body: tableData.map((item) => [
         item.Days,
         item.Amount,
