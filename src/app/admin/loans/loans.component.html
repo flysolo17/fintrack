@@ -1,109 +1,94 @@
 <div class="container mt-3">
-  <!-- Search bar -->
-  <div class="mb-3">
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Search by Name or Loan ID"
-      [formControl]="searchText"
-    />
+  <!-- Card Container -->
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h5 class="card-title mb-0">Manage Loans</h5>
+    </div>
+    <div class="card-body">
+      <!-- Search bar -->
+      <div class="mb-3">
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          placeholder="Search by Name or Loan ID"
+          [formControl]="searchText"
+        />
+      </div>
+
+      <!-- Table displaying loans -->
+      <table class="table table-sm table-striped">
+        <thead class="table-light">
+          <tr>
+            <th>Loan ID</th>
+            <th>Borrower</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Last Updated</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let loan of getPaginatedLoans()" class="table-row">
+            <td>{{ loan.loan?.id }}</td>
+            <td>
+              <div class="d-flex gap-2 align-items-center">
+                <img
+                  [src]="loan.users?.profile ?? '../../../assets/profile.png'"
+                  [alt]="formatName(loan.users)"
+                  width="30px"
+                  height="30px"
+                  class="rounded-circle"
+                />
+                <span class="text-muted">{{ formatName(loan.users) }}</span>
+              </div>
+            </td>
+            <td>
+              <span>{{ loan.loan?.amountPaid | currency : "PHP" }} of</span>
+              <span class="text-muted">{{ loan.loan?.amount | currency : "PHP" }}</span>
+            </td>
+            <td>
+              <span class="badge"
+                [ngClass]="{
+                  'bg-success': loan.loan?.status === 'PAID',
+                  'bg-warning': loan.loan?.status === 'PENDING',
+                  'bg-danger': loan.loan?.status === 'DECLINED'
+                }">
+                {{ loan.loan?.status }}
+              </span>
+            </td>
+            <td>{{ loan.loan?.createdAt | date : "short" }}</td>
+            <td>{{ loan.loan?.updatedAt | date : "short" }}</td>
+
+            <td class="d-flex justify-content-center">
+              <div *ngIf="loan.loan?.status === 'PENDING'" class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-danger" (click)="decline(loan)">
+                  <i class="bi bi-x"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-success" (click)="confirmLoan(loan)">
+                  <i class="bi bi-check"></i>
+                </button>
+              </div>
+
+              <div class="d-flex gap-2" *ngIf="loan.loan?.amount === loan.loan?.amountPaid && loan.loan?.status !== 'PAID'">
+                <button class="btn btn-sm btn-outline-success" (click)="markAsPaid(loan)">
+                  <i class="bi bi-check-circle"></i> Completed
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <ngb-pagination
+        [collectionSize]="filteredLoans.length"
+        [(page)]="currentPage"
+        [pageSize]="pageSize"
+        (pageChange)="onPageChange($event)"
+        size="sm"
+      >
+      </ngb-pagination>
+    </div>
   </div>
-
-  <!-- Table displaying loans -->
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Loan ID</th>
-        <th>Borrower</th>
-        <th>Payment</th>
-        <th>Status</th>
-        <th>CreatedAt</th>
-        <th>Last Updated</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let loan of getPaginatedLoans()">
-        <td>{{ loan.loan?.id }}</td>
-        <td>
-          <div class="d-flex gap-3 align-items-center">
-            <img
-              [src]="loan.users?.profile ?? '../../../assets/profile.png'"
-              [alt]="formatName(loan.users)"
-              width="40px"
-              height="40px"
-              class="rounded-circle"
-            />
-
-            <h6>{{ formatName(loan.users) }}</h6>
-          </div>
-        </td>
-        <td>
-          {{ loan.loan?.amountPaid | currency : "PHP" }} of
-          {{ loan.loan?.amount | currency : "PHP" }}
-        </td>
-        <td>{{ loan.loan?.status }}</td>
-
-        <td>{{ loan.loan?.createdAt | date : "short" }}</td>
-        <td>{{ loan.loan?.updatedAt | date : "short" }}</td>
-
-        <td>
-          <div
-            *ngIf="loan.loan?.status === 'PENDING'"
-            class="d-flex align-items-center gap-3"
-          >
-            <button class="btn btn-sm btn-danger" (click)="decline(loan)">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-x"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"
-                />
-              </svg>
-            </button>
-            <button class="btn btn-sm btn-success" (click)="confirmLoan(loan)">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-check"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"
-                />
-              </svg>
-            </button>
-          </div>
-
-          <div
-            class="d-flex align-items-center gap-3"
-            *ngIf="
-              loan.loan?.amount === loan.loan?.amountPaid &&
-              loan.loan?.status !== 'PAID'
-            "
-          >
-            <button class="btn btn-success" (click)="markAsPaid(loan)">
-              Completed
-            </button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Pagination -->
-  <ngb-pagination
-    [collectionSize]="filteredLoans.length"
-    [(page)]="currentPage"
-    [pageSize]="pageSize"
-    (pageChange)="onPageChange($event)"
-  >
-  </ngb-pagination>
 </div>

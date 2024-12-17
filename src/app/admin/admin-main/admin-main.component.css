@@ -69,3 +69,26 @@
   color: #fff;              /* White text */
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.3); /* Subtle shadow effect */
 }
+.btn {
+  border: none;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
+.btn i {
+  font-size: 1.2rem;
+}
+
+.btn span {
+  font-size: 1rem;
+}

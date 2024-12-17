@@ -34,6 +34,7 @@ export class DailyPaymentComponent implements OnInit {
 
   ngOnInit(): void {
     this.users$ = this.autService.users$;
+    console.log(this.users$)
     this.loanService.getPaymentsWithUser().subscribe((data) => {
       console.log(data);
       this.payments = [];

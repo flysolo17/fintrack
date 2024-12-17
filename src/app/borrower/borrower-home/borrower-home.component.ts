@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoanService } from '../../services/loan.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscribable } from 'rxjs';
 import { LoanHistory } from '../../models/loans/loan-history';
 import { Loans } from '../../models/loans/loan';
 import { PaymentRow } from '../../loan/view-loan/view-loan.component';
@@ -15,11 +15,18 @@ import { user } from '@angular/fire/auth';
   styleUrl: './borrower-home.component.css',
 })
 export class BorrowerHomeComponent implements OnInit {
+data$: any;
+paymentHistory$: Observable<undefined> | Subscribable<undefined> | Promise<undefined> | undefined;
+toggleSidebar() {
+throw new Error('Method not implemented.');
+}
   histories$: Observable<LoanHistory[]> | undefined;
   activeLoans$: Observable<Loans[]> | undefined;
   payments: PaymentRow[] = [];
   users$: Users | null = null;
   active = 1;
+isMobile: any;
+isSidebarVisible: any;
   constructor(
     private loanService: LoanService,
     private router: Router,

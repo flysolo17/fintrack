@@ -1,0 +1,20 @@
+.nav-link.active {
+  font-weight: bold;
+  background-color: #343a40;
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  .navbar-toggler {
+    width: 100%;
+    border: none;
+  }
+
+  .card {
+    width: 100% !important;
+  }
+
+  .d-flex {
+    flex-direction: column;
+  }
+}

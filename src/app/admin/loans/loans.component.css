@@ -1,0 +1,29 @@
+/* Card style for a more polished appearance */
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  /* Hover effect for table rows */
+  .table-row:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+  }
+  
+  /* Small icon buttons with rounded edges */
+  .btn-outline-danger, .btn-outline-success {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+  }
+  
+  .btn-outline-danger:hover, .btn-outline-success:hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Badge color customization for loan status */
+  .badge {
+    font-size: 14px;
+    padding: 5px 12px;
+  }
+  

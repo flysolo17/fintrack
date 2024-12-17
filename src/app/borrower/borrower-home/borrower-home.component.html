@@ -1,44 +1,94 @@
-<button class="btn btn-dark" (click)="logout()">Logout</button>
-<div class="w-25 overflow-auto bg-white rounded-3 p-3">
-  <div class="d-flex gap-3">
-    <img
-      [src]="users$?.profile ?? '../../../assets/profile.png'"
-      class="rounded-circle"
-      width="80px"
-      height="80px"
-    />
-    <div>
-      <h6 class="text-dark">
-        {{ users$?.lastName }} {{ users$?.firstName }}
-        {{ users$?.middleName }}
-      </h6>
-      <span class="text-muted">{{ users$?.username }} </span>
-    </div>
+<div class="d-flex flex-wrap">
+  <!-- Sidebar Navigation -->
+  <div class="bg-dark text-white vh-100 p-3 sidebar" [ngClass]="{'d-none d-md-block': !isMobile}">
+    <h5 class="text-white">Borrower Dashboard</h5>
+    <hr />
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a
+          class="nav-link text-white"
+          [ngClass]="{ active: active === 1 }"
+          (click)="active = 1"
+          >Payment Schedule/Loan History</a
+        >
+      </li>
+      <li class="nav-item mt-3">
+        <button class="btn btn-light w-100" (click)="logout()">Logout</button>
+      </li>
+    </ul>
   </div>
-</div>
-<div class="row mb-3">
-  <div class="col" *ngFor="let loans of activeLoans$ | async">
-    <div class="card" style="width: 400px">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-6">
-            <span class="text-muted">Loan ID</span>
-            <h6>{{ loans.id }}</h6>
-          </div>
-          <div class="col-6">
-            <span class="text-muted">Amount</span>
-            <h6>{{ loans.amount | currency : "PHP" }}</h6>
-          </div>
-          <div class="col-6">
-            <span class="text-muted">Interest </span>
-            <h6>{{ loans.interest }} %</h6>
-          </div>
-          <div class="col-6">
-            <span class="text-muted">Amount Paid </span>
-            <h6>{{ loans.amountPaid | currency : "PHP" }}</h6>
-          </div>
-          <div class="col-12">
-            <span class="text-muted">Payment Schedule </span>
+
+  <!-- Mobile Sidebar Toggle -->
+  <button
+    class="btn btn-dark d-md-none mb-3"
+    (click)="toggleSidebar()"
+    [innerHTML]="isSidebarVisible ? 'Hide Menu' : 'Show Menu'"
+  ></button>
+  <div
+    class="bg-dark text-white p-3 mobile-sidebar d-md-none"
+    [ngClass]="{ 'd-block': isSidebarVisible, 'd-none': !isSidebarVisible }"
+  >
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a
+          class="nav-link text-white"
+          [ngClass]="{ active: active === 1 }"
+          (click)="active = 1; toggleSidebar()"
+          >Payment Schedule/Loan History</a
+        >
+      </li>
+      <li class="nav-item mt-3">
+        <button class="btn btn-light w-100" (click)="logout()">Logout</button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-grow-1 p-4">
+    <!-- Profile Section -->
+    <div class="mb-4">
+      <div class="d-flex flex-wrap align-items-center gap-3">
+        <img
+          [src]="users$?.profile ?? '../../../assets/profile.png'"
+          class="rounded-circle"
+          width="80px"
+          height="80px"
+        />
+        <div>
+          <h6 class="text-dark">
+            {{ users$?.lastName }} {{ users$?.firstName }}
+            {{ users$?.middleName }}
+          </h6>
+          <span class="text-muted">{{ users$?.username }} </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loan Cards -->
+    <div class="row mb-3">
+      <div class="col-12 col-md-6 col-lg-4 mb-3" *ngFor="let loans of activeLoans$ | async">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6">
+                <span class="text-muted">Loan ID</span>
+                <h6>{{ loans.id }}</h6>
+              </div>
+              <div class="col-6">
+                <span class="text-muted">Amount</span>
+                <h6>{{ loans.amount | currency : 'PHP' }}</h6>
+              </div>
+              <div class="col-6">
+                <span class="text-muted">Interest</span>
+                <h6>{{ loans.interest }} %</h6>
+              </div>
+              <div class="col-6">
+                <span class="text-muted">Amount Paid</span>
+                <h6>{{ loans.amountPaid | currency : 'PHP' }}</h6>
+              </div>
+            </div>
+            <hr />
+            <span class="text-muted">Payment Schedule</span>
           </div>
         </div>
       </div>
@@ -46,69 +96,3 @@
   </div>
 </div>
 
-<div class="d-flex flex-column w-100">
-  <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
-    <li [ngbNavItem]="1">
-      <button ngbNavLink>Payment Schedule</button>
-      <ng-template ngbNavContent>
-        <table class="table table-borderless table-hover">
-          <thead>
-            <tr>
-              <th>Date</th>
-
-              <th>Amount</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let payment of payments">
-              <td>{{ payment.date }}</td>
-
-              <td>{{ payment.amount }}</td>
-              <td>
-                <span
-                  class="badge"
-                  [ngClass]="{
-                    'text-bg-success': payment.status === 'PAID',
-                    'text-bg-warning': payment.status === 'UNPAID',
-                    'text-bg-danger': payment.status === 'OVERDUE'
-                  }"
-                >
-                  {{ payment.status }}
-                </span>
-              </td>
-            </tr>
-            <tr *ngIf="payments.length === 0">
-              <td colspan="5" class="text-center">No payments found.</td>
-            </tr>
-          </tbody>
-        </table>
-      </ng-template>
-    </li>
-    <li [ngbNavItem]="2">
-      <button ngbNavLink>Loan History</button>
-      <ng-template ngbNavContent>
-        <ul class="list-group list-group-flush">
-          <li
-            class="list-group-item"
-            *ngFor="let history of histories$ | async"
-          >
-            <div class="d-flex gap-2 w-100 p-2 align-items-center">
-              <div class="flex-grow-1">
-                <p class="p-0 m-0">{{ history.message }}</p>
-                <span class="text-muted">{{
-                  history.createdAt | date : "long"
-                }}</span>
-              </div>
-              <h6>
-                {{ history.amount | currency : "PHP" }}
-              </h6>
-            </div>
-          </li>
-        </ul>
-      </ng-template>
-    </li>
-  </ul>
-
-  <div [ngbNavOutlet]="nav" class="mt-2"></div>
-</div>

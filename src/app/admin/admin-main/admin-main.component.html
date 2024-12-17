@@ -87,17 +87,17 @@
         <li class="nav-item mb-3">
           <a
             class="nav-link text-white d-flex align-items-center p-3 rounded"
-            routerLink="users"
-            routerLinkActive="active-link"
+         
           >
-            <i class="fas fa-user-cog me-2"></i>
-            <span>Account Settings</span>
+            <i class="fas fa-chart-line me-2"></i>
+            <span>Collector Performance</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" (click)="logout()">
-            <i class="fas fa-users"></i> Logout
-          </a>
+          <button class="btn btn-danger text-white d-flex align-items-center gap-2 px-3 py-2" (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </button>
         </li>
       </ul>
     </div>
