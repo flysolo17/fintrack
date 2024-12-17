@@ -44,10 +44,11 @@
             </td>
             <td>
               <button
-                *ngIf="users$?.type === 'COLLECTOR'"
+                *ngIf="users$?.type == 'COLLECTOR'"
                 class="btn btn-sm btn-outline-primary"
                 [disabled]="
-                  payment.status == 'PAID' || payment.status === 'OVERDUE'
+                  (payment.status == 'PAID' || payment.status === 'OVERDUE') &&
+                  isScheduledToday(payment.schedule)
                 "
                 (click)="pay(payment.loanWithUser, payment.schedule)"
               >
