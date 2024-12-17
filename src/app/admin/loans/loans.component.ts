@@ -6,7 +6,7 @@ import { LoanWithUser } from '../../models/loans/LoanWithUser';
 import { LoanHistory } from '../../models/loans/loan-history';
 import { AuthService } from '../../services/auth.service';
 import { generateRandomNumber } from '../../utils/Constants';
-import { LoanStatus } from '../../models/loans/loan';
+import { LoanStatus, PaymentStatus } from '../../models/loans/loan';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -92,6 +92,7 @@ export class LoansComponent implements OnInit {
       message: 'Your loan has been accepted. Congratiolations',
       amount: loanWithUser.loan?.amount ?? 0,
       createdAt: new Date(),
+      status: PaymentStatus.UNPAID,
     };
 
     this.loanService
@@ -113,6 +114,7 @@ export class LoansComponent implements OnInit {
       message: 'Your loan application has been declined.',
       amount: 0,
       createdAt: new Date(),
+      status: PaymentStatus.UNPAID,
     };
 
     this.loanService
@@ -134,6 +136,7 @@ export class LoansComponent implements OnInit {
       message: 'Your loan application has been completed. Congrats!',
       amount: 0,
       createdAt: new Date(),
+      status: PaymentStatus.PAID,
     };
 
     this.loanService

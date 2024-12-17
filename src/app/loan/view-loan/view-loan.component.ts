@@ -72,6 +72,7 @@ export class ViewLoanComponent implements OnInit {
               e.status === LoanStatus.CONFIRMED ||
               e.status === LoanStatus.PENDING
             ) {
+              this.payments = [];
               this.activeLoans$.push(e);
               let schedules = e.paymentSchedule;
               schedules.forEach((s) => {

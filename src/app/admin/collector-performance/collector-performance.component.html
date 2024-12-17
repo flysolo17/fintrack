@@ -1,0 +1,35 @@
+<div class="container-fluid p-3">
+  <div class="row g-3">
+    <div class="col-12">
+      <div class="bg-white rounded-3 p-3">
+        <table class="table table-borderless table-hover">
+          <thead>
+            <tr>
+              <th>Collector Name</th>
+              <th>Assigned Loans</th>
+              <th>Payment Collected</th>
+              <th>Total Amount Collected</th>
+
+              <th>Profit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let performance of collectorPerformance$ | async">
+              <td>{{ performance.collectorName }}</td>
+              <td>{{ performance.assignedLoans }}</td>
+              <td>{{ performance.totalLoansCollected }}</td>
+              <td>{{ performance.totalAmountCollected | currency : "PHP" }}</td>
+
+              <td>
+                {{
+                  performance.totalAmountCollected - performance.profit
+                    | currency : "PHP"
+                }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

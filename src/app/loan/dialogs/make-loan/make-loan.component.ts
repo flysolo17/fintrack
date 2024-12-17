@@ -105,6 +105,7 @@ export class MakeLoanComponent implements OnInit {
       createdAt: new Date(),
       amount: loan.amount,
       collectorID: this.collector?.id ?? '',
+      status: PaymentStatus.UNPAID,
     };
     this.loanService
       .acceptLoan(loan, history, loanWithoutInterest)

@@ -49,35 +49,6 @@
 
 <div class="container-fluid p-3 rounded bg-white">
   <div class="row g-3">
-    <div class="col-7">
-      <h2>Top Collectors</h2>
-      <canvasjs-chart [options]="topCollectorOptions"></canvasjs-chart>
-    </div>
-
-    <div class="col-5">
-      <table class="table table-borderless table-hover">
-        <thead>
-          <tr>
-            <th>Collector</th>
-            <th>Loan Purchases</th>
-            <th>Amount Collected</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let collector of topCollectors">
-            <td class="text-start">
-              {{ collector.name }}
-            </td>
-            <td>
-              {{ collector.totalAmountLoanPurchases | currency : "PHP" }}
-            </td>
-            <td>
-              {{ collector.totalAmountCollected | currency : "PHP" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
     <div class="col-6">
       <div id="pieChartContainer" style="height: 400; width: 400"></div>
     </div>

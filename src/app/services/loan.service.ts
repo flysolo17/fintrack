@@ -78,6 +78,14 @@ export class LoanService {
     private encryptionService: EncryptionService
   ) {}
 
+  getAllLoans(): Observable<Loans[]> {
+    const q = query(
+      collection(this.firestore, LOANS_COLLECTION).withConverter(loanConverter),
+      orderBy('updatedAt', 'desc'),
+      orderBy('createdAt', 'desc')
+    );
+    return collectionData(q);
+  }
   acceptLoan(loan: Loans, history: LoanHistory, loanWithoutInterest: number) {
     const batch = writeBatch(this.firestore);
     const loanAccountRef = doc(

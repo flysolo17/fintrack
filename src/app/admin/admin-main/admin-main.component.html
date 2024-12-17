@@ -86,15 +86,18 @@
         </li>
         <li class="nav-item mb-3">
           <a
+            routerLink="collector-performance"
             class="nav-link text-white d-flex align-items-center p-3 rounded"
-         
           >
             <i class="fas fa-chart-line me-2"></i>
             <span>Collector Performance</span>
           </a>
         </li>
         <li class="nav-item">
-          <button class="btn btn-danger text-white d-flex align-items-center gap-2 px-3 py-2" (click)="logout()">
+          <button
+            class="btn btn-danger text-white d-flex align-items-center gap-2 px-3 py-2"
+            (click)="logout()"
+          >
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
           </button>

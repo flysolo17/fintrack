@@ -4,6 +4,7 @@ import {
   collectionData,
   Firestore,
   getDocs,
+  orderBy,
   query,
   where,
 } from '@angular/fire/firestore';
@@ -12,7 +13,7 @@ import { userConverter, UserType } from '../models/accounts/users';
 import { combineLatest, from, map, Observable, switchMap } from 'rxjs';
 import { LOANS_COLLECTION } from './loan.service';
 import { loanConverter, LoanStatus } from '../models/loans/loan';
-import { historyConverter } from '../models/loans/loan-history';
+import { historyConverter, LoanHistory } from '../models/loans/loan-history';
 import { CollectorWithData } from '../models/accounts/CollectorWithData';
 
 export const LOAN_HISTORY_COLLECTION = 'loan-history';
@@ -76,5 +77,14 @@ export class HistoryService {
         snapshot.docs.reduce((sum, doc) => sum + (doc.data().amount || 0), 0)
       )
     );
+  }
+  getAllLoanHistory(): Observable<LoanHistory[]> {
+    const q = query(
+      collection(this.firestore, LOAN_HISTORY_COLLECTION).withConverter(
+        historyConverter
+      ),
+      orderBy('createdAt', 'desc')
+    );
+    return collectionData(q);
   }
 }

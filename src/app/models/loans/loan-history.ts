@@ -1,4 +1,5 @@
 import { QueryDocumentSnapshot } from '@angular/fire/firestore';
+import { PaymentStatus } from './loan';
 
 export interface LoanHistory {
   id: string;
@@ -7,6 +8,7 @@ export interface LoanHistory {
   loanID: string;
   message: string;
   amount: number;
+  status: PaymentStatus;
   createdAt: Date;
 }
 export const historyConverter = {

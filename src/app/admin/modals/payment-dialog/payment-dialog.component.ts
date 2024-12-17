@@ -7,7 +7,7 @@ import { generateRandomNumber } from '../../../utils/Constants';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../services/auth.service';
 import { Users } from '../../../models/accounts/users';
-import { PaymentSchedule } from '../../../models/loans/loan';
+import { PaymentSchedule, PaymentStatus } from '../../../models/loans/loan';
 
 @Component({
   selector: 'app-payment-dialog',
@@ -62,6 +62,7 @@ export class PaymentDialogComponent implements OnInit {
       message: `Payment update collected by ${this.users?.username} amounted ${this.totalAmountPaid}`,
       amount: this.totalAmountPaid,
       createdAt: new Date(),
+      status: PaymentStatus.PAID,
     };
 
     this.loanService

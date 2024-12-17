@@ -123,7 +123,10 @@ export class AdminDashboardComponent implements OnInit {
       data: [
         {
           type: 'column', // Choose the chart type (column, bar, line, etc.)
-          dataPoints: this.topCollectorsData,
+          dataPoints: this.topCollectorsData.map((product) => ({
+            y: product.availed,
+            label: product.name,
+          })),
         },
       ],
     };

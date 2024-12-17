@@ -47,8 +47,8 @@
                 *ngIf="users$?.type == 'COLLECTOR'"
                 class="btn btn-sm btn-outline-primary"
                 [disabled]="
-                  (payment.status == 'PAID' || payment.status === 'OVERDUE') &&
-                  isScheduledToday(payment.schedule)
+                  payment.status == 'PAID' ||
+                  !isScheduledToday(payment.schedule)
                 "
                 (click)="pay(payment.loanWithUser, payment.schedule)"
               >

@@ -1,12 +1,46 @@
-<div class="under-development">
-  <img
-    src="../../../assets/Logo.png"
-    alt="Under Development"
-    class="under-development-image"
-  />
-  <h1>Under Development</h1>
-  <p>
-    This section is currently under development. Please check back later for
-    updates!
-  </p>
+<div class="container-fluid p-3">
+  <div class="row g-3">
+    <div class="col-12">
+      <div class="bg-white rounded-3 p-3">
+        <table class="table table-borderless table-hover">
+          <thead>
+            <tr>
+              <th>Full Name</th>
+              <th>Credit Score</th>
+              <th>Total Loans</th>
+              <th>Active Loans</th>
+              <th>Total Overdues</th>
+              <th>Total Paid</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let borrower of borrowerPerformance$ | async">
+              <td>
+                <div class="d-flex align-items-center">
+                  <img
+                    [src]="
+                      borrower.user?.profile ?? '../../../assets/profile.png'
+                    "
+                    alt="user profile"
+                    width="36"
+                    height="36"
+                    class="rounded-circle border"
+                  />
+                  <span class="ms-2">
+                    {{ borrower?.user?.firstName }}
+                    {{ borrower.user?.lastName }}
+                  </span>
+                </div>
+              </td>
+              <td>{{ borrower.creditScore }}</td>
+              <td>{{ borrower.totalLoans }}</td>
+              <td>{{ borrower.activeLoans }}</td>
+              <td>{{ borrower.totalOverdues }}</td>
+              <td>{{ borrower.totalPaid | currency : "PHP" }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

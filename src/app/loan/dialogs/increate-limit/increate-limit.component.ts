@@ -6,6 +6,7 @@ import { LoanHistory } from '../../../models/loans/loan-history';
 import { generateRandomNumber } from '../../../utils/Constants';
 import { ToastrService } from 'ngx-toastr';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { PaymentStatus } from '../../../models/loans/loan';
 
 @Component({
   selector: 'app-increate-limit',
@@ -31,6 +32,7 @@ export class IncreateLimitComponent {
       message: `Your Loan account limit has increase. Congratiolations`,
       amount: this.increaseAmount,
       createdAt: new Date(),
+      status: PaymentStatus.UNPAID,
     };
     this.loanService
       .increaseLimit(this.account.id, this.increaseAmount, history)
