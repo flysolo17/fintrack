@@ -22,7 +22,9 @@ export class AppComponent implements OnInit {
     let uid = localStorage.getItem('uid');
     if (uid !== null) {
       this.authService.getUserByID(uid).subscribe((data) => {
+        console.log(data);
         this.authService.setUser(data);
+        console.log(this.authService.users$);
         this.navigateToMainPage(data!.type);
       });
     }
@@ -33,8 +35,10 @@ export class AppComponent implements OnInit {
       this.router.navigate(['admin']);
     } else if (type == UserType.COLLECTOR) {
       this.router.navigate(['collector']);
-    } else {
+    } else if (type == UserType.BORROWER) {
       this.router.navigate(['borrower']);
+    } else {
+      this.router.navigate(['login']);
     }
   }
 }

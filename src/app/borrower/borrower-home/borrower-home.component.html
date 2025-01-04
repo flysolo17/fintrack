@@ -1,7 +1,10 @@
-<div class="d-flex flex-wrap">
+<div class="d-flex flex-column flex-md-row">
   <!-- Sidebar Navigation -->
-  <div class="bg-dark text-white vh-100 p-3 sidebar" [ngClass]="{'d-none d-md-block': !isMobile}">
-    <h5 class="text-white">Borrower Dashboard</h5>
+  <div
+    class="bg-dark text-white p-3 d-md-block d-none"
+    style="width: 250px; min-height: 100vh"
+  >
+    <h5>Borrower Dashboard</h5>
     <hr />
     <ul class="nav flex-column">
       <li class="nav-item">
@@ -9,7 +12,7 @@
           class="nav-link text-white"
           [ngClass]="{ active: active === 1 }"
           (click)="active = 1"
-          >Payment Schedule/Loan History</a
+          >Payment Schedule/Loan history</a
         >
       </li>
       <li class="nav-item mt-3">
@@ -18,81 +21,116 @@
     </ul>
   </div>
 
-  <!-- Mobile Sidebar Toggle -->
-  <button
-    class="btn btn-dark d-md-none mb-3"
-    (click)="toggleSidebar()"
-    [innerHTML]="isSidebarVisible ? 'Hide Menu' : 'Show Menu'"
-  ></button>
-  <div
-    class="bg-dark text-white p-3 mobile-sidebar d-md-none"
-    [ngClass]="{ 'd-block': isSidebarVisible, 'd-none': !isSidebarVisible }"
+  <!-- Collapsible Sidebar for Mobile -->
+  <nav
+    class="navbar navbar-dark bg-dark d-md-none"
+    style="position: fixed; width: 100%; z-index: 1050"
   >
-    <ul class="nav flex-column">
-      <li class="nav-item">
-        <a
-          class="nav-link text-white"
-          [ngClass]="{ active: active === 1 }"
-          (click)="active = 1; toggleSidebar()"
-          >Payment Schedule/Loan History</a
-        >
-      </li>
-      <li class="nav-item mt-3">
-        <button class="btn btn-light w-100" (click)="logout()">Logout</button>
-      </li>
-    </ul>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#mobileSidebar"
+      aria-controls="mobileSidebar"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </nav>
+  <div class="collapse bg-dark text-white" id="mobileSidebar">
+    <div class="p-3">
+      <h5>Borrower Dashboard</h5>
+      <hr />
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a
+            class="nav-link text-white"
+            [ngClass]="{ active: active === 1 }"
+            (click)="active = 1"
+            >Payment Schedule/Loan history</a
+          >
+        </li>
+        <li class="nav-item mt-3">
+          <button class="btn btn-light w-100" (click)="logout()">Logout</button>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <!-- Main Content -->
-  <div class="flex-grow-1 p-4">
+  <div class="flex-grow-1 p-4 mt-5 mt-md-0">
     <!-- Profile Section -->
-    <div class="mb-4">
-      <div class="d-flex flex-wrap align-items-center gap-3">
-        <img
-          [src]="users$?.profile ?? '../../../assets/profile.png'"
-          class="rounded-circle"
-          width="80px"
-          height="80px"
-        />
-        <div>
-          <h6 class="text-dark">
-            {{ users$?.lastName }} {{ users$?.firstName }}
-            {{ users$?.middleName }}
-          </h6>
-          <span class="text-muted">{{ users$?.username }} </span>
-        </div>
+    <div class="mb-4 d-flex align-items-center gap-3">
+      <img
+        [src]="users$?.profile ?? '../../../assets/profile.png'"
+        class="rounded-circle"
+        width="80px"
+        height="80px"
+      />
+      <div>
+        <h6 class="text-dark">
+          {{ users$?.lastName }} {{ users$?.firstName }}
+          {{ users$?.middleName }}
+        </h6>
+        <span class="text-muted">{{ users$?.username }} </span>
+        <p>
+          <strong>Address:</strong>
+          {{ data$?.loanAccount?.address }}
+        </p>
       </div>
     </div>
 
-    <!-- Loan Cards -->
-    <div class="row mb-3">
-      <div class="col-12 col-md-6 col-lg-4 mb-3" *ngFor="let loans of activeLoans$ | async">
+    <!-- Active Loans Section -->
+    <div class="row g-3">
+      <div class="col-12 col-md-6" *ngFor="let loans of activeLoans$ | async">
         <div class="card">
           <div class="card-body">
-            <div class="row">
-              <div class="col-6">
-                <span class="text-muted">Loan ID</span>
-                <h6>{{ loans.id }}</h6>
-              </div>
-              <div class="col-6">
-                <span class="text-muted">Amount</span>
-                <h6>{{ loans.amount | currency : 'PHP' }}</h6>
-              </div>
-              <div class="col-6">
-                <span class="text-muted">Interest</span>
-                <h6>{{ loans.interest }} %</h6>
-              </div>
-              <div class="col-6">
-                <span class="text-muted">Amount Paid</span>
-                <h6>{{ loans.amountPaid | currency : 'PHP' }}</h6>
-              </div>
+            <h5>Loan ID: {{ loans.id }}</h5>
+            <p>
+              <strong>Amount:</strong> {{ loans.amount | currency : "PHP" }}
+            </p>
+            <p><strong>Interest:</strong> {{ loans.interest }}%</p>
+            <p>
+              <strong>Amount Paid:</strong>
+              {{ loans.amountPaid | currency : "PHP" }}
+            </p>
+            <p>
+              <strong>Remaining Balance:</strong>
+              {{ loans.amount - loans.amountPaid | currency : "PHP" }}
+            </p>
+
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let schedule of loans.paymentSchedule">
+                    <td>{{ schedule.date | date : "shortDate" }}</td>
+                    <td>{{ schedule.amount | currency : "PHP" }}</td>
+                    <td>
+                      <span
+                        class="badge"
+                        [ngClass]="{
+                          'bg-success': schedule.status === 'PAID',
+                          'bg-warning': schedule.status === 'UNPAID',
+                          'bg-danger': schedule.status === 'OVERDUE'
+                        }"
+                        >{{ schedule.status }}</span
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <hr />
-            <span class="text-muted">Payment Schedule</span>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-

@@ -67,6 +67,9 @@ export const LOANS_COLLECTION = 'loans';
   providedIn: 'root',
 })
 export class LoanService {
+  getLoans() {
+    throw new Error('Method not implemented.');
+  }
   calculateLoan(loanAmount: number, interestRate: number, loanTerm: number) {
     throw new Error('Method not implemented.');
   }
@@ -349,5 +352,66 @@ export class LoanService {
       history
     );
     return batch.commit();
+  }
+
+  deleteLoanAccount(loanAccountID: string) {
+    const batch = writeBatch(this.firestore);
+
+    // Reference to the loan account document
+    const loanAccountRef = doc(this.firestore, LOAN_ACCOUNT, loanAccountID);
+
+    // Reference to all loans associated with this loan account
+    const loansQuery = query(
+      collection(this.firestore, LOANS_COLLECTION),
+      where('loanAccountID', '==', loanAccountID)
+    );
+
+    // Reference to all loan history associated with this loan account
+    const historyQuery = query(
+      collection(this.firestore, LOAN_HISTORY_COLLECTION),
+      where('loanAccountID', '==', loanAccountID)
+    );
+
+    // Delete the loan account
+    batch.delete(loanAccountRef);
+
+    // Delete all loans associated with the loan account
+    getDocs(loansQuery)
+      .then((loanDocs) => {
+        loanDocs.forEach((loanDoc) => {
+          const loanRef = loanDoc.ref;
+          batch.delete(loanRef);
+        });
+
+        // Delete all loan history records associated with the loan account
+        getDocs(historyQuery)
+          .then((historyDocs) => {
+            historyDocs.forEach((historyDoc) => {
+              const historyRef = historyDoc.ref;
+              batch.delete(historyRef);
+            });
+
+            // Commit the batch to delete the documents
+            batch
+              .commit()
+              .then(() => {
+                this.toastr.success(
+                  'Loan account and associated records deleted successfully'
+                );
+              })
+              .catch((error) => {
+                console.error('Error deleting loan account:', error);
+                this.toastr.error('Error deleting loan account');
+              });
+          })
+          .catch((error) => {
+            console.error('Error fetching loan history:', error);
+            this.toastr.error('Error deleting loan history');
+          });
+      })
+      .catch((error) => {
+        console.error('Error fetching loans:', error);
+        this.toastr.error('Error deleting loans');
+      });
   }
 }

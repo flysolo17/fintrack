@@ -79,7 +79,76 @@ h3 {
 .card-text {
   font-size: 1.2rem;
 }
+.overview-cards {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 20px; /* Space between cards */
+}
 
+.card {
+  flex: 1; /* Makes the cards equal width */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+  min-width: 200px; /* Ensures minimum width */
+}
+
+.card-title {
+  font-size: 1.2rem;
+  margin-bottom: 0;
+}
+
+h5 {
+  font-size: 1.5rem;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f6f9;
+}
+.container {
+  padding: 30px;
+}
+.overview-cards {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+.card {
+  width: 22%;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 20px;
+}
+.card h5 {
+  font-size: 2rem;
+  margin-top: 10px;
+}
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.chart-container {
+  margin-top: 40px;
+}
+h3 {
+  margin-bottom: 20px;
+  font-size: 2rem;
+  font-weight: 600;
+}
+.table-container {
+  margin-top: 40px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+table th,
+table td {
+  text-align: center;
+}
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f6f9;

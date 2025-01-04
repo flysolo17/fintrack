@@ -16,6 +16,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './borrowers.component.css',
 })
 export class BorrowersComponent implements OnInit {
+  deleteLoanAccount(arg0: string) {
+    throw new Error('Method not implemented.');
+  }
   modalService = inject(NgbModal);
   loans$: UserWithLoanAccount[] = [];
   loanStatus: any;

@@ -45,7 +45,9 @@
             Increase Limit
           </button>
           <button
-            [disabled]="data$.loanAccount?.amount === 0"
+            [disabled]="
+              data$.loanAccount?.amount === 0 || user$?.type == 'ADMIN'
+            "
             class="btn btn-primary px-4"
             (click)="createLoan(data$.user!!, data$.loanAccount!)"
           >

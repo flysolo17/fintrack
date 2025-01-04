@@ -59,6 +59,7 @@ import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { IncreateLimitComponent } from './loan/dialogs/increate-limit/increate-limit.component';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { CollectorPerformanceComponent } from './admin/collector-performance/collector-performance.component';
+import { ProfileAdminComponent } from './profile-admin/profile-admin.component';
 
 @NgModule({
   declarations: [
@@ -101,6 +102,7 @@ import { CollectorPerformanceComponent } from './admin/collector-performance/col
     LoansComponent,
     IncreateLimitComponent,
     CollectorPerformanceComponent,
+    ProfileAdminComponent,
   ],
   imports: [
     BrowserModule,

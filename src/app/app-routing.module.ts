@@ -25,6 +25,7 @@ import { BorrowerHomeComponent } from './borrower/borrower-home/borrower-home.co
 import { DailyPaymentComponent } from './admin/daily-payment/daily-payment.component';
 import { LoansComponent } from './admin/loans/loans.component';
 import { CollectorPerformanceComponent } from './admin/collector-performance/collector-performance.component';
+import { ProfileAdminComponent } from './profile-admin/profile-admin.component';
 
 const routes: Routes = [
   {
@@ -68,6 +69,10 @@ const routes: Routes = [
       {
         path: '',
         component: AdminDashboardComponent,
+      },
+      {
+        path: 'profile-admin',
+        component: ProfileAdminComponent,
       },
       {
         path: 'dashboard',

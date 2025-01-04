@@ -44,12 +44,8 @@
             </td>
             <td>
               <button
-                *ngIf="users$?.type == 'COLLECTOR'"
                 class="btn btn-sm btn-outline-primary"
-                [disabled]="
-                  payment.status == 'PAID' ||
-                  !isScheduledToday(payment.schedule)
-                "
+                [disabled]="payment.status == 'PAID'"
                 (click)="pay(payment.loanWithUser, payment.schedule)"
               >
                 Pay Now

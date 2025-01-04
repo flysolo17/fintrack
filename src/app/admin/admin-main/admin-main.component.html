@@ -32,7 +32,7 @@
             routerLink="loans"
             routerLinkActive="active-link"
           >
-            <i class="fas fa-tachometer-alt me-2"></i>
+            <i class="fas fa-money-check-alt me-2"></i>
             <span>Loans</span>
           </a>
         </li>
@@ -56,24 +56,16 @@
             <span>Daily Payment</span>
           </a>
         </li>
-        <ul class="nav flex-column">
-          <!-- Borrowers Tab -->
-          <li class="nav-item mb-3">
-            <a
-              class="nav-link text-white d-flex align-items-center p-3 rounded-3 w-100"
-              routerLink="borrowers"
-              routerLinkActive="active-link"
-              [routerLinkActiveOptions]="{ exact: true }"
-            >
-              <!-- Icon for Borrowers Tab -->
-              <i class="fas fa-user me-2"></i>
-
-              <!-- Text for Borrowers Tab -->
-              <span class="d-inline-block">Borrowers</span>
-            </a>
-          </li>
-        </ul>
-
+        <li class="nav-item mb-3">
+          <a
+            class="nav-link text-white d-flex align-items-center p-3 rounded"
+            routerLink="borrowers"
+            routerLinkActive="active-link"
+          >
+            <i class="fas fa-user me-2"></i>
+            <span>Borrowers</span>
+          </a>
+        </li>
         <li class="nav-item mb-3">
           <a
             class="nav-link text-white d-flex align-items-center p-3 rounded"
@@ -86,11 +78,23 @@
         </li>
         <li class="nav-item mb-3">
           <a
-            routerLink="collector-performance"
             class="nav-link text-white d-flex align-items-center p-3 rounded"
+            routerLink="collector-performance"
+            routerLinkActive="active-link"
           >
             <i class="fas fa-chart-line me-2"></i>
             <span>Collector Performance</span>
+          </a>
+        </li>
+        <!-- New Profiles Tab -->
+        <li class="nav-item mb-3">
+          <a
+            class="nav-link text-white d-flex align-items-center p-3 rounded"
+            routerLink="profile-admin"
+            routerLinkActive="active-link"
+          >
+            <i class="fas fa-user-circle me-2"></i>
+            <span>Profiles</span>
           </a>
         </li>
         <li class="nav-item">

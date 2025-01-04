@@ -45,33 +45,54 @@
             </td>
             <td>
               <span>{{ loan.loan?.amountPaid | currency : "PHP" }} of</span>
-              <span class="text-muted">{{ loan.loan?.amount | currency : "PHP" }}</span>
+              <span class="text-muted">{{
+                loan.loan?.amount | currency : "PHP"
+              }}</span>
             </td>
             <td>
-              <span class="badge"
+              <span
+                class="badge"
                 [ngClass]="{
                   'bg-success': loan.loan?.status === 'PAID',
                   'bg-warning': loan.loan?.status === 'PENDING',
                   'bg-danger': loan.loan?.status === 'DECLINED'
-                }">
+                }"
+              >
                 {{ loan.loan?.status }}
               </span>
             </td>
             <td>{{ loan.loan?.createdAt | date : "short" }}</td>
             <td>{{ loan.loan?.updatedAt | date : "short" }}</td>
 
-            <td class="d-flex justify-content-center">
-              <div *ngIf="loan.loan?.status === 'PENDING'" class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-danger" (click)="decline(loan)">
-                  <i class="bi bi-x"></i>
+            <td class="d-flex justify-content-center gap-2">
+              <div *ngIf="loan.loan?.status === 'PENDING'">
+                <button
+                  class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
+                  (click)="decline(loan)"
+                  title="Decline Loan"
+                >
+                  <i class="bi bi-x"></i> Decline
                 </button>
-                <button class="btn btn-sm btn-outline-success" (click)="confirmLoan(loan)">
-                  <i class="bi bi-check"></i>
+                <button
+                  class="btn btn-sm btn-outline-success d-flex align-items-center gap-1"
+                  (click)="confirmLoan(loan)"
+                  title="Confirm Loan"
+                >
+                  <i class="bi bi-check"></i> Confirm
                 </button>
               </div>
 
-              <div class="d-flex gap-2" *ngIf="loan.loan?.amount === loan.loan?.amountPaid && loan.loan?.status !== 'PAID'">
-                <button class="btn btn-sm btn-outline-success" (click)="markAsPaid(loan)">
+              <div
+                *ngIf="
+                  loan.loan?.amount === loan.loan?.amountPaid &&
+                  loan.loan?.status !== 'PAID'
+                "
+              >
+                <button
+                  class="btn btn-sm btn-outline-success d-flex align-items-center gap-1"
+                  (click)="markAsPaid(loan)"
+                  title="Mark as Paid"
+                >
                   <i class="bi bi-check-circle"></i> Completed
                 </button>
               </div>

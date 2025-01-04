@@ -25,20 +25,6 @@
           Borrower List
         </button>
       </li>
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
-          id="loan-details-tab"
-          data-bs-toggle="tab"
-          data-bs-target="#loan-details"
-          type="button"
-          role="tab"
-          aria-controls="loan-details"
-          aria-selected="false"
-        >
-          Loan Details
-        </button>
-      </li>
     </ul>
 
     <!-- Tab Content -->
@@ -139,6 +125,12 @@
                       (click)="makeAloan(user.loanAccount?.id ?? '')"
                     >
                       View
+                    </button>
+                    <button
+                      class="btn btn-warning btn-sm text-white"
+                      (click)="deleteLoanAccount(user.loanAccount?.id ?? '')"
+                    >
+                      Delete
                     </button>
                   </div>
                 </td>

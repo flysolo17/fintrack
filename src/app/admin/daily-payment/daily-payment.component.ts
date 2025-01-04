@@ -27,32 +27,44 @@ export class DailyPaymentComponent implements OnInit {
   filteredPayments: PaymentRow[] = [];
   payments: PaymentRow[] = [];
   users$: Users | null = null;
+
   constructor(
     private loanService: LoanService,
-    private autService: AuthService
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.users$ = this.autService.users$;
-    console.log(this.users$)
-    this.loanService.getPaymentsWithUser().subscribe((data) => {
-      console.log(data);
-      this.payments = [];
-      data.forEach((loan) => {
-        loan.loan?.paymentSchedule.forEach((payment) => {
-          this.payments.push({
-            loanWithUser: loan,
-            date: this.formatDate(payment.date),
-            customer: `${loan.users?.firstName} ${loan.users?.lastName}`,
-            amount: payment.amount.toString(),
-            status: payment.status,
-            schedule: payment,
+    this.users$ =
+      this.authService.users$ ||
+      ({
+        username: '',
+        firstName: '',
+        lastName: '',
+      } as Users);
+
+    this.loanService.getPaymentsWithUser().subscribe(
+      (data) => {
+        console.log(data);
+        this.payments = [];
+        data.forEach((loan) => {
+          loan.loan?.paymentSchedule.forEach((payment) => {
+            this.payments.push({
+              loanWithUser: loan,
+              date: this.formatDate(payment.date),
+              customer: `${loan.users?.firstName} ${loan.users?.lastName}`,
+              amount: payment.amount.toString(),
+              status: payment.status,
+              schedule: payment,
+            });
           });
         });
-      });
-      console.log('Payments: ', this.payments);
-      this.filterPaymentsByDate();
-    });
+        console.log('Payments: ', this.payments);
+        this.filterPaymentsByDate();
+      },
+      (error) => {
+        console.error('Error fetching payments:', error);
+      }
+    );
   }
 
   setSelectedDate(event: Event): void {
@@ -71,6 +83,7 @@ export class DailyPaymentComponent implements OnInit {
   }
 
   formatDate(date: Date): string {
+    if (!date) return '';
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
     const year = date.getFullYear();
@@ -78,22 +91,35 @@ export class DailyPaymentComponent implements OnInit {
   }
 
   get formattedSelectedDate(): string {
-    const month = (new Date().getMonth() + 1).toString().padStart(2, '0');
-
+    const month = (this.selectedDate.getMonth() + 1)
+      .toString()
+      .padStart(2, '0');
     const day = this.selectedDate.getDate().toString().padStart(2, '0');
     const year = this.selectedDate.getFullYear();
     return `${year}-${month}-${day}`;
   }
 
-  pay(loanWithUser: LoanWithUser, schedule: PaymentSchedule) {
+  pay(loanWithUser: LoanWithUser, schedule: PaymentSchedule): void {
     const modal = this.modalService.open(PaymentDialogComponent);
     modal.componentInstance.loanWithUser = loanWithUser;
     modal.componentInstance.schedule = schedule;
+
+    modal.result.then(
+      (result) => {
+        console.log('Payment successful:', result);
+        this.filterPaymentsByDate();
+      },
+      (reason) => {
+        console.log('Payment modal dismissed:', reason);
+      }
+    );
   }
+
   isScheduledToday(schedule: PaymentSchedule): boolean {
     const today = new Date();
     const scheduledDate = new Date(schedule.date);
 
+    // Return true if both dates match for year, month, and day.
     return (
       today.getFullYear() === scheduledDate.getFullYear() &&
       today.getMonth() === scheduledDate.getMonth() &&
