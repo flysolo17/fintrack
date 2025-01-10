@@ -41,7 +41,7 @@
       <div
         class="card bg-warning shadow-sm p-3 d-flex flex-row align-items-center"
       >
-      <i class="fas fa-user-check fa-2x text-white me-3"></i>
+        <i class="fas fa-user-check fa-2x text-white me-3"></i>
         <div>
           <h6 class="text-white">pending borrower</h6>
           <h3 class="text-white fw-bold"></h3>
@@ -52,12 +52,20 @@
       <div
         class="card bg-primary shadow-sm p-3 d-flex flex-row align-items-center"
       >
-      <i class="fas fa-user-check fa-2x text-white  me-3"></i>
+        <i class="fas fa-user-check fa-2x text-white me-3"></i>
         <div>
           <h6 class="text-white">default borrower</h6>
           <h3 class="text-white fw-bold"></h3>
         </div>
       </div>
     </div>
-  
-
+    <div>
+      <div>
+        <canvasjs-chart
+          [options]="chartOptions"
+          [styles]="{ width: '100%', height: '360px' }"
+        ></canvasjs-chart>
+      </div>
+    </div>
+  </div>
+</div>

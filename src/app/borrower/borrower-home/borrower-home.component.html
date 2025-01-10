@@ -12,7 +12,7 @@
           class="nav-link text-white"
           [ngClass]="{ active: active === 1 }"
           (click)="active = 1"
-          >Payment Schedule/Loan history</a
+          >Payment Schedule/Loan History</a
         >
       </li>
       <li class="nav-item mt-3">
@@ -48,7 +48,7 @@
             class="nav-link text-white"
             [ngClass]="{ active: active === 1 }"
             (click)="active = 1"
-            >Payment Schedule/Loan history</a
+            >Payment Schedule/Loan History</a
           >
         </li>
         <li class="nav-item mt-3">
@@ -61,7 +61,9 @@
   <!-- Main Content -->
   <div class="flex-grow-1 p-4 mt-5 mt-md-0">
     <!-- Profile Section -->
-    <div class="mb-4 d-flex align-items-center gap-3">
+    <div
+      class="mb-4 d-flex align-items-center gap-3 flex-column flex-md-row text-center text-md-start"
+    >
       <img
         [src]="users$?.profile ?? '../../../assets/profile.png'"
         class="rounded-circle"

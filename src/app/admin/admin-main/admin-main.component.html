@@ -86,6 +86,7 @@
             <span>Collector Performance</span>
           </a>
         </li>
+
         <!-- New Profiles Tab -->
         <li class="nav-item mb-3">
           <a
@@ -97,16 +98,10 @@
             <span>Profiles</span>
           </a>
         </li>
-        <li class="nav-item">
-          <button
-            class="btn btn-danger text-white d-flex align-items-center gap-2 px-3 py-2"
-            (click)="logout()"
-          >
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-          </button>
-        </li>
       </ul>
+      <li class="nav-item mt-3">
+        <button class="btn btn-light w-100" (click)="logout()">Logout</button>
+      </li>
     </div>
 
     <!-- Main Content Area -->
