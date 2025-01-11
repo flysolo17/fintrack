@@ -26,6 +26,7 @@ import { DailyPaymentComponent } from './admin/daily-payment/daily-payment.compo
 import { LoansComponent } from './admin/loans/loans.component';
 import { CollectorPerformanceComponent } from './admin/collector-performance/collector-performance.component';
 import { ProfileAdminComponent } from './profile-admin/profile-admin.component';
+import { ProfileBorrowerComponent } from './profile-borrower/profile-borrower.component';
 
 const routes: Routes = [
   {
@@ -122,6 +123,10 @@ const routes: Routes = [
       {
         path: '',
         component: BorrowerHomeComponent,
+      },
+      {
+        path: 'profile-borrower',
+        component: ProfileBorrowerComponent,
       },
     ],
   },

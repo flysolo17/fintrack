@@ -60,6 +60,7 @@ import { IncreateLimitComponent } from './loan/dialogs/increate-limit/increate-l
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { CollectorPerformanceComponent } from './admin/collector-performance/collector-performance.component';
 import { ProfileAdminComponent } from './profile-admin/profile-admin.component';
+import { ProfileBorrowerComponent } from './profile-borrower/profile-borrower.component';
 
 @NgModule({
   declarations: [
@@ -103,6 +104,7 @@ import { ProfileAdminComponent } from './profile-admin/profile-admin.component';
     IncreateLimitComponent,
     CollectorPerformanceComponent,
     ProfileAdminComponent,
+    ProfileBorrowerComponent,
   ],
   imports: [
     BrowserModule,
