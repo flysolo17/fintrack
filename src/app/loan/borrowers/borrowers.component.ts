@@ -7,6 +7,7 @@ import { Users } from '../../models/accounts/users';
 import { UserWithLoanAccount } from '../../models/accounts/UserWithLoanAccount';
 import { AuthService } from '../../services/auth.service';
 import { generateRandomNumber } from '../../utils/Constants';
+import { PdfGenerationService } from '../../services/pdf-generation.service';
 
 @Component({
   selector: 'app-borrowers',
@@ -28,7 +29,8 @@ export class BorrowersComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private pdfGenerationService: PdfGenerationService
   ) {}
 
   ngOnInit(): void {
@@ -110,5 +112,9 @@ export class BorrowersComponent implements OnInit {
         .toLowerCase()
         .includes(term)
     );
+  }
+
+  downLoadData(data: UserWithLoanAccount) {
+    this.pdfGenerationService.downLoadUserWithLoanAccount(data);
   }
 }

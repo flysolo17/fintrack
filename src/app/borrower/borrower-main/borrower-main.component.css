@@ -1,0 +1,69 @@
+/* Sidebar default width */
+.sidebar {
+  height: 100dvh;
+  width: 250px;
+
+  overflow: hidden;
+  transition: width 0.3s ease;
+}
+
+/* Sidebar collapsed width */
+.sidebar.collapsed {
+  width: 80px;
+}
+
+/* Icon sizes */
+.icon-normal {
+  font-size: 1rem; /* Normal size */
+}
+
+.icon-large {
+  font-size: 1.2rem; /* Larger size */
+}
+
+.icon-normal,
+.icon-large {
+  transition: font-size 0.3s ease;
+}
+
+/* Label transition for smooth appearance/disappearance */
+.tab-label {
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Hide the label when collapsed */
+.sidebar.collapsed .tab-label {
+  display: none; /* Completely hide the label */
+}
+
+.white-tint {
+  filter: brightness(0) invert(1); /* Makes the image white */
+}
+
+.logo-normal {
+  width: 80px; /* Default size for expanded state */
+  transition: width 0.3s ease;
+}
+
+.logo-collapsed {
+  width: 50px; /* Smaller size for collapsed state */
+  transition: width 0.3s ease;
+}
+
+/* Background for the active <li> */
+.active-tab {
+  background-color: #007bff; /* Change this to your preferred background color */
+  border-radius: 4px;
+}
+
+/* Style for the active <a> link */
+.nav-link.active {
+  font-weight: bold;
+  background-color: transparent;
+  color: #ffffff; /* Adjust text color for active state */
+}
+
+/* Transition for smooth effect */
+.nav-item {
+  transition: background-color 0.3s ease;
+}

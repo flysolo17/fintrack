@@ -1,0 +1,41 @@
+<div class="container-fluid p-3 h-100 bg-body-tertiary">
+  <div class="bg-white rounded-3 p-3">
+    <div class="d-flex align-items-center justify-content-between p-3">
+      <h5>Payment History</h5>
+      <div class="d-flex gap-2 w-25">
+        <input
+          type="text"
+          [formControl]="searchText$"
+          class="form-control w-100"
+          placeholder="Search loan ID"
+        />
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-borderless table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>Loan ID</th>
+            <th>Message</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of filteredHistory$ | async">
+            <td>{{ item.loanID }}</td>
+            <td>{{ item.message }}</td>
+            <td>{{ item.amount | currency : "PHP" }}</td>
+            <td>{{ item.status }}</td>
+            <td>{{ item.createdAt | date : "medium" }}</td>
+          </tr>
+          <tr *ngIf="(filteredHistory$ | async)?.length === 0">
+            <td colspan="8" class="text-center">No records found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

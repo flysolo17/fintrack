@@ -1,1 +1,56 @@
-<router-outlet></router-outlet>
+<div class="d-flex vh-100 overflow-hidden w-100">
+  <!-- Sidebar -->
+  <nav
+    class="sidebar bg-dark text-light"
+    [ngClass]="{ collapsed: isCollapsed }"
+  >
+    <div class="d-flex flex-column align-items-center p-3">
+      <div class="w-100 p-3 d-flex align-items-center justify-content-center">
+        <img
+          src="../../../assets/logo_1.png"
+          [ngClass]="{
+            'logo-normal': !isCollapsed,
+            'logo-collapsed': isCollapsed
+          }"
+          class="white-tint"
+        />
+      </div>
+      <ul class="nav flex-column w-100 h-100">
+        <li
+          class="nav-item"
+          *ngFor="let tab of tabs"
+          [ngClass]="{
+            'active-tab': isRouteActive(tab.route)
+          }"
+        >
+          <a
+            [routerLink]="tab.route"
+            routerLinkActive="active"
+            class="nav-link text-light d-flex align-items-center"
+          >
+            <fa-icon
+              [icon]="tab.selectedIcon"
+              class="me-3"
+              [ngClass]="{
+                'icon-large': isCollapsed,
+                'icon-normal': !isCollapsed
+              }"
+            ></fa-icon>
+
+            <span class="tab-label" *ngIf="!isCollapsed">{{ tab.label }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="flex-grow-1 overflow-auto">
+    <div class="w-100 sticky-top bg-dark p-3">
+      <button class="btn btn-outline-light btn-sm" (click)="toggleSidebar()">
+        <fa-icon [icon]="hamburger"></fa-icon>
+      </button>
+    </div>
+    <div class="w-100 overflow-auto bg-body-tertiary">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

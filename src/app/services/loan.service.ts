@@ -51,6 +51,7 @@ import {
   Observable,
   of,
   switchMap,
+  toArray,
 } from 'rxjs';
 import { LoanWithUser } from '../models/loans/LoanWithUser';
 import { LoanWithBorrowerAndCollector } from '../models/loans/LoanWithUserAndCollector';
@@ -60,6 +61,7 @@ import {
 } from '../models/accounts/LoanAccount';
 import { LoanWithUserAndDocuments } from '../models/loans/LoanWithUserAndDocuments';
 import { User } from '@angular/fire/auth';
+import e from 'express';
 export const IDENTIFICATION_COLLECTION = 'identifications';
 export const LOANS_COLLECTION = 'loans';
 
@@ -413,5 +415,32 @@ export class LoanService {
         console.error('Error fetching loans:', error);
         this.toastr.error('Error deleting loans');
       });
+  }
+
+  getLoansByCollectorID(id: string): Observable<LoanWithUser[]> {
+    const q = query(
+      collection(this.firestore, LOANS_COLLECTION).withConverter(loanConverter),
+      where('collectorID', '==', id),
+      orderBy('updatedAt', 'desc'),
+      orderBy('createdAt', 'desc')
+    );
+
+    return collectionData(q).pipe(
+      mergeMap((loans) =>
+        from(loans).pipe(
+          mergeMap(async (loan) => {
+            const userRef = doc(
+              this.firestore,
+              AUTH_COLLECTION,
+              loan.loanAccountID
+            ).withConverter(userConverter);
+            const userSnap = await getDoc(userRef);
+            const user = userSnap.exists() ? (userSnap.data() as Users) : null;
+            return { loan: loan, users: user } as LoanWithUser;
+          }),
+          toArray()
+        )
+      )
+    );
   }
 }

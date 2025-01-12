@@ -60,8 +60,12 @@ import { IncreateLimitComponent } from './loan/dialogs/increate-limit/increate-l
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { CollectorPerformanceComponent } from './admin/collector-performance/collector-performance.component';
 import { ProfileAdminComponent } from './profile-admin/profile-admin.component';
+
 import { VerificationComponent } from './auth/verification/verification.component';
 import { EmailVerificationComponent } from './auth/email-verification/email-verification.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { DocumentsComponent } from './borrower/documents/documents.component';
+import { HistoryComponent } from './borrower/history/history.component';
 
 @NgModule({
   declarations: [
@@ -105,23 +109,23 @@ import { EmailVerificationComponent } from './auth/email-verification/email-veri
     IncreateLimitComponent,
     CollectorPerformanceComponent,
     ProfileAdminComponent,
+
     VerificationComponent,
     EmailVerificationComponent,
-
-    //
+    DocumentsComponent,
+    HistoryComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FontAwesomeModule,
     NgbModule,
     ReactiveFormsModule,
     NgbDropdownModule,
     NgbPaginationModule,
     CommonModule,
     BrowserAnimationsModule,
-
     CanvasJSAngularChartsModule,
-
     ToastrModule.forRoot(),
     FormsModule,
   ],

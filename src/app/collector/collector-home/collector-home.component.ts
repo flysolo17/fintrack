@@ -1,29 +1,154 @@
-import { Component } from '@angular/core';
-import {
-  generateRandomNumber,
-  generateRandomString,
-} from '../../utils/Constants';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoanService } from '../../services/loan.service';
+import { LoanHistoryByMonth } from '../../models/loans/loan-history';
+import { HistoryService } from '../../services/history.service';
+import { identity, Observable, of } from 'rxjs';
+import { Loans } from '../../models/loans/loan';
+import { LoanWithUser } from '../../models/loans/LoanWithUser';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-collector-home',
   templateUrl: './collector-home.component.html',
-  styleUrl: './collector-home.component.css',
+  styleUrls: ['./collector-home.component.css'],
 })
-export class CollectorHomeComponent {
-  get randomAccountNumber(): string {
-    return generateRandomNumber();
+export class CollectorHomeComponent implements OnInit {
+  chartOptions: any;
+  loanHistoryByMonth: LoanHistoryByMonth[] = [];
+  loansWithUsers: (LoanWithUser & {
+    firstSchedule?: Date | null;
+    lastSchedule?: Date | null;
+  })[] = [];
+  filteredLoans: (LoanWithUser & {
+    firstSchedule?: Date | null;
+    lastSchedule?: Date | null;
+  })[] = [];
+
+  searchText$ = new FormControl('');
+
+  constructor(
+    private loanService: LoanService,
+    private router: Router,
+    private loanHistory: HistoryService
+  ) {
+    this.chartOptions = this.initializeChartOptions([]);
   }
 
-  constructor(private loanService: LoanService, private router: Router) {}
+  ngOnInit(): void {
+    const id = localStorage.getItem('uid') ?? '';
+    this.loanService.getLoansByCollectorID(id).subscribe((data) => {
+      this.loansWithUsers = data.map((loanWithUser) => {
+        console.log(loanWithUser);
+        const paymentSchedule = loanWithUser.loan?.paymentSchedule || [];
+        return {
+          ...loanWithUser,
+          firstSchedule:
+            paymentSchedule.length > 0 ? paymentSchedule[0].date : null,
+          lastSchedule:
+            paymentSchedule.length > 0
+              ? paymentSchedule[paymentSchedule.length - 1].date
+              : null,
+        };
+      });
+      this.filterLoans();
+    });
 
-  createLoan() {
-    const extras = {
-      queryParams: {
-        account: generateRandomNumber(),
+    this.loanHistory
+      .getPaidLoanHistoryByCollectorIDGroupByMonth(id)
+      .subscribe((data) => {
+        this.loanHistoryByMonth = data.reverse();
+        this.updateChartOptions();
+      });
+  }
+
+  filterLoans(): void {
+    const searchText = this.searchText$.value?.toLowerCase() || '';
+    console.log('Filtering with:', searchText); // Debugging search input
+
+    this.filteredLoans = this.loansWithUsers.filter((loanWithUser) => {
+      // Match loan ID
+      const loanIDMatch = loanWithUser.loan?.id
+        .toLowerCase()
+        .includes(searchText);
+
+      // Match applicant name (first, middle, last name)
+      const nameMatch = (
+        (loanWithUser.users?.firstName || '') +
+        ' ' +
+        (loanWithUser.users?.middleName || '') +
+        ' ' +
+        (loanWithUser.users?.lastName || '')
+      )
+        .toLowerCase()
+        .includes(searchText);
+
+      return loanIDMatch || nameMatch;
+    });
+
+    console.log('Filtered Loans:', this.filteredLoans); // Debugging filtered loans
+  }
+
+  private initializeChartOptions(dataPoints: any[]) {
+    return {
+      animationEnabled: true,
+      theme: 'light2',
+      title: {
+        text: 'Loans Collected Per month',
       },
+      axisY: {
+        title: 'Loans Collected',
+        includeZero: true,
+      },
+      axisY2: {
+        title: 'Revenue (PHP)',
+        includeZero: true,
+        labelFormatter: (e: any) => `₱${e.value.toLocaleString()}`,
+      },
+      toolTip: {
+        shared: true,
+      },
+      legend: {
+        cursor: 'pointer',
+        itemclick: (e: any) => {
+          e.dataSeries.visible = !e.dataSeries.visible;
+          e.chart.render();
+        },
+      },
+      data: [
+        {
+          type: 'column',
+          showInLegend: true,
+          name: 'Loans Collected',
+          yValueFormatString: '#,### Loans',
+          dataPoints,
+        },
+        {
+          type: 'spline',
+          showInLegend: true,
+          name: 'Revenue',
+          axisYType: 'secondary',
+          yValueFormatString: '₱#,###',
+          dataPoints,
+        },
+      ],
     };
-    this.router.navigate(['collector/create-loan'], extras);
+  }
+
+  private updateChartOptions() {
+    const loansCollectedDataPoints = this.loanHistoryByMonth.map(
+      (monthData) => ({
+        label: `${monthData.month} ${monthData.year}`,
+        y: monthData.histories.length,
+      })
+    );
+
+    const revenueDataPoints = this.loanHistoryByMonth.map((monthData) => ({
+      label: `${monthData.month} ${monthData.year}`,
+      y: monthData.histories.reduce((sum, history) => sum + history.amount, 0),
+    }));
+
+    this.chartOptions = this.initializeChartOptions(loansCollectedDataPoints);
+    this.chartOptions.data[1].dataPoints = revenueDataPoints;
   }
 }

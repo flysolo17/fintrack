@@ -1,14 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { LoanService } from '../../services/loan.service';
+import { FormControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { LoanHistory } from '../../models/loans/loan-history';
-import { Loans } from '../../models/loans/loan';
-import { PaymentRow } from '../../loan/view-loan/view-loan.component';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  startWith,
+} from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { PaymentRow } from '../../loan/view-loan/view-loan.component';
 import { Users } from '../../models/accounts/users';
-import { LoanAccount } from '../../models/accounts/LoanAccount';
-import { LoanWithUserAndDocuments } from '../../models/loans/LoanWithUserAndDocuments';
+import { Loans, PaymentStatus } from '../../models/loans/loan';
+import {
+  LoanHistory,
+  LoanHistoryByMonth,
+} from '../../models/loans/loan-history';
+import { AuthService } from '../../services/auth.service';
+import { HistoryService } from '../../services/history.service';
+import { LoanService } from '../../services/loan.service';
+import { PdfGenerationService } from '../../services/pdf-generation.service';
 
 @Component({
   selector: 'app-borrower-home',
@@ -16,71 +26,77 @@ import { LoanWithUserAndDocuments } from '../../models/loans/LoanWithUserAndDocu
   styleUrls: ['./borrower-home.component.css'],
 })
 export class BorrowerHomeComponent implements OnInit {
-  isMobile: any;
-  isSidebarVisible: any;
-  loan: any;
-  toggleSidebar() {
-    throw new Error('Method not implemented.');
-  }
-  uploadSelected($event: File, arg1: number) {
-    throw new Error('Method not implemented.');
-  }
   histories$: Observable<LoanHistory[]> | undefined;
   activeLoans$: Observable<Loans[]> | undefined;
-  paymentHistory$: Observable<PaymentRow[]> = of([]);
+  payments: PaymentRow[] = [];
   users$: Users | null = null;
-
-  loanAccount$: Observable<LoanAccount | null> | undefined;
   active = 1;
-  data$: LoanWithUserAndDocuments | null = null;
+
+  loanHistoryByMonth$: Observable<LoanHistoryByMonth[]> = of([]);
+  searhText$ = new FormControl('');
+  filteredPayments$: Observable<PaymentRow[]> = of([]);
 
   constructor(
     private loanService: LoanService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private loanHistoryService: HistoryService,
+    private pdfGenerator: PdfGenerationService
   ) {}
 
+  createPdf(loan: Loans) {
+    this.pdfGenerator.createPDF(loan);
+  }
+
   ngOnInit(): void {
-    const id = localStorage.getItem('uid') ?? '';
-    this.authService.getUserByID(id).subscribe((data) => {
+    let id = localStorage.getItem('uid') ?? '';
+    this.loanHistoryByMonth$ =
+      this.loanHistoryService.getPaidLoanHistoryByCollectorIDGroupByMonth(id);
+    this.authService.getUserByID(id).subscribe((data: Users | null) => {
       this.users$ = data;
-      if (this.users$) {
+      if (this.users$ != null) {
         this.histories$ = this.loanService.getHistory(this.users$.username);
         this.activeLoans$ = this.loanService.getActiveLoans(
           this.users$.username
         );
-        this.viewLoan(this.users$.username);
-        // Process payment schedules into paymentHistory$
-        this.activeLoans$?.subscribe((data: Loans[]) => {
-          const payments: PaymentRow[] = [];
-          data.forEach((loan) => {
-            loan.paymentSchedule.forEach((schedule) => {
-              payments.push({
-                date: this.formatDate(new Date(schedule.date)),
-                amount: schedule.amount.toString(),
-                status: schedule.status,
+
+        this.activeLoans$.subscribe((data: Loans[]) => {
+          data.forEach((e) => {
+            let schedules = e.paymentSchedule;
+            schedules.forEach((s) => {
+              this.payments.push({
+                loanId: e.id,
+                date: this.formatDate(s.date),
+                amount: s.amount.toString(),
+                status: s.status,
               });
             });
           });
-
-          // Assign payments array to paymentHistory$
-          this.paymentHistory$ = of(payments);
+          this.initializeSearch();
         });
       }
     });
-
-    console.log(id);
   }
 
-  viewLoan(id: string) {
-    this.loanService
-      .viewLoanAccount(id)
-      .then((data) => {
-        this.data$ = data;
-        console.log(data);
-      })
-      .finally();
+  initializeSearch(): void {
+    this.filteredPayments$ = this.searhText$.valueChanges.pipe(
+      startWith(''),
+      debounceTime(300),
+      distinctUntilChanged(),
+      map((text) => this.filterPayments(text || ''))
+    );
   }
+
+  filterPayments(text: string): PaymentRow[] {
+    return this.payments.filter(
+      (payment) =>
+        payment.loanId.toLowerCase().includes(text.toLowerCase()) ||
+        payment.date.includes(text) ||
+        payment.amount.includes(text) ||
+        payment.status.toLowerCase().includes(text.toLowerCase())
+    );
+  }
+
   formatDate(date: Date): string {
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
@@ -89,8 +105,23 @@ export class BorrowerHomeComponent implements OnInit {
   }
 
   logout() {
+    localStorage.clear();
     this.router.navigateByUrl('/login', { replaceUrl: true }).then(() => {
       this.router.resetConfig(this.router.config);
     });
+  }
+
+  get unpaid(): number {
+    return this.payments.filter((e) => e.status === PaymentStatus.UNPAID)
+      .length;
+  }
+
+  get paid(): number {
+    return this.payments.filter((e) => e.status === PaymentStatus.PAID).length;
+  }
+
+  get overdue(): number {
+    return this.payments.filter((e) => e.status === PaymentStatus.OVERDUE)
+      .length;
   }
 }

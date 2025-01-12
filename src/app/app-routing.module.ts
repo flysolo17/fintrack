@@ -26,7 +26,10 @@ import { DailyPaymentComponent } from './admin/daily-payment/daily-payment.compo
 import { LoansComponent } from './admin/loans/loans.component';
 import { CollectorPerformanceComponent } from './admin/collector-performance/collector-performance.component';
 import { ProfileAdminComponent } from './profile-admin/profile-admin.component';
+
 import { EmailVerificationComponent } from './auth/email-verification/email-verification.component';
+import { DocumentsComponent } from './borrower/documents/documents.component';
+import { HistoryComponent } from './borrower/history/history.component';
 
 const routes: Routes = [
   {
@@ -127,6 +130,22 @@ const routes: Routes = [
       {
         path: '',
         component: BorrowerHomeComponent,
+      },
+      {
+        path: 'home',
+        component: BorrowerHomeComponent,
+      },
+      {
+        path: 'documents',
+        component: DocumentsComponent,
+      },
+      {
+        path: 'history',
+        component: HistoryComponent,
+      },
+      {
+        path: 'profile',
+        component: ProfileAdminComponent,
       },
     ],
   },

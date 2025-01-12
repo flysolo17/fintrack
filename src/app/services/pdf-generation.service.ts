@@ -8,6 +8,7 @@ import {
   GroupCollectorPerformance,
 } from '../admin/collector-performance/collector-performance.component';
 import { BorrowerPerformanceData } from '../collector/performance/performance.component';
+import { UserWithLoanAccount } from '../models/accounts/UserWithLoanAccount';
 @Injectable({
   providedIn: 'root',
 })
@@ -19,6 +20,13 @@ export class PdfGenerationService {
     this.logoImage = new Image();
     this.logoImage.src = '../../../assets/logo_1.png';
     this.logoImage.onerror = () => console.error('Failed to load logo image.');
+  }
+
+  private formatCurrency(value: number): string {
+    return `${value.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      currency: 'PHP',
+    })}`;
   }
 
   createPDF(loan: Loans, loanOfficer: Users | null = null) {
@@ -44,9 +52,9 @@ export class PdfGenerationService {
     const details = [
       `Loan ID: ${loan.id}`,
       `Loan Account ID: ${loan.loanAccountID}`,
-      `Amount: ₱${loan.amount.toFixed(2)}`,
+      `Amount: ${this.formatCurrency(loan.amount)}`,
       `Interest: ${loan.interest}%`,
-      `Amount Paid: ₱${loan.amountPaid.toFixed(2)}`,
+      `Amount Paid: ${this.formatCurrency(loan.amountPaid)}`,
       `Status: ${loan.status}`,
       `Created At: ${loan.createdAt.toLocaleDateString()}`,
       `Updated At: ${loan.updatedAt.toLocaleDateString()}`,
@@ -54,20 +62,23 @@ export class PdfGenerationService {
 
     doc.setFontSize(12);
     details.forEach((line, index) => {
-      doc.text(line, 15, y + imgHeight + 20 + index * 7); // Position text under the logo
+      doc.text(line, 15, y + imgHeight + 20 + index * 7);
     });
 
-    if (loanOfficer !== null) {
+    if (loanOfficer) {
       const fullname = `${loanOfficer.firstName} ${
         loanOfficer.middleName || ''
       } ${loanOfficer.lastName}`.trim();
-      doc.setFontSize(12);
-      doc.text(`Loan Officer: ${fullname}`, 15, y + imgHeight + 25);
+      doc.text(
+        `Loan Officer: ${fullname}`,
+        15,
+        y + imgHeight + 20 + details.length * 7
+      );
     }
 
     const tableData = loan.paymentSchedule.map((schedule) => ({
       Days: schedule.days,
-      Amount: `₱${schedule.amount.toFixed(2)}`,
+      Amount: this.formatCurrency(schedule.amount),
       Date: schedule.date.toLocaleDateString(),
       Status: schedule.status,
     }));
@@ -82,11 +93,10 @@ export class PdfGenerationService {
         item.Status,
       ]),
       theme: 'grid',
-      headStyles: { fillColor: [22, 160, 133] }, // Stylish header
+      headStyles: { fillColor: [22, 160, 133] },
       bodyStyles: { fontSize: 10 },
     });
 
-    // Save the PDF
     doc.save(`${loan.id}.pdf`);
   }
 
@@ -96,7 +106,7 @@ export class PdfGenerationService {
     const imgHeight = 40;
     const pageWidth = doc.internal.pageSize.getWidth();
     const x = (pageWidth - imgWidth) / 2;
-    const y = 10; // Top margin
+    const y = 10;
 
     if (this.logoImage.complete && this.logoImage.naturalWidth > 0) {
       doc.addImage(this.logoImage, 'PNG', x, y, imgWidth, imgHeight);
@@ -117,12 +127,12 @@ export class PdfGenerationService {
       Collector: performance.collectorName,
       'Assigned Loans': performance.assignedLoans,
       'Total Loans Collected': performance.totalLoansCollected,
-      'Total Amount Collected': `₱${performance.totalAmountCollected.toFixed(
-        2
-      )}`,
-      Profit: `₱${(
+      'Total Amount Collected': this.formatCurrency(
+        performance.totalAmountCollected
+      ),
+      Profit: this.formatCurrency(
         performance.profit - performance.totalAmountCollected
-      ).toFixed(2)}`,
+      ),
     }));
 
     autoTable(doc, {
@@ -148,8 +158,7 @@ export class PdfGenerationService {
       bodyStyles: { fontSize: 10 },
     });
 
-    const fileName = `${group.month}-${group.year}.pdf`;
-    doc.save(fileName);
+    doc.save(`${group.month}-${group.year}.pdf`);
   }
 
   downloadBorrowerData(data: BorrowerPerformanceData) {
@@ -186,7 +195,7 @@ export class PdfGenerationService {
       `Total Loans: ${data.totalLoans}`,
       `Active Loans: ${data.activeLoans}`,
       `Total Overdues: ${data.totalOverdues}`,
-      `Total Paid: ₱${data.totalPaid.toFixed(2)}`,
+      `Total Paid: ${this.formatCurrency(data.totalPaid)}`,
     ];
 
     doc.setFontSize(12);
@@ -230,7 +239,7 @@ export class PdfGenerationService {
         'Total Loans': data.totalLoans,
         'Active Loans': data.activeLoans,
         'Total Overdues': data.totalOverdues,
-        'Total Paid': `₱${data.totalPaid.toFixed(2)}`,
+        'Total Paid': this.formatCurrency(data.totalPaid),
       };
     });
 
@@ -261,4 +270,81 @@ export class PdfGenerationService {
 
     doc.save('borrower_performances.pdf');
   }
+  downLoadUserWithLoanAccount(userWithLoanAccount: UserWithLoanAccount) {
+    const doc = new jsPDF();
+    const imgWidth = 40;
+    const imgHeight = 40;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const x = (pageWidth - imgWidth) / 2;
+    const y = 10;
+
+    // Add logo if available
+    if (this.logoImage.complete && this.logoImage.naturalWidth > 0) {
+      doc.addImage(this.logoImage, 'PNG', x, y, imgWidth, imgHeight);
+    } else {
+      console.warn('Logo not loaded; skipping logo.');
+    }
+
+    // Title
+    doc.setFontSize(18);
+    doc.text(
+      'User with Loan Account Information',
+      pageWidth / 2,
+      y + imgHeight + 10,
+      {
+        align: 'center',
+      }
+    );
+
+    // User details
+    const user = userWithLoanAccount.user;
+    const loanAccount = userWithLoanAccount.loanAccount;
+
+    const userDetails = user
+      ? [
+          `Name: ${user.firstName} ${user.middleName || ''} ${user.lastName}`,
+          `Email: ${user.email}`,
+          `Phone: ${user.phone}`,
+          `Username: ${user.username}`,
+
+          `Created At: ${user.createdAt.toLocaleDateString()}`,
+        ]
+      : ['User: N/A'];
+
+    const loanDetails = loanAccount
+      ? [
+          `Loan Account ID: ${loanAccount.id}`,
+          `Product Loan ID: ${loanAccount.productLoanID}`,
+          `Amount: ${this.formatCurrency(loanAccount.amount)}`,
+          `Interest: ${loanAccount.interest}%`,
+          `Credit Score: ${loanAccount.creditScore}`,
+          `Payable Days: ${loanAccount.payableDays}`,
+          `Status: ${loanAccount.status}`,
+          `Created At: ${loanAccount.createdAt.toLocaleDateString()}`,
+          `Updated At: ${loanAccount.updatedAt.toLocaleDateString()}`,
+        ]
+      : ['Loan Account: N/A'];
+
+    doc.setFontSize(12);
+    let yOffset = y + imgHeight + 20;
+    userDetails.forEach((line, index) => {
+      doc.text(line, 15, yOffset + index * 7);
+    });
+
+    yOffset += userDetails.length * 7;
+
+    loanDetails.forEach((line, index) => {
+      doc.text(line, 15, yOffset + index * 7);
+    });
+
+    // Save the PDF with a filename
+    const fileName = user
+      ? `${user.firstName}_${user.lastName}_with_loan_account.pdf`
+      : 'user_with_loan_account.pdf';
+    doc.save(fileName);
+  }
+
+  downLoadAllUserWithLoanAccount(
+    userWithLoanAccountList: UserWithLoanAccount[]
+  ) {}
 }

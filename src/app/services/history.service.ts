@@ -12,8 +12,12 @@ import { AUTH_COLLECTION } from './auth.service';
 import { userConverter, UserType } from '../models/accounts/users';
 import { combineLatest, from, map, Observable, switchMap } from 'rxjs';
 import { LOANS_COLLECTION } from './loan.service';
-import { loanConverter, LoanStatus } from '../models/loans/loan';
-import { historyConverter, LoanHistory } from '../models/loans/loan-history';
+import { loanConverter, LoanStatus, PaymentStatus } from '../models/loans/loan';
+import {
+  historyConverter,
+  LoanHistory,
+  LoanHistoryByMonth,
+} from '../models/loans/loan-history';
 import { CollectorWithData } from '../models/accounts/CollectorWithData';
 
 export const LOAN_HISTORY_COLLECTION = 'loan-history';
@@ -85,6 +89,54 @@ export class HistoryService {
       ),
       orderBy('createdAt', 'desc')
     );
+    return collectionData(q);
+  }
+
+  getPaidLoanHistoryByCollectorIDGroupByMonth(
+    collectorID: string
+  ): Observable<LoanHistoryByMonth[]> {
+    const q = query(
+      collection(this.firestore, LOAN_HISTORY_COLLECTION).withConverter(
+        historyConverter
+      ),
+      where('collectorID', '==', collectorID),
+      where('status', '==', PaymentStatus.PAID),
+      orderBy('createdAt', 'desc')
+    );
+
+    return collectionData(q).pipe(
+      map((histories: LoanHistory[]) => this.groupHistoriesByMonth(histories))
+    );
+  }
+
+  private groupHistoriesByMonth(
+    histories: LoanHistory[]
+  ): LoanHistoryByMonth[] {
+    return histories.reduce((acc: LoanHistoryByMonth[], history) => {
+      const date = new Date(history.createdAt);
+      const month = date.toLocaleString('default', { month: 'long' });
+      const year = date.getFullYear().toString();
+
+      let group = acc.find((g) => g.month === month && g.year === year);
+      if (!group) {
+        group = { month, year, histories: [] };
+        acc.push(group);
+      }
+      group.histories.push(history);
+
+      return acc;
+    }, []);
+  }
+
+  getLoanHistoryByBorrowerID(borrowerID: string): Observable<LoanHistory[]> {
+    let q = query(
+      collection(this.firestore, LOAN_HISTORY_COLLECTION).withConverter(
+        historyConverter
+      ),
+      where('borrowerID', '==', borrowerID),
+      orderBy('createdAt', 'desc')
+    );
+
     return collectionData(q);
   }
 }

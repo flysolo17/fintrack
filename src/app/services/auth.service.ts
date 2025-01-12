@@ -510,4 +510,16 @@ export class AuthService {
       }
     );
   }
+
+  getIdentifications(
+    loanAccountID: string
+  ): Observable<Identifications | null> {
+    return docData(
+      doc(
+        this.firestore,
+        IDENTIFICATION_COLLECTION,
+        loanAccountID
+      ).withConverter(identificationConverter)
+    ).pipe(map((data) => data ?? null));
+  }
 }

@@ -15,10 +15,12 @@ import { Toast, ToastrService } from 'ngx-toastr';
 import { IncreateLimitComponent } from '../dialogs/increate-limit/increate-limit.component';
 
 export interface PaymentRow {
+  loanId: string;
   date: string;
   amount: string;
   status: PaymentStatus;
 }
+
 @Component({
   selector: 'app-view-loan',
   templateUrl: './view-loan.component.html',
@@ -77,6 +79,7 @@ export class ViewLoanComponent implements OnInit {
               let schedules = e.paymentSchedule;
               schedules.forEach((s) => {
                 this.payments.push({
+                  loanId: e.id,
                   date: this.formatDate(s.date),
                   amount: s.amount.toString(),
                   status: s.status,

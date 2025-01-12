@@ -13,7 +13,6 @@ export interface Loans {
   updatedAt: Date;
 }
 
-//make this a table
 export interface PaymentSchedule {
   days: number;
   amount: number;

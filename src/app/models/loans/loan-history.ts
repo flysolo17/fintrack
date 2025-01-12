@@ -11,6 +11,7 @@ export interface LoanHistory {
   status: PaymentStatus;
   createdAt: Date;
 }
+
 export const historyConverter = {
   toFirestore: (data: LoanHistory) => data,
   fromFirestore: (snap: QueryDocumentSnapshot) => {
@@ -19,3 +20,9 @@ export const historyConverter = {
     return data;
   },
 };
+
+export interface LoanHistoryByMonth {
+  month: string;
+  year: string;
+  histories: LoanHistory[];
+}
