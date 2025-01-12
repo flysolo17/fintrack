@@ -75,6 +75,7 @@ export class AdminDashboardComponent implements OnInit {
       ],
     }))
   );
+
   topCollectors: CollectorWithData[] = [];
 
   constructor(
@@ -102,6 +103,7 @@ export class AdminDashboardComponent implements OnInit {
     this.loanStatusData$.subscribe((data) => {
       this.renderPieChart(data);
     });
+
     this.historyService.getTopCollectors().subscribe((data) => {
       this.topCollectorsData = data.map((collector) => ({
         label: collector.name,

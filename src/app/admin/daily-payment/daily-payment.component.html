@@ -10,6 +10,7 @@
         class="form-control form-control-sm w-auto"
       />
     </div>
+
     <div class="table-responsive">
       <table class="table table-hover align-middle">
         <thead class="table-light">
@@ -45,7 +46,9 @@
             <td>
               <button
                 class="btn btn-sm btn-outline-primary"
-                [disabled]="payment.status == 'PAID'"
+                [disabled]="
+                  payment.status == 'PAID' || users$?.type === 'ADMIN'
+                "
                 (click)="pay(payment.loanWithUser, payment.schedule)"
               >
                 Pay Now

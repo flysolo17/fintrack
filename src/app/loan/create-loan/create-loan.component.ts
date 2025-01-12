@@ -109,6 +109,7 @@ export class CreateLoanComponent implements OnInit {
       username: formValues.username,
       password: '00000',
       createdAt: new Date(),
+      verified: false,
     };
 
     let type = this.getLoanType(loanValues.type);

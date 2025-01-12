@@ -26,12 +26,17 @@ import { DailyPaymentComponent } from './admin/daily-payment/daily-payment.compo
 import { LoansComponent } from './admin/loans/loans.component';
 import { CollectorPerformanceComponent } from './admin/collector-performance/collector-performance.component';
 import { ProfileAdminComponent } from './profile-admin/profile-admin.component';
+import { EmailVerificationComponent } from './auth/email-verification/email-verification.component';
 
 const routes: Routes = [
   {
     path: '',
     redirectTo: '/landing-page',
     pathMatch: 'full',
+  },
+  {
+    path: 'email-verification/:email',
+    component: EmailVerificationComponent,
   },
   {
     path: 'landing-page',
@@ -167,7 +172,7 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        component: ProfileComponent,
+        component: ProfileAdminComponent,
       },
     ],
   },

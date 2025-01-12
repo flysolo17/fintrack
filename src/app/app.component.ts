@@ -25,7 +25,6 @@ export class AppComponent implements OnInit {
         console.log(data);
         this.authService.setUser(data);
         console.log(this.authService.users$);
-        this.navigateToMainPage(data!.type);
       });
     }
   }

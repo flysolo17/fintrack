@@ -49,10 +49,9 @@
             class="form-control form-control-sm border-0"
             placeholder="Search Borrowers..."
             style="box-shadow: none"
+            [(ngModel)]="searchTerm"
+            (input)="filterLoans()"
           />
-          <button class="btn btn-primary btn-sm rounded-0 rounded-end">
-            Search
-          </button>
         </div>
 
         <!-- Borrowers Table -->
@@ -71,7 +70,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let user of loans$" class="cursor-pointer">
+              <tr *ngFor="let user of filteredLoans$" class="cursor-pointer">
                 <td class="fw-semibold text-primary text-center">
                   {{ user.loanAccount?.id }}
                 </td>

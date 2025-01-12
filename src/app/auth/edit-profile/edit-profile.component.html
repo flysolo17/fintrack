@@ -1,1 +1,82 @@
-<p>edit-profile works!</p>
+<div class="modal-header">
+  <h6 class="modal-title">Change Profile</h6>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss()"
+  ></button>
+</div>
+
+<div class="modal-body">
+  <form (ngSubmit)="saveChanges()" [formGroup]="userForm$" novalidate>
+    <!-- First Name -->
+    <div class="mb-3">
+      <label for="firstName" class="form-label">First Name</label>
+      <input
+        type="text"
+        id="firstName"
+        class="form-control"
+        formControlName="firstName"
+        [ngClass]="{
+          'is-invalid':
+            userForm$.get('firstName')?.invalid &&
+            userForm$.get('firstName')?.touched
+        }"
+      />
+      <div class="invalid-feedback">First Name is required.</div>
+    </div>
+
+    <!-- Middle Name -->
+    <div class="mb-3">
+      <label for="middleName" class="form-label">Middle Name</label>
+      <input
+        type="text"
+        id="middleName"
+        class="form-control"
+        formControlName="middleName"
+        [ngClass]="{
+          'is-invalid':
+            userForm$.get('middleName')?.invalid &&
+            userForm$.get('middleName')?.touched
+        }"
+      />
+      <div class="invalid-feedback">Middle Name is required.</div>
+    </div>
+
+    <!-- Last Name -->
+    <div class="mb-3">
+      <label for="lastName" class="form-label">Last Name</label>
+      <input
+        type="text"
+        id="lastName"
+        class="form-control"
+        formControlName="lastName"
+        [ngClass]="{
+          'is-invalid':
+            userForm$.get('lastName')?.invalid &&
+            userForm$.get('lastName')?.touched
+        }"
+      />
+      <div class="invalid-feedback">Last Name is required.</div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button
+        class="btn btn-outline-secondary"
+        type="button"
+        (click)="activeModal.dismiss()"
+      >
+        Cancel
+      </button>
+      <button
+        class="btn btn-success"
+        type="submit"
+        [disabled]="userForm$.invalid"
+      >
+        Save Changes
+      </button>
+    </div>
+  </form>
+</div>

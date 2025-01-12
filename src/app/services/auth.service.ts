@@ -18,9 +18,20 @@ import {
 } from '@angular/fire/firestore';
 import { userConverter, Users, UserType } from '../models/accounts/users';
 import { EncryptionService } from './encryption.service';
-import { generateRandomNumber, generateRandomString } from '../utils/Constants';
-import { user, User } from '@angular/fire/auth';
 import {
+  formatPhoneNumber,
+  generateRandomNumber,
+  generateRandomString,
+} from '../utils/Constants';
+import {
+  Auth,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  user,
+  User,
+} from '@angular/fire/auth';
+import {
+  audit,
   combineLatest,
   from,
   map,
@@ -47,14 +58,19 @@ import {
   LoanAccountStatus,
 } from '../models/accounts/LoanAccount';
 import { UserWithLoanAccount } from '../models/accounts/UserWithLoanAccount';
+import { FirebaseError } from '@angular/fire/app';
+
 export const AUTH_COLLECTION = 'users';
 export const LOAN_ACCOUNT = 'loan-account';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   users$: Users | null = null;
+
   constructor(
+    private auth: Auth,
     private firestore: Firestore,
     private storage: Storage,
     private encriptionService: EncryptionService,
@@ -62,6 +78,73 @@ export class AuthService {
   ) {}
   setUser(user: Users | null) {
     this.users$ = user;
+  }
+
+  verifyUser(email: string) {
+    const emailQuery = query(
+      collection(this.firestore, AUTH_COLLECTION).withConverter(userConverter),
+      where('email', '==', email),
+      limit(1)
+    );
+    return getDocs(emailQuery).then((querySnapshot) => {
+      if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0];
+        return updateDoc(userDoc.ref, { verified: true });
+      } else {
+        throw new Error('User not found');
+      }
+    });
+  }
+
+  async changePassword(uid: string, newPassword: string) {
+    try {
+      const encryptedPassword = this.encriptionService.encrypt(newPassword);
+      await updateDoc(
+        doc(this.firestore, AUTH_COLLECTION, uid).withConverter(userConverter),
+        {
+          password: encryptedPassword,
+        }
+      );
+      this.toastr.success('Successfully Updated');
+    } catch (error: any) {
+      const errorMessage = error?.message || 'An unexpected error occurred';
+      this.toastr.error(errorMessage);
+      console.error('Error updating password:', error);
+    }
+  }
+
+  sendVerificationCode(phone: string, verifier: RecaptchaVerifier) {
+    return signInWithPhoneNumber(this.auth, phone, verifier);
+  }
+
+  async editUser(
+    uid: string,
+    firstName: string,
+    middleName: string,
+    lastName: string
+  ) {
+    try {
+      await updateDoc(
+        doc(this.firestore, AUTH_COLLECTION, uid).withConverter(userConverter),
+        {
+          firstName: firstName,
+          middleName: middleName,
+          lastName: lastName,
+        }
+      );
+
+      // Show success notification
+      this.toastr.success('Successfully saved', 'Edit User');
+    } catch (e) {
+      // Log the error
+      console.error('Error updating user:', e);
+
+      // Show error notification
+      this.toastr.error(
+        'Failed to save changes. Please try again.',
+        'Edit User'
+      );
+    }
   }
 
   async login(username: string, password: string): Promise<Users | null> {
@@ -139,6 +222,25 @@ export class AuthService {
       return downloadURL;
     } catch (error) {
       console.error('Error uploading file:', error);
+      throw error;
+    }
+  }
+  async changeProfile(uid: string, file: File) {
+    try {
+      // Upload the file and get the download URL
+      const downloadURL = await this.uploadFile(file);
+
+      await updateDoc(
+        doc(this.firestore, AUTH_COLLECTION, uid).withConverter(userConverter),
+        {
+          profile: downloadURL,
+        }
+      );
+
+      this.toastr.success('Profile updated successfully.');
+    } catch (error) {
+      this.toastr.error('Error updating profile:' + error);
+
       throw error;
     }
   }

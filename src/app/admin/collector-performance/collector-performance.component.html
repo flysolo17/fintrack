@@ -2,33 +2,72 @@
   <div class="row g-3">
     <div class="col-12">
       <div class="bg-white rounded-3 p-3">
-        <table class="table table-borderless table-hover">
-          <thead>
-            <tr>
-              <th>Collector Name</th>
-              <th>Assigned Loans</th>
-              <th>Payment Collected</th>
-              <th>Total Amount Collected</th>
+        <div *ngIf="chartOptions$ | async as chartOptions">
+          <canvasjs-chart
+            [options]="chartOptions"
+            style="width: 100%"
+          ></canvasjs-chart>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="bg-white rounded-3 p-3">
+          <ul ngbNav #nav="ngbNav" class="nav-tabs">
+            <li *ngFor="let group of collectorPerformance$ | async" ngbNavItem>
+              <button ngbNavLink>
+                {{ getFormattedDate(group.month, group.year) }}
 
-              <th>Profit</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let performance of collectorPerformance$ | async">
-              <td>{{ performance.collectorName }}</td>
-              <td>{{ performance.assignedLoans }}</td>
-              <td>{{ performance.totalLoansCollected }}</td>
-              <td>{{ performance.totalAmountCollected | currency : "PHP" }}</td>
-
-              <td>
-                {{
-                  performance.totalAmountCollected - performance.profit
-                    | currency : "PHP"
-                }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <svg
+                  (click)="downloadPerformance(group)"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-arrow-down-circle-fill ms-3"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"
+                  />
+                </svg>
+              </button>
+              <ng-template ngbNavContent>
+                <div class="container-fluid p-3">
+                  <table class="table table-borderless table-hover">
+                    <thead>
+                      <tr>
+                        <th>Collector Name</th>
+                        <th>Assigned Loans</th>
+                        <th>Total Loans Collected</th>
+                        <th>Total Amount Collected</th>
+                        <th>Profit</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let performance of group.performance">
+                        <td>{{ performance.collectorName }}</td>
+                        <td>{{ performance.assignedLoans }}</td>
+                        <td>{{ performance.totalLoansCollected }}</td>
+                        <td>
+                          {{
+                            performance.totalAmountCollected | currency : "PHP"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            performance.profit -
+                              performance.totalAmountCollected
+                              | currency : "PHP"
+                          }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+          <div [ngbNavOutlet]="nav"></div>
+        </div>
       </div>
     </div>
   </div>

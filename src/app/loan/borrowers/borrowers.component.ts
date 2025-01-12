@@ -1,19 +1,17 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { generateRandomNumber } from '../../utils/Constants';
-import { Router } from '@angular/router';
-import { LoanService } from '../../services/loan.service';
-import { LoanWithUser } from '../../models/loans/LoanWithUser';
-import { AuthService } from '../../services/auth.service';
-import { UserWithLoanAccount } from '../../models/accounts/UserWithLoanAccount';
-import { Users } from '../../models/accounts/users';
+import { Component, OnInit, inject } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { MakeLoanComponent } from '../dialogs/make-loan/make-loan.component';
+import { Router } from '@angular/router';
+
 import { ToastrService } from 'ngx-toastr';
+import { Users } from '../../models/accounts/users';
+import { UserWithLoanAccount } from '../../models/accounts/UserWithLoanAccount';
+import { AuthService } from '../../services/auth.service';
+import { generateRandomNumber } from '../../utils/Constants';
 
 @Component({
   selector: 'app-borrowers',
   templateUrl: './borrowers.component.html',
-  styleUrl: './borrowers.component.css',
+  styleUrls: ['./borrowers.component.css'],
 })
 export class BorrowersComponent implements OnInit {
   deleteLoanAccount(arg0: string) {
@@ -21,6 +19,8 @@ export class BorrowersComponent implements OnInit {
   }
   modalService = inject(NgbModal);
   loans$: UserWithLoanAccount[] = [];
+  filteredLoans$: UserWithLoanAccount[] = [];
+  searchTerm: string = '';
   loanStatus: any;
   user$: Users | null = null;
   loanService: any;
@@ -30,6 +30,7 @@ export class BorrowersComponent implements OnInit {
     private authService: AuthService,
     private toastr: ToastrService
   ) {}
+
   ngOnInit(): void {
     let uid = localStorage.getItem('uid') ?? '';
     this.authService.getUserData(uid).then((data) => {
@@ -38,13 +39,14 @@ export class BorrowersComponent implements OnInit {
     this.authService.getUserWithLoanAccount().subscribe(
       (data) => {
         this.loans$ = data;
-        console.log(data);
+        this.filteredLoans$ = data; // Initialize filtered loans
       },
       (error) => {
         console.error('Error fetching user with loan account:', error);
       }
     );
   }
+
   createLoan() {
     const extras = {
       queryParams: {
@@ -82,12 +84,14 @@ export class BorrowersComponent implements OnInit {
     this.loanService.getLoans().subscribe({
       next: (loans: UserWithLoanAccount[]) => {
         this.loans$ = loans;
+        this.filteredLoans$ = loans;
       },
       error: (err: any) => {
         console.error('Error fetching loans:', err);
       },
     });
   }
+
   acceptLoanAccount(loanAccountID: string) {
     this.authService
       .acceptLoanAccount(loanAccountID)
@@ -97,5 +101,14 @@ export class BorrowersComponent implements OnInit {
       .catch((err) => {
         this.toastr.error(err['message']);
       });
+  }
+
+  filterLoans(): void {
+    const term = this.searchTerm.toLowerCase();
+    this.filteredLoans$ = this.loans$.filter((loan) =>
+      `${loan.user?.firstName} ${loan.user?.lastName}`
+        .toLowerCase()
+        .includes(term)
+    );
   }
 }

@@ -34,14 +34,12 @@ export class DailyPaymentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.users$ =
-      this.authService.users$ ||
-      ({
-        username: '',
-        firstName: '',
-        lastName: '',
-      } as Users);
-
+    const id = localStorage.getItem('uid') ?? '';
+    if (id !== '') {
+      this.authService.getUserByID(id).subscribe((data) => {
+        this.users$ = data;
+      });
+    }
     this.loanService.getPaymentsWithUser().subscribe(
       (data) => {
         console.log(data);
@@ -89,14 +87,24 @@ export class DailyPaymentComponent implements OnInit {
     const year = date.getFullYear();
     return `${month}/${day}/${year}`;
   }
-
   get formattedSelectedDate(): string {
-    const month = (this.selectedDate.getMonth() + 1)
-      .toString()
-      .padStart(2, '0');
-    const day = this.selectedDate.getDate().toString().padStart(2, '0');
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    const month = monthNames[this.selectedDate.getMonth()];
     const year = this.selectedDate.getFullYear();
-    return `${year}-${month}-${day}`;
+    return `${month} - ${year}`;
   }
 
   pay(loanWithUser: LoanWithUser, schedule: PaymentSchedule): void {

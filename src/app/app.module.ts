@@ -60,6 +60,8 @@ import { IncreateLimitComponent } from './loan/dialogs/increate-limit/increate-l
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { CollectorPerformanceComponent } from './admin/collector-performance/collector-performance.component';
 import { ProfileAdminComponent } from './profile-admin/profile-admin.component';
+import { VerificationComponent } from './auth/verification/verification.component';
+import { EmailVerificationComponent } from './auth/email-verification/email-verification.component';
 
 @NgModule({
   declarations: [
@@ -103,6 +105,10 @@ import { ProfileAdminComponent } from './profile-admin/profile-admin.component';
     IncreateLimitComponent,
     CollectorPerformanceComponent,
     ProfileAdminComponent,
+    VerificationComponent,
+    EmailVerificationComponent,
+
+    //
   ],
   imports: [
     BrowserModule,
@@ -115,6 +121,7 @@ import { ProfileAdminComponent } from './profile-admin/profile-admin.component';
     BrowserAnimationsModule,
 
     CanvasJSAngularChartsModule,
+
     ToastrModule.forRoot(),
     FormsModule,
   ],

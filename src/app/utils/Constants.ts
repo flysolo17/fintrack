@@ -100,3 +100,10 @@ export function processPayment(loan: Loans, amount: number): Loans {
 
   return loan;
 }
+
+export function formatPhoneNumber(phone: string): string {
+  if (phone.startsWith('0')) {
+    return '+63' + phone.substring(1); // Replace '0' with '+63'
+  }
+  return phone; // Return the original phone number if it doesn't start with '0'
+}

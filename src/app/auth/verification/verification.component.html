@@ -1,0 +1,55 @@
+<div class="modal-header">
+  <h6 class="modal-title">Verification</h6>
+</div>
+<div class="modal-body">
+  <!-- Display Phone Number -->
+  <div class="form-floating mb-3">
+    <input
+      type="text"
+      class="form-control"
+      id="floatingInput"
+      readonly
+      [value]="phone"
+    />
+    <label for="floatingInput">Phone Number</label>
+  </div>
+
+  <!-- Button to Send Verification Code -->
+  <div class="mb-3">
+    <button class="btn btn-primary" (click)="sendVerification()">
+      Send Verification Code
+    </button>
+  </div>
+
+  <!-- Input for Verification Code -->
+  <form class="form-floating mb-3">
+    <input
+      type="text"
+      class="form-control"
+      id="code"
+      [(ngModel)]="verificationCode"
+      placeholder="Enter verification code"
+      required
+    />
+    <label for="code">Verification Code</label>
+  </form>
+
+  <!-- reCAPTCHA Container -->
+  <div id="recaptcha-container"></div>
+
+  <!-- Button to Confirm Code -->
+  <div class="mb-3">
+    <button
+      class="btn btn-success"
+      (click)="verifyCode()"
+      [disabled]="verificationCode"
+    >
+      Confirm Code
+    </button>
+  </div>
+
+  <!-- Confirmation Result -->
+  <div *ngIf="windowRef.confirmationResult == verificationCode">
+    <p>Verification successful!</p>
+  </div>
+</div>

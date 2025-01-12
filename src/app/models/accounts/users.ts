@@ -10,6 +10,7 @@ export interface Users {
   type: UserType;
   phone: string;
   email: string;
+  verified: boolean;
   username: string;
   password: string;
   createdAt: Date;

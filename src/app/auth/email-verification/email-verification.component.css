@@ -1,0 +1,13 @@
+.container {
+  max-width: 600px;
+}
+.card {
+  margin: auto;
+}
+.progress {
+  height: 20px;
+  margin-top: 20px;
+}
+.progress-bar {
+  transition: width 1s;
+}
