@@ -429,14 +429,20 @@ export class LoanService {
       mergeMap((loans) =>
         from(loans).pipe(
           mergeMap(async (loan) => {
-            const userRef = doc(
-              this.firestore,
-              AUTH_COLLECTION,
-              loan.loanAccountID
-            ).withConverter(userConverter);
-            const userSnap = await getDoc(userRef);
-            const user = userSnap.exists() ? (userSnap.data() as Users) : null;
-            return { loan: loan, users: user } as LoanWithUser;
+            const userQuery = query(
+              collection(this.firestore, AUTH_COLLECTION).withConverter(
+                userConverter
+              ),
+              where('username', '==', loan.loanAccountID),
+              limit(1)
+            );
+
+            const userSnap = await getDocs(userQuery);
+            const user = userSnap.empty
+              ? null
+              : (userSnap.docs[0].data() as Users);
+
+            return { loan, users: user } as LoanWithUser;
           }),
           toArray()
         )

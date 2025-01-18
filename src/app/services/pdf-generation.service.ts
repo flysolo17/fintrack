@@ -9,6 +9,7 @@ import {
 } from '../admin/collector-performance/collector-performance.component';
 import { BorrowerPerformanceData } from '../collector/performance/performance.component';
 import { UserWithLoanAccount } from '../models/accounts/UserWithLoanAccount';
+import { LoanWithUser } from '../models/loans/LoanWithUser';
 @Injectable({
   providedIn: 'root',
 })
@@ -344,7 +345,127 @@ export class PdfGenerationService {
     doc.save(fileName);
   }
 
-  downLoadAllUserWithLoanAccount(
-    userWithLoanAccountList: UserWithLoanAccount[]
-  ) {}
+  downloadUserWithLoanAccount(userWithLoanAccount: UserWithLoanAccount[]) {
+    const doc = new jsPDF();
+    const imgWidth = 40;
+    const imgHeight = 40;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const x = (pageWidth - imgWidth) / 2;
+    const y = 10;
+
+    // Add logo if available
+    if (this.logoImage.complete && this.logoImage.naturalWidth > 0) {
+      doc.addImage(this.logoImage, 'PNG', x, y, imgWidth, imgHeight);
+    } else {
+      console.warn('Logo not loaded; skipping logo.');
+    }
+
+    // Add title below the logo
+    doc.setFontSize(18);
+    doc.text(
+      'User with Loan Account Information',
+      pageWidth / 2,
+      y + imgHeight + 10,
+      { align: 'center' }
+    );
+
+    // Prepare the table data
+    const tableData = userWithLoanAccount.map((item) => {
+      return {
+        'Loan Account': item.loanAccount?.id,
+        User: `${item.user?.firstName} ${item.user?.lastName}`,
+        Type: item.loanAccount?.name,
+
+        Interest: `${item.loanAccount?.interest}%`,
+        'Available Loan': this.formatCurrency(item.loanAccount?.amount ?? 0.0),
+        Status: item.loanAccount?.status,
+      };
+    });
+
+    // Add the table using autoTable
+    autoTable(doc, {
+      startY: y + imgHeight + 20, // Adjust Y position to avoid overlap with title
+      head: [
+        [
+          'Loan Account',
+          'User',
+          'Type',
+          'Interest',
+          'Available Loan',
+          'Status',
+        ],
+      ],
+      body: tableData.map((item) => [
+        item['Loan Account'] ?? '',
+        item['User'] ?? '',
+        item['Type'] ?? '',
+        item['Interest'] ?? '',
+        item['Available Loan'] ?? '',
+        item['Status'] ?? '',
+      ]),
+      theme: 'grid',
+      headStyles: { fillColor: [22, 160, 133] },
+      bodyStyles: { fontSize: 10 },
+    });
+
+    // Save the PDF with a filename
+    doc.save('user_with_loan_account.pdf');
+  }
+
+  downloadLoanWithUsers(userWithLoan: LoanWithUser[]) {
+    const doc = new jsPDF();
+    const imgWidth = 40;
+    const imgHeight = 40;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const x = (pageWidth - imgWidth) / 2;
+    const y = 10;
+
+    // Add logo if available
+    if (this.logoImage.complete && this.logoImage.naturalWidth > 0) {
+      doc.addImage(this.logoImage, 'PNG', x, y, imgWidth, imgHeight);
+    } else {
+      console.warn('Logo not loaded; skipping logo.');
+    }
+
+    doc.setFontSize(18);
+    doc.text('Loan and User Information', pageWidth / 2, y + imgHeight + 10, {
+      align: 'center',
+    });
+
+    const tableData = userWithLoan.map((item) => {
+      const startDate =
+        item?.loan?.paymentSchedule?.[0]?.date.toDateString() ?? '';
+      const endDate =
+        item?.loan?.paymentSchedule?.[
+          item?.loan?.paymentSchedule?.length - 1
+        ]?.date.toDateString() ?? '';
+
+      const loan = item.loan;
+      const user = item.users;
+      return [
+        loan?.id ?? '',
+        `${user?.firstName ?? ''} ${user?.middleName ?? ''} ${
+          user?.lastName ?? ''
+        }`,
+        this.formatCurrency(loan?.amount ?? 0.0),
+        loan?.status ?? '',
+        startDate,
+        endDate,
+      ];
+    });
+
+    // Add the table using autoTable
+    autoTable(doc, {
+      startY: y + imgHeight + 20,
+      head: [
+        ['Loan ID', 'Applicant', 'Amount', 'Status', 'Start Date', 'End Date'],
+      ],
+      body: tableData,
+      theme: 'grid',
+      headStyles: { fillColor: [22, 160, 133] },
+      bodyStyles: { fontSize: 10 },
+    });
+
+    doc.save('loan_with_users.pdf');
+  }
 }

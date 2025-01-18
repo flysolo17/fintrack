@@ -12,6 +12,7 @@ import { Users } from '../../models/accounts/users';
 import { LoanHistory } from '../../models/loans/loan-history';
 import { HistoryService } from '../../services/history.service';
 import { PdfGenerationService } from '../../services/pdf-generation.service';
+import { FormControl } from '@angular/forms';
 
 export interface GroupCollectorPerformance {
   month: string;
@@ -37,11 +38,11 @@ export class CollectorPerformanceComponent implements OnInit {
   collectors$: Observable<Users[]> = this.authService.getAllCollectors();
   history$: Observable<LoanHistory[]> =
     this.loanHistoryService.getAllLoanHistory();
-
   collectorPerformance$: Observable<GroupCollectorPerformance[]> | undefined;
   chartOptions$: Observable<any> | undefined;
   filteredCollectorPerformance: GroupCollectorPerformance[] = [];
-  searchTerm: string = '';
+  searchTerm = new FormControl('');
+
   constructor(
     private loanService: LoanService,
     private authService: AuthService,
@@ -67,11 +68,12 @@ export class CollectorPerformanceComponent implements OnInit {
             .sort((a, b) => b.profit - a.profit);
           return { month, year, performance } as GroupCollectorPerformance;
         });
-        this.filteredCollectorPerformance = groups;
+        this.filteredCollectorPerformance = groups; // Set initial data
         return groups;
       })
     );
     this.collectorPerformance$.subscribe();
+
     this.chartOptions$ = this.collectorPerformance$.pipe(
       map((groups) => ({
         animationEnabled: true,
@@ -92,16 +94,18 @@ export class CollectorPerformanceComponent implements OnInit {
         ],
       }))
     );
-    console.log(this.chartOptions$);
   }
 
   onSearch(): void {
-    const searchTermLower = this.searchTerm.toLowerCase();
+    const searchTermLower = this.searchTerm.value?.toLowerCase();
+    // Filter the collector performance based on the search term
     this.collectorPerformance$?.subscribe((groups) => {
       this.filteredCollectorPerformance = groups.map((group) => ({
         ...group,
         performance: group.performance.filter((performance) =>
-          performance.collectorName.toLowerCase().includes(searchTermLower)
+          performance.collectorName
+            .toLowerCase()
+            .includes(searchTermLower ?? '')
         ),
       }));
     });

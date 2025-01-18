@@ -3,10 +3,17 @@ import { Router } from '@angular/router';
 import { LoanService } from '../../services/loan.service';
 import { LoanHistoryByMonth } from '../../models/loans/loan-history';
 import { HistoryService } from '../../services/history.service';
-import { identity, Observable, of } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  identity,
+  Observable,
+  of,
+} from 'rxjs';
 import { Loans } from '../../models/loans/loan';
 import { LoanWithUser } from '../../models/loans/LoanWithUser';
 import { FormControl } from '@angular/forms';
+import { PdfGenerationService } from '../../services/pdf-generation.service';
 
 @Component({
   selector: 'app-collector-home',
@@ -20,6 +27,7 @@ export class CollectorHomeComponent implements OnInit {
     firstSchedule?: Date | null;
     lastSchedule?: Date | null;
   })[] = [];
+
   filteredLoans: (LoanWithUser & {
     firstSchedule?: Date | null;
     lastSchedule?: Date | null;
@@ -30,7 +38,8 @@ export class CollectorHomeComponent implements OnInit {
   constructor(
     private loanService: LoanService,
     private router: Router,
-    private loanHistory: HistoryService
+    private loanHistory: HistoryService,
+    private pdfGenerattionService: PdfGenerationService
   ) {
     this.chartOptions = this.initializeChartOptions([]);
   }
@@ -51,7 +60,6 @@ export class CollectorHomeComponent implements OnInit {
               : null,
         };
       });
-      this.filterLoans();
     });
 
     this.loanHistory
@@ -60,33 +68,15 @@ export class CollectorHomeComponent implements OnInit {
         this.loanHistoryByMonth = data.reverse();
         this.updateChartOptions();
       });
-  }
 
-  filterLoans(): void {
-    const searchText = this.searchText$.value?.toLowerCase() || '';
-    console.log('Filtering with:', searchText); // Debugging search input
-
-    this.filteredLoans = this.loansWithUsers.filter((loanWithUser) => {
-      // Match loan ID
-      const loanIDMatch = loanWithUser.loan?.id
-        .toLowerCase()
-        .includes(searchText);
-
-      // Match applicant name (first, middle, last name)
-      const nameMatch = (
-        (loanWithUser.users?.firstName || '') +
-        ' ' +
-        (loanWithUser.users?.middleName || '') +
-        ' ' +
-        (loanWithUser.users?.lastName || '')
+    this.searchText$.valueChanges
+      .pipe(
+        debounceTime(300), // Debounce to limit calls while typing
+        distinctUntilChanged() // Only trigger when search term changes
       )
-        .toLowerCase()
-        .includes(searchText);
-
-      return loanIDMatch || nameMatch;
-    });
-
-    console.log('Filtered Loans:', this.filteredLoans); // Debugging filtered loans
+      .subscribe((searchText) => {
+        this.filterLoans(searchText ?? ''); // Filter loans based on the current search term
+      });
   }
 
   private initializeChartOptions(dataPoints: any[]) {
@@ -150,5 +140,36 @@ export class CollectorHomeComponent implements OnInit {
 
     this.chartOptions = this.initializeChartOptions(loansCollectedDataPoints);
     this.chartOptions.data[1].dataPoints = revenueDataPoints;
+  }
+
+  downloan() {
+    this.pdfGenerattionService.downloadLoanWithUsers(this.loansWithUsers);
+  }
+
+  filterLoans(searchText: string = ''): void {
+    const lowerSearchText = searchText.toLowerCase();
+    console.log('Filtering with:', lowerSearchText); // Debugging search input
+
+    this.filteredLoans = this.loansWithUsers.filter((loanWithUser) => {
+      // Match loan ID
+      const loanIDMatch = loanWithUser.loan?.id
+        .toLowerCase()
+        .includes(lowerSearchText);
+
+      // Match applicant name (first, middle, last name)
+      const nameMatch = (
+        (loanWithUser.users?.firstName || '') +
+        ' ' +
+        (loanWithUser.users?.middleName || '') +
+        ' ' +
+        (loanWithUser.users?.lastName || '')
+      )
+        .toLowerCase()
+        .includes(lowerSearchText);
+
+      return loanIDMatch || nameMatch;
+    });
+
+    console.log('Filtered Loans:', this.filteredLoans); // Debugging filtered loans
   }
 }

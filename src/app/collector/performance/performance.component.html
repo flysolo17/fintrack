@@ -1,39 +1,41 @@
-<div class="container-fluid p-3">
+<div class="container-fluid p-3" *ngIf="users$ | async as user">
   <div class="row g-3">
-    <div class="col-4">
-      <div
-        *ngIf="goodBadBorrowersOptions$ | async as chartOptions"
-        class="bg-white rounded-3 p-3"
-      >
-        <canvasjs-chart
-          [options]="chartOptions"
-          style="width: 100%"
-        ></canvasjs-chart>
+    <ng-container *ngIf="user.type === 'COLLECTOR'">
+      <div class="col-4">
+        <div
+          *ngIf="goodBadBorrowersOptions$ | async as chartOptions"
+          class="bg-white rounded-3 p-3"
+        >
+          <canvasjs-chart
+            [options]="chartOptions"
+            style="width: 100%"
+          ></canvasjs-chart>
+        </div>
       </div>
-    </div>
-    <div class="col-4">
-      <div
-        *ngIf="totalLoansOptions$ | async as chartOptions"
-        class="bg-white rounded-3 p-3"
-      >
-        <canvasjs-chart
-          [options]="chartOptions"
-          style="width: 100%"
-        ></canvasjs-chart>
+      <div class="col-4">
+        <div
+          *ngIf="totalLoansOptions$ | async as chartOptions"
+          class="bg-white rounded-3 p-3"
+        >
+          <canvasjs-chart
+            [options]="chartOptions"
+            style="width: 100%"
+          ></canvasjs-chart>
+        </div>
       </div>
-    </div>
 
-    <div class="col-4">
-      <div
-        *ngIf="activeLoansOptions$ | async as chartOptions"
-        class="bg-white rounded-3 p-3"
-      >
-        <canvasjs-chart
-          [options]="chartOptions"
-          style="width: 100%"
-        ></canvasjs-chart>
+      <div class="col-4">
+        <div
+          *ngIf="activeLoansOptions$ | async as chartOptions"
+          class="bg-white rounded-3 p-3"
+        >
+          <canvasjs-chart
+            [options]="chartOptions"
+            style="width: 100%"
+          ></canvasjs-chart>
+        </div>
       </div>
-    </div>
+    </ng-container>
 
     <div class="col-12">
       <div class="bg-white rounded-3 p-3">
