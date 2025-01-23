@@ -6,13 +6,14 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { LoanService } from '../../services/loan.service';
 import { LoanStatus } from '../../models/loans/loan';
-import { combineLatest, map, Observable, of } from 'rxjs';
+import { combineLatest, map, Observable, of, Subscribable } from 'rxjs';
 import { LoanWithUser } from '../../models/loans/LoanWithUser';
 import { ProductLoan } from '../../models/loans/loan-types';
 import { LoanTypeService } from '../../services/loan-type.service';
 import { ProductWithAvailed } from '../../models/products/ProductWithAvailed';
 import { HistoryService } from '../../services/history.service';
 import { CollectorWithData } from '../../models/accounts/CollectorWithData';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -20,6 +21,12 @@ import { CollectorWithData } from '../../models/accounts/CollectorWithData';
   styleUrls: ['./admin-dashboard.component.css'],
 })
 export class AdminDashboardComponent implements OnInit {
+  downloadPerformancePDF() {
+    throw new Error('Method not implemented.');
+  }
+  downloadBorrowerPDF(_t81: any) {
+    throw new Error('Method not implemented.');
+  }
   topCollectorsData: any[] = [];
   topCollectorOptions: any;
   loan$: Observable<LoanWithUser[]> = this.loanService.getRecentLoans();
@@ -77,6 +84,11 @@ export class AdminDashboardComponent implements OnInit {
   );
 
   topCollectors: CollectorWithData[] = [];
+  searchQuery!: FormControl<any>;
+  filteredBorrowerPerformance$!:
+    | Observable<undefined>
+    | Subscribable<undefined>
+    | Promise<undefined>;
 
   constructor(
     private router: Router,

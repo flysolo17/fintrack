@@ -1,0 +1,29 @@
+.container {
+  padding: 40px 20px;
+}
+
+.card {
+  border-radius: 10px;
+}
+
+.card-header {
+  background: linear-gradient(to right, #007bff, #0056b3);
+}
+
+img {
+  border: 3px solid #007bff;
+  transition: transform 0.3s ease;
+}
+
+img:hover {
+  transform: scale(1.1);
+}
+
+button {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+button i {
+  font-size: 0.9rem;
+}
