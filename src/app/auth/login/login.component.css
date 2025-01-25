@@ -113,3 +113,17 @@ body {
   border: 2px solid white;
   border-radius: 4px;
 }
+/* Custom size for the dropdown box */
+.custom-select {
+  width: 100px; /* Set a fixed width (adjust as needed) */
+  padding: 5px; /* Space inside the dropdown box */
+  font-size: 16px; /* Adjust font size */
+  height: 40px; /* Set a fixed height for the dropdown */
+  border-radius: 5px; /* Optional: rounded corners */
+}
+
+/* Adjust the size of the label for a consistent look */
+label[for="role"] {
+  font-size: 18px; /* Larger font size for the label */
+  margin-bottom: 8px; /* Space between the label and dropdown */
+}

@@ -117,4 +117,8 @@ export class BorrowersComponent implements OnInit {
   downLoadData(data: UserWithLoanAccount) {
     this.pdfGenerationService.downLoadUserWithLoanAccount(data);
   }
+
+  downloadAll() {
+    this.pdfGenerationService.downloadUserWithLoanAccount(this.loans$);
+  }
 }

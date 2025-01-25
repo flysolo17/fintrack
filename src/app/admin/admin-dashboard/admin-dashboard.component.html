@@ -2,17 +2,27 @@
 
 <div class="container">
   <!-- Header Section -->
-  <div class="text-center mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-5">
     <h1 class="display-4 text-primary">
       <i class="fas fa-tachometer-alt"></i> Admin Fintrack Dashboard
     </h1>
-    <p class="lead text-muted">
-      <i class="fas fa-cogs"></i> Monitor and manage loan applications,
-      repayments, and financial analytics.
-      <br />
-    </p>
+    <!-- Profile Icon with Clickable RouterLink -->
+    <div
+      class="profile-icon"
+      [routerLink]="['/profile-admin']"
+      routerLinkActive="active-link"
+    >
+      <i class="fas fa-user-circle fa-2x"></i>
+      <!-- Profile icon -->
+    </div>
   </div>
+  <p class="lead text-muted">
+    <i class="fas fa-cogs"></i> Monitor and manage loan applications,
+    repayments, and financial analytics.
+    <br />
+  </p>
 </div>
+
 <head>
   <link
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
@@ -64,8 +74,20 @@
 </div>
 
 <!-- Loan Listings Section -->
-<div class="table-container">
-  <h3>Loan Listings</h3>
+<div class="bg-white rounded-3 p-3 mt-3">
+  <div class="d-flex align-items-center justify-content-between">
+    <h3>Loan Listings</h3>
+    <div class="d-flex gap-3">
+      <input
+        type="text"
+        class="form-control me-2"
+        placeholder="Search..."
+        [formControl]="searhText$"
+      />
+      <button class="btn btn-primary" (click)="download()">Download</button>
+    </div>
+  </div>
+
   <table class="table table-striped table-bordered">
     <thead>
       <tr>
@@ -78,7 +100,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let loan of loan$ | async">
+      <tr *ngFor="let loan of filteredLoan$ | async">
         <td>{{ loan.loan?.id }}</td>
         <td>
           {{ loan.users?.firstName }} {{ loan.users?.middleName }}
@@ -97,3 +119,5 @@
     </tbody>
   </table>
 </div>
+
+<app-performance></app-performance>

@@ -5,7 +5,8 @@
       <img src="../../../assets/Logo.png" alt="Logo" class="logo" />
     </div>
     <h2>Welcome Back! 👋</h2>
-    <p>Sign in to continue.</p>
+    <p>Log in to continue.</p>
+
     <form [formGroup]="loginForm$" (submit)="login()">
       <label for="username">Email or Username</label>
       <input
@@ -52,12 +53,28 @@
         Password is required and must be at least 6 characters long.
       </div>
 
+      <!-- Dropdown for selecting role -->
+      <label for="role">Select Role</label>
+      <select
+        id="role"
+        class="form-control custom-select"
+        formControlName="role"
+      >
+        <option value="admin">Admin</option>
+        <option value="collector">Collector</option>
+        <option value="borrower">Borrower</option>
+      </select>
+      <div
+        *ngIf="
+          loginForm$.get('role')?.invalid && loginForm$.get('role')?.touched
+        "
+        class="text-danger"
+      >
+        Role is required.
+      </div>
+
       <button type="submit" class="btn btn-signin">Log In</button>
     </form>
-    <p>
-      Don't have an account?
-      <a>Sign Up Now</a>
-    </p>
   </div>
 
   <!-- Right Section -->

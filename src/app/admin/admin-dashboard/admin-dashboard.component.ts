@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CanvasJS } from '@canvasjs/angular-charts';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
@@ -6,7 +6,17 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { LoanService } from '../../services/loan.service';
 import { LoanStatus } from '../../models/loans/loan';
-import { combineLatest, map, Observable, of, Subscribable } from 'rxjs';
+
+import {
+  combineLatest,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  Observable,
+  of,
+  Subscribable,
+} from 'rxjs';
+
 import { LoanWithUser } from '../../models/loans/LoanWithUser';
 import { ProductLoan } from '../../models/loans/loan-types';
 import { LoanTypeService } from '../../services/loan-type.service';
@@ -14,6 +24,8 @@ import { ProductWithAvailed } from '../../models/products/ProductWithAvailed';
 import { HistoryService } from '../../services/history.service';
 import { CollectorWithData } from '../../models/accounts/CollectorWithData';
 import { FormControl } from '@angular/forms';
+
+import { PdfGenerationService } from '../../services/pdf-generation.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -30,7 +42,8 @@ export class AdminDashboardComponent implements OnInit {
   topCollectorsData: any[] = [];
   topCollectorOptions: any;
   loan$: Observable<LoanWithUser[]> = this.loanService.getRecentLoans();
-
+  filteredLoan$: Observable<LoanWithUser[]> = this.loan$;
+  searhText$ = new FormControl('');
   approved$: Observable<LoanWithUser[]> = this.loan$.pipe(
     map((loans) =>
       loans.filter((loan) => loan.loan?.status === LoanStatus.CONFIRMED)
@@ -69,7 +82,7 @@ export class AdminDashboardComponent implements OnInit {
     map((products) => ({
       animationEnabled: true,
       title: {
-        text: 'Products Distributions',
+        text: 'Total Income',
       },
       data: [
         {
@@ -94,7 +107,9 @@ export class AdminDashboardComponent implements OnInit {
     private router: Router,
     private loanService: LoanService,
     private loanTypeService: LoanTypeService,
-    private historyService: HistoryService
+    private historyService: HistoryService,
+    @Inject(PdfGenerationService)
+    private pdfGenerationService: PdfGenerationService
   ) {}
 
   loanStatusData$: Observable<{ label: string; y: number }[]> = combineLatest([
@@ -115,6 +130,14 @@ export class AdminDashboardComponent implements OnInit {
     this.loanStatusData$.subscribe((data) => {
       this.renderPieChart(data);
     });
+    this.searhText$.valueChanges
+      .pipe(
+        debounceTime(300), // Add debounce to limit the number of calls
+        distinctUntilChanged() // Only trigger when the search term actually changes
+      )
+      .subscribe((searchText) => {
+        this.filterLoans(searchText ?? '');
+      });
 
     this.historyService.getTopCollectors().subscribe((data) => {
       this.topCollectorsData = data.map((collector) => ({
@@ -150,7 +173,7 @@ export class AdminDashboardComponent implements OnInit {
     const pieChart = new CanvasJS.Chart('pieChartContainer', {
       animationEnabled: true,
       title: {
-        text: 'Loan Status Distribution',
+        text: 'Total Loan Amount Distributed',
       },
       data: [
         {
@@ -162,5 +185,25 @@ export class AdminDashboardComponent implements OnInit {
       ],
     });
     pieChart.render();
+  }
+
+  download() {
+    this.loan$.subscribe((data) => {
+      this.pdfGenerationService.downloadLoanWithUsers(data);
+    });
+  }
+
+  private filterLoans(searchText: string): void {
+    this.filteredLoan$ = this.loan$.pipe(
+      map((loans) => {
+        const searchTermLower = searchText.toLowerCase();
+        return loans.filter(
+          (loan) =>
+            loan.users?.firstName.toLowerCase().includes(searchTermLower) ||
+            loan.users?.lastName.toLowerCase().includes(searchTermLower) ||
+            loan.loan?.id.toLowerCase().includes(searchTermLower) // Example of filtering by loan account ID
+        );
+      })
+    );
   }
 }

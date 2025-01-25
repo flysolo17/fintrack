@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { LoanService } from '../../services/loan.service';
 import { HistoryService } from '../../services/history.service';
-import { combineLatest, map, Observable, startWith } from 'rxjs';
+import { combineLatest, map, Observable, of, startWith } from 'rxjs';
 import { UserWithLoanAccount } from '../../models/accounts/UserWithLoanAccount';
 import { Loans, LoanStatus, PaymentStatus } from '../../models/loans/loan';
 import { LoanHistory } from '../../models/loans/loan-history';
@@ -41,13 +41,14 @@ export class PerformanceComponent implements OnInit {
   activeLoansOptions$: Observable<any> | undefined;
 
   searchQuery = new FormControl('');
-
+  users$: Observable<Users | null> = of(null);
   constructor(
     private authService: AuthService,
     private loanService: LoanService,
     private historyService: HistoryService,
     private pdfService: PdfGenerationService
   ) {}
+
   downloadBorrowerPDF(data: BorrowerPerformanceData) {
     this.pdfService.downloadBorrowerData(data);
   }
@@ -57,6 +58,8 @@ export class PerformanceComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+    const id = localStorage.getItem('uid') ?? '';
+    this.users$ = this.authService.getUserByID(id);
     this.borrowerPerformance$ = combineLatest([
       this.usersWithLoans$,
       this.loans$,

@@ -173,3 +173,84 @@ input[type="range"] {
   border-radius: 5px;
   cursor: pointer;
 }
+
+.content {
+  display: flex;
+  align-items: center;
+}
+
+.text {
+  flex: 1;
+}
+
+.image img {
+  max-width: 150px;
+  border-radius: 10px;
+}
+.home {
+  height: 100vh;
+  display: flex;
+  background-color: #fff; /* Fallback color if image fails to load */
+  background-image: url("../../../assets/looan.jpg"); /* Replace with your background image path */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.right {
+  flex: 1; /* Takes up the remaining space on the right */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left {
+  flex: 1; /* Ensures the left side takes half of the space */
+  padding: 40px; /* Space around the text card */
+  display: flex;
+  justify-content: flex-start; /* Align text to the left */
+  align-items: center; /* Center vertically */
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+.btn-success {
+  display: inline-block;
+  padding: 30px 80px; /* Increased size for better visibility */
+  font-size: 25px; /* Improved font size for readability */
+  font-weight: 600; /* Bold text for emphasis */
+  color: #fff; /* White text color */
+  background: linear-gradient(
+    45deg,
+    #0066cc,
+    #004a99
+  ); /* Gradient background */
+  border: none; /* Removes the default border */
+  border-radius: 8px; /* Smooth rounded corners */
+  text-decoration: none; /* Removes underline from links */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a shadow for depth */
+  transition: all 0.3s ease-in-out; /* Smooth hover effect */
+}
+
+.btn-success:hover {
+  background: linear-gradient(
+    45deg,
+    #06b906,
+    #006600
+  ); /* Darker gradient on hover */
+  transform: translateY(-2px); /* Slight upward movement */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+.btn-success:active {
+  transform: translateY(0); /* Reset movement when clicked */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Reduced shadow when clicked */
+}
+
+.ms-4 {
+  margin-left: 16px; /* Adds spacing to the left */
+}
