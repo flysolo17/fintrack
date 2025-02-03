@@ -78,6 +78,7 @@ const routes: Routes = [
         path: '',
         component: AdminDashboardComponent,
       },
+
       {
         path: 'profile-admin',
         component: ProfileAdminComponent,

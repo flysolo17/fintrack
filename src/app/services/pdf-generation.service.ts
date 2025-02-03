@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { jsPDF } from 'jspdf';
-import { Loans } from '../models/loans/loan';
+import { Loans, PaymentSchedule } from '../models/loans/loan';
 import autoTable from 'jspdf-autotable';
 import { Users } from '../models/accounts/users';
 import {
@@ -10,11 +10,21 @@ import {
 import { BorrowerPerformanceData } from '../collector/performance/performance.component';
 import { UserWithLoanAccount } from '../models/accounts/UserWithLoanAccount';
 import { LoanWithUser } from '../models/loans/LoanWithUser';
+import { PaymentRow } from '../admin/daily-payment/daily-payment.component';
+
 @Injectable({
   providedIn: 'root',
 })
 export class PdfGenerationService {
   private logoImage: HTMLImageElement;
+
+  formatDate(date: Date): string {
+    if (!date) return '';
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+  }
 
   constructor() {
     // Preload the logo during service initialization
@@ -467,5 +477,68 @@ export class PdfGenerationService {
     });
 
     doc.save('loan_with_users.pdf');
+  }
+
+  downloadDailyPayment(schedules: PaymentRow[], totalCollected: number) {
+    const doc = new jsPDF();
+    const imgWidth = 40;
+    const imgHeight = 40;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const x = (pageWidth - imgWidth) / 2;
+    const y = 10;
+
+    // Add logo if available
+    if (this.logoImage.complete && this.logoImage.naturalWidth > 0) {
+      doc.addImage(this.logoImage, 'PNG', x, y, imgWidth, imgHeight);
+    } else {
+      console.warn('Logo not loaded; skipping logo.');
+    }
+
+    doc.setFontSize(18);
+    doc.text('Daily Payment', pageWidth / 2, y + imgHeight + 10, {
+      align: 'center',
+    });
+
+    // Get formatted date for filename
+    const formattedDate = this.formatDate(new Date());
+
+    // Map filtered data
+    const tableData = schedules.map((item: PaymentRow) => {
+      const user = `${item.loanWithUser.users?.firstName ?? ''} ${
+        item.loanWithUser.users?.lastName ?? ''
+      }`.trim();
+
+      return [
+        this.formatDate(new Date(item.date)), // Date
+        user, // Customer name
+        this.formatCurrency(Number(item.amount)), // Amount
+        item.status, // Status
+      ];
+    });
+
+    // Add table using autoTable
+    const tableY = y + imgHeight + 20;
+    autoTable(doc, {
+      startY: tableY,
+      head: [['Date', 'Customer', 'Amount', 'Status']],
+      body: tableData,
+      theme: 'grid',
+      headStyles: { fillColor: [22, 160, 133] },
+      bodyStyles: { fontSize: 10 },
+    });
+
+    // Get the last position after the table
+    const finalY = (doc as any).lastAutoTable.finalY || tableY + 10;
+
+    // Add total collected text
+    doc.setFontSize(12);
+    doc.text(
+      `Total Collected: ${this.formatCurrency(totalCollected)}`,
+      pageWidth - 60,
+      finalY + 10
+    );
+
+    // Save the PDF
+    doc.save(`daily_payment_${formattedDate}.pdf`);
   }
 }

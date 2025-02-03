@@ -22,6 +22,8 @@ import { HistoryService } from '../../services/history.service';
 import { CollectorWithData } from '../../models/accounts/CollectorWithData';
 import { FormControl } from '@angular/forms';
 import { PdfGenerationService } from '../../services/pdf-generation.service';
+import { Users } from '../../models/accounts/users';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -29,6 +31,7 @@ import { PdfGenerationService } from '../../services/pdf-generation.service';
   styleUrls: ['./admin-dashboard.component.css'],
 })
 export class AdminDashboardComponent implements OnInit {
+  users$: Users | null = null;
   topCollectorsData: any[] = [];
   topCollectorOptions: any;
   loan$: Observable<LoanWithUser[]> = this.loanService.getRecentLoans();
@@ -72,7 +75,7 @@ export class AdminDashboardComponent implements OnInit {
     map((products) => ({
       animationEnabled: true,
       title: {
-        text: 'Products Distributions',
+        text: 'Total Income',
       },
       data: [
         {
@@ -93,7 +96,8 @@ export class AdminDashboardComponent implements OnInit {
     private loanService: LoanService,
     private loanTypeService: LoanTypeService,
     private historyService: HistoryService,
-    private pdfGenerationService: PdfGenerationService
+    private pdfGenerationService: PdfGenerationService,
+    private authService: AuthService
   ) {}
 
   loanStatusData$: Observable<{ label: string; y: number }[]> = combineLatest([
@@ -111,6 +115,10 @@ export class AdminDashboardComponent implements OnInit {
   );
 
   ngOnInit() {
+    const id = localStorage.getItem('uid') ?? '';
+    this.authService.getUserByID(id).subscribe((data) => {
+      this.users$ = data;
+    });
     this.loanStatusData$.subscribe((data) => {
       this.renderPieChart(data);
     });
@@ -157,7 +165,7 @@ export class AdminDashboardComponent implements OnInit {
     const pieChart = new CanvasJS.Chart('pieChartContainer', {
       animationEnabled: true,
       title: {
-        text: 'Loan Status Distribution',
+        text: 'Loan Loan Amount Distributed',
       },
       data: [
         {
@@ -189,5 +197,8 @@ export class AdminDashboardComponent implements OnInit {
         );
       })
     );
+  }
+  navigateToProfile() {
+    this.router.navigate(['/admin/profile-admin']);
   }
 }

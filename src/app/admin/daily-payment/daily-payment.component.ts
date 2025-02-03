@@ -6,8 +6,13 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaymentDialogComponent } from '../modals/payment-dialog/payment-dialog.component';
 import { Users } from '../../models/accounts/users';
 import { AuthService } from '../../services/auth.service';
+import { Observable, of } from 'rxjs';
+import { LoanHistory } from '../../models/loans/loan-history';
+import { HistoryService } from '../../services/history.service';
+import { computeTotalCollected } from '../../utils/Constants';
+import { PdfGenerationService } from '../../services/pdf-generation.service';
 
-interface PaymentRow {
+export interface PaymentRow {
   loanWithUser: LoanWithUser;
   date: string;
   customer: string;
@@ -28,12 +33,20 @@ export class DailyPaymentComponent implements OnInit {
   payments: PaymentRow[] = [];
   users$: Users | null = null;
 
+  history$: LoanHistory[] = [];
+  totalCollected$ = 0;
   constructor(
     private loanService: LoanService,
-    private authService: AuthService
+    private authService: AuthService,
+    private historyService: HistoryService,
+    private pdfGeneration: PdfGenerationService
   ) {}
+  generatePdf(paymenRow: PaymentRow[]) {
+    this.pdfGeneration.downloadDailyPayment(paymenRow, this.totalCollected$);
+  }
 
   ngOnInit(): void {
+    this.getTotalCollected(new Date());
     const id = localStorage.getItem('uid') ?? '';
     if (id !== '') {
       this.authService.getUserByID(id).subscribe((data) => {
@@ -65,16 +78,26 @@ export class DailyPaymentComponent implements OnInit {
     );
   }
 
+  getTotalCollected(date: Date) {
+    this.historyService.getTotalCollected(date).subscribe((data) => {
+      this.history$ = data;
+      console.log('COllected', data);
+      this.totalCollected$ = computeTotalCollected(data);
+    });
+  }
+
   setSelectedDate(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input) {
       this.selectedDate = new Date(input.value);
+      this.getTotalCollected(this.selectedDate);
       this.filterPaymentsByDate();
     }
   }
 
   filterPaymentsByDate(): void {
     const formattedSelectedDate = this.formatDate(this.selectedDate);
+
     this.filteredPayments = this.payments.filter(
       (payment) => payment.date === formattedSelectedDate
     );

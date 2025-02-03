@@ -1,5 +1,6 @@
 import { LoanAccount } from '../models/accounts/LoanAccount';
 import { Loans, PaymentStatus } from '../models/loans/loan';
+import { LoanHistory } from '../models/loans/loan-history';
 
 export function generateRandomString(size: number = 12): string {
   const characters =
@@ -106,4 +107,28 @@ export function formatPhoneNumber(phone: string): string {
     return '+63' + phone.substring(1); // Replace '0' with '+63'
   }
   return phone; // Return the original phone number if it doesn't start with '0'
+}
+
+export function getStartTime(date: Date): Date {
+  if (!date) {
+    throw new Error('Invalid date');
+  }
+  const startTime = new Date(date);
+  startTime.setHours(0, 0, 0, 0); // Set time to midnight
+  return startTime;
+}
+
+export function getEndTime(date: Date): Date {
+  if (!date) {
+    throw new Error('Invalid date');
+  }
+  const endTime = new Date(date);
+  endTime.setHours(23, 59, 59, 999); // Set time to just before midnight
+  return endTime;
+}
+
+export function computeTotalCollected(history: LoanHistory[]): number {
+  let total = 0;
+  history.forEach((e) => (total += e.amount));
+  return total;
 }

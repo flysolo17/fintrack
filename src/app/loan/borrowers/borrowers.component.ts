@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
-import { Users } from '../../models/accounts/users';
+import { AccountStatus, Users } from '../../models/accounts/users';
 import { UserWithLoanAccount } from '../../models/accounts/UserWithLoanAccount';
 import { AuthService } from '../../services/auth.service';
 import { generateRandomNumber } from '../../utils/Constants';
@@ -40,8 +40,11 @@ export class BorrowersComponent implements OnInit {
     });
     this.authService.getUserWithLoanAccount().subscribe(
       (data) => {
-        this.loans$ = data;
-        this.filteredLoans$ = data; // Initialize filtered loans
+        const all = data.filter(
+          (e) => e.user?.accountStatus === AccountStatus.ACTIVE
+        );
+        this.loans$ = all;
+        this.filteredLoans$ = all;
       },
       (error) => {
         console.error('Error fetching user with loan account:', error);
@@ -107,10 +110,11 @@ export class BorrowersComponent implements OnInit {
 
   filterLoans(): void {
     const term = this.searchTerm.toLowerCase();
-    this.filteredLoans$ = this.loans$.filter((loan) =>
-      `${loan.user?.firstName} ${loan.user?.lastName}`
-        .toLowerCase()
-        .includes(term)
+    this.filteredLoans$ = this.loans$.filter(
+      (loan) =>
+        `${loan.user?.firstName} ${loan.user?.lastName}`
+          .toLowerCase()
+          .includes(term) || loan.user?.address.toLowerCase().includes(term)
     );
   }
 
@@ -120,5 +124,14 @@ export class BorrowersComponent implements OnInit {
 
   downloadAll() {
     this.pdfGenerationService.downloadUserWithLoanAccount(this.loans$);
+  }
+
+  delete(id: string) {
+    this.authService
+      .deleteAccount(id)
+      .then((data) => {
+        this.toastr.success('Successfully Deleted!');
+      })
+      .catch((err) => this.toastr.error(err['message']));
   }
 }

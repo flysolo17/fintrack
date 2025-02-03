@@ -47,7 +47,7 @@
           <input
             type="text"
             class="form-control form-control-sm border-0"
-            placeholder="Search Borrowers..."
+            placeholder="Search Borrowers or address..."
             style="box-shadow: none"
             [(ngModel)]="searchTerm"
             (input)="filterLoans()"
@@ -138,6 +138,13 @@
                     >
                       <i class="fa-solid fa-circle-down text-dark"></i>
                     </button>
+
+                    <div
+                      class="btn btn-danger btn-sm"
+                      (click)="delete(user.user?.id ?? '')"
+                    >
+                      Delete
+                    </div>
                   </div>
                 </td>
               </tr>

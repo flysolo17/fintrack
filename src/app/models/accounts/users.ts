@@ -1,6 +1,10 @@
 import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { Identifications } from './Identifications';
 
+export enum AccountStatus {
+  ACTIVE = 'ACTIVE',
+  DELETED = 'DELETED',
+}
 export interface Users {
   id: string;
   firstName: string;
@@ -14,6 +18,8 @@ export interface Users {
   username: string;
   password: string;
   createdAt: Date;
+  accountStatus: AccountStatus;
+  address: string;
 }
 
 export const userConverter = {

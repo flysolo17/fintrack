@@ -3,12 +3,17 @@
     <div class="d-flex align-items-center justify-content-between mb-3">
       <h6 class="fw-bold mb-0">Daily Payment</h6>
       <!-- Date Picker -->
-      <input
-        type="date"
-        [value]="selectedDate | date : 'yyyy-MM-dd'"
-        (change)="setSelectedDate($event)"
-        class="form-control form-control-sm w-auto"
-      />
+      <div class="d-flex gap-1 align-items-center">
+        <input
+          type="date"
+          [value]="selectedDate | date : 'yyyy-MM-dd'"
+          (change)="setSelectedDate($event)"
+          class="form-control form-control-sm w-auto"
+        />
+        <button class="btn btn-primary" (click)="generatePdf(filteredPayments)">
+          Download
+        </button>
+      </div>
     </div>
 
     <div class="table-responsive">
@@ -63,5 +68,7 @@
         </tbody>
       </table>
     </div>
+
+    <p>Total Collected {{ totalCollected$ | currency : "PHP" }}</p>
   </div>
 </div>

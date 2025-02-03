@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateLoanTypeComponent } from '../modals/create-loan-type/create-loan-type.component';
 import { LoanTypeService } from '../../services/loan-type.service';
+import { ProductLoan } from '../../models/loans/loan-types';
 
 @Component({
   selector: 'app-loan-type',
@@ -17,6 +18,11 @@ export class LoanTypeComponent {
 
   create() {
     const modal = this.modal.open(CreateLoanTypeComponent);
+  }
+
+  edit(product: ProductLoan) {
+    const modal = this.modal.open(CreateLoanTypeComponent);
+    modal.componentInstance.product = product;
   }
   deleteLoanType(id: string) {
     this.loanTypeService.deleteLoanType(id);

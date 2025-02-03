@@ -55,7 +55,8 @@ export class LoansComponent implements OnInit {
       // Return true if the search term matches name or loan id
       return (
         name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        loan.loan?.id.toString().includes(searchTerm)
+        loan.loan?.id.toString().includes(searchTerm) ||
+        loan.users?.address.toLowerCase().includes(searchTerm.toLowerCase())
       );
     });
     this.currentPage = 1; // Reset to first page when search is updated

@@ -19,6 +19,7 @@ import {
   LoanHistoryByMonth,
 } from '../models/loans/loan-history';
 import { CollectorWithData } from '../models/accounts/CollectorWithData';
+import { getEndTime, getStartTime } from '../utils/Constants';
 
 export const LOAN_HISTORY_COLLECTION = 'loan-history';
 @Injectable({
@@ -137,6 +138,18 @@ export class HistoryService {
       orderBy('createdAt', 'desc')
     );
 
+    return collectionData(q);
+  }
+
+  getTotalCollected(date: Date): Observable<LoanHistory[]> {
+    const q = query(
+      collection(this.firestore, LOAN_HISTORY_COLLECTION).withConverter(
+        historyConverter
+      ),
+      where('createdAt', '>=', getStartTime(date)),
+      where('createdAt', '<=', getEndTime(date)),
+      where('status', '==', PaymentStatus.PAID)
+    );
     return collectionData(q);
   }
 }

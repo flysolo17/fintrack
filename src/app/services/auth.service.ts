@@ -16,7 +16,12 @@ import {
   where,
   writeBatch,
 } from '@angular/fire/firestore';
-import { userConverter, Users, UserType } from '../models/accounts/users';
+import {
+  AccountStatus,
+  userConverter,
+  Users,
+  UserType,
+} from '../models/accounts/users';
 import { EncryptionService } from './encryption.service';
 import {
   formatPhoneNumber,
@@ -163,6 +168,9 @@ export class AuthService {
     const user = userDoc.data() as Users;
     const decryptedPassword = this.encriptionService.decrypt(user.password);
 
+    if (user.accountStatus == AccountStatus.DELETED) {
+      return null;
+    }
     if (decryptedPassword === password) {
       localStorage.setItem('uid', user.id);
       return user;
@@ -249,6 +257,7 @@ export class AuthService {
     const q = query(
       collection(this.firestore, AUTH_COLLECTION).withConverter(userConverter),
       where('type', '==', UserType.COLLECTOR),
+      where('accountStatus', '==', AccountStatus.ACTIVE),
       orderBy('createdAt', 'desc')
     );
     return collectionData(q);
@@ -397,7 +406,6 @@ export class AuthService {
       orderBy('createdAt', 'desc'),
       orderBy('updatedAt', 'desc')
     );
-
     const loanAccountSnapshots = collectionData(loanAccounts, {
       idField: 'id',
     }).pipe(
@@ -411,11 +419,11 @@ export class AuthService {
               where('username', '==', loanAccount.id),
               limit(1)
             );
-
             const userSnapshot = await getDocs(userDoc);
             const user = !userSnapshot.empty
               ? (userSnapshot.docs[0].data() as Users)
               : null;
+
             return { user, loanAccount };
           }),
           toArray()
@@ -424,7 +432,6 @@ export class AuthService {
     );
     return loanAccountSnapshots;
   }
-
   deleteAll() {
     const data = collection(this.firestore, AUTH_COLLECTION);
     const q = query(data, where('username', '!=', 'fintrackadmin')); // Query to exclude "fintrackadmin"
@@ -521,5 +528,28 @@ export class AuthService {
         loanAccountID
       ).withConverter(identificationConverter)
     ).pipe(map((data) => data ?? null));
+  }
+
+  deleteAccount(id: string) {
+    return updateDoc(
+      doc(this.firestore, AUTH_COLLECTION, id).withConverter(userConverter),
+      {
+        accountStatus: AccountStatus.DELETED,
+      }
+    );
+  }
+  async addAccountStatusField() {
+    const q = await getDocs(collection(this.firestore, AUTH_COLLECTION));
+
+    q.forEach((document) => {
+      updateDoc(
+        doc(this.firestore, AUTH_COLLECTION, document.id).withConverter(
+          userConverter
+        ),
+        {
+          address: 'Magindanao', // or another default status
+        }
+      );
+    });
   }
 }

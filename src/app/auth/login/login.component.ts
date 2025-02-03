@@ -23,6 +23,7 @@ export class LoginComponent {
     private toastr: ToastrService
   ) {
     this.loginForm$ = fb.nonNullable.group({
+      type: [null, Validators.required],
       username: ['', Validators.required],
       password: ['', Validators.required],
     });
@@ -30,15 +31,22 @@ export class LoginComponent {
 
   async login() {
     if (this.loginForm$.invalid) {
-      this.toastr.success('Invalid username or password');
+      this.toastr.error('Invalid username or password');
       return;
     }
-    const { username, password } = this.loginForm$.value;
+
+    const { username, password, type } = this.loginForm$.value;
 
     try {
       const user = await this.authService.login(username, password);
+
       if (user) {
-        this.authService.setUser(user)
+        if (user?.type !== type) {
+          console.log(user?.type, type);
+          this.toastr.error('Invalid User type');
+          return;
+        }
+        this.authService.setUser(user);
         this.toastr.success('Login successful!');
         this.navigateToMainPage(user.type);
       } else {

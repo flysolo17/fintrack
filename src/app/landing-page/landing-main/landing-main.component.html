@@ -1,79 +1,42 @@
-<nav class="navigation">
-  <ul class="nav-list">
-    <li class="nav-item">
-      <a routerLink="home" routerLinkActive="active" class="nav-link">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          class="icon"
-        >
-          <circle cx="12" cy="12" r="10" fill="#33cc33" />
-          <path d="M12 3L3 12h3v7h6v-4h4v4h3v-7h3L12 3z" fill="#ffffff" />
-        </svg>
-        Home
-      </a>
-    </li>
-    <li class="nav-item">
-      <a routerLink="contact" routerLinkActive="active" class="nav-link">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          class="icon"
-        >
-          <circle cx="12" cy="12" r="10" fill="#33cc33" />
-          <path
-            d="M12 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0zm-8 8c0-4 4-6 8-6s8 2 8 6v2H4v-2z"
-            fill="#ffffff"
-          />
-        </svg>
-        Contacts
-      </a>
-    </li>
-    <li class="nav-item">
-      <a routerLink="about" routerLinkActive="active" class="nav-link">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          class="icon"
-        >
-          <circle cx="12" cy="12" r="10" fill="#33cc33" />
-          <path
-            d="M12 7a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zM10 11h4v8h-4v-8z"
-            fill="#ffffff"
-          />
-        </svg>
-        About Us
-      </a>
-    </li>
-  </ul>
-</nav>
-
-<main>
+<div class="vh-100 d-flex flex-column">
   <div
-    class="header-container d-flex align-items-center justify-content-between p-6 bg-dark-green position-relative"
+    class="container-fluid d-flex gap-3 p-3 bg-success text-light align-items-center"
   >
-    <div
-      class="header-logo d-flex align-items-center justify-content-start gap-2 text-white"
-    >
+    <img src="../../../assets/logo_1.png" width="100" height="100" />
+    <h4 class="fw-bold" style="max-width: 75%">
+      FINTRACK: A WEB-BASED FINANCIAL RECORD MANAGEMENT SYSTEM FOR MICROFINANCE
+      INSTITUTIONS
+    </h4>
+  </div>
+
+  <div class="flex-grow-1 d-flex align-items-stretch">
+    <div class="box p-3 w-50">
+      <div class="rounded-3 border h-100" style="padding: 4rem">
+        <p class="text-justify fs-4">
+          FinTrack: A Web-Based Financial Record Monitoring System for
+          Microfinance Institutions (MFIs) is a web application designed to
+          provide a centralized database for payment records, a listing of
+          borrowers, and a system for monitoring loan payment records to ensure
+          that borrowers are well informed in regards with their payment
+          records.
+        </p>
+      </div>
+    </div>
+    <div class="box w-50" style="position: relative">
       <img
-        src="../../../assets/logo_1.png"
-        width="100px"
-        height="100px"
-        class="rounded-circle"
+        src="../../../assets/loan.jpg"
+        alt="Loan Image"
+        style="object-fit: cover"
+        height="100%"
+        width="100%"
       />
-      <h1 class="fw-bold fs-3 mt-1 custom-header text-white">
-        FINTRACK: A WEB-BASED FINANCIAL RECORD MANAGEMENT SYSTEM FOR
-        MICROFINANCE INSTITUTIONS
-      </h1>
-      <a class="btn btn-primary ms-4" routerLink="/login">Login</a>
+      <button
+        style="position: absolute; bottom: 100px; right: 30px; width: 120px"
+        class="btn btn-primary btn-lg rounded-0"
+        routerLink="/login"
+      >
+        Login
+      </button>
     </div>
   </div>
-</main>
-
-<router-outlet></router-outlet>
+</div>

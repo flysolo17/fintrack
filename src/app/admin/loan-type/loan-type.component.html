@@ -20,14 +20,17 @@
       <td>{{ data.description }}</td>
       <td>{{ data.interest }} %</td>
       <td>
-        <button
-          class="btn btn-danger d-flex align-items-center gap-1"
-          (click)="deleteLoanType(data.id)"
-          title="Delete Loan Type"
-        >
-          <i class="fa-solid fa-trash"></i>
-          <span>Delete</span>
-        </button>
+        <div class="d-flex align-items-center gap-1">
+          <button class="btn btn-success" (click)="edit(data)">Edit</button>
+          <button
+            class="btn btn-danger d-flex align-items-center gap-1"
+            (click)="deleteLoanType(data.id)"
+            title="Delete Loan Type"
+          >
+            <i class="fa-solid fa-trash"></i>
+            <span>Delete</span>
+          </button>
+        </div>
       </td>
     </tr>
   </tbody>

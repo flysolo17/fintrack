@@ -1,48 +1,58 @@
-<title>Admin Dashboard - Fintrack System</title>
-
-<div class="container">
-  <!-- Header Section -->
-  <div class="text-center mb-5">
-    <h1 class="display-4 text-primary">
-      <i class="fas fa-tachometer-alt"></i> Admin Fintrack Dashboard
-    </h1>
-    <p class="lead text-muted">
-      <i class="fas fa-cogs"></i> Monitor and manage loan applications,
-      repayments, and financial analytics.
-      <br />
-    </p>
+<div class="d-flex gap-3">
+  <div class="flex-fill">
+    <title>Admin Dashboard - Fintrack System</title>
+    <div class="container">
+      <!-- Header Section -->
+      <div class="text-center mb-5">
+        <h1 class="display-4 text-primary">
+          <i class="fas fa-tachometer-alt"></i> Admin Fintrack Dashboard
+        </h1>
+        <p class="lead text-muted">
+          <i class="fas fa-cogs"></i> Monitor and manage loan applications,
+          repayments, and financial analytics.
+          <br />
+        </p>
+      </div>
+    </div>
+    <head>
+      <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        rel="stylesheet"
+      />
+    </head>
   </div>
-</div>
-<head>
-  <link
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-    rel="stylesheet"
+  <img
+    [src]="users$?.profile ?? '../../../assets/profile.png'"
+    class="rounded-circle"
+    width="80"
+    height="80"
+    (click)="navigateToProfile()"
   />
-</head>
+</div>
 
 <!-- Overview Cards Section -->
 <div class="overview-cards">
   <!-- Total Loans -->
   <div class="card bg-primary text-white">
-    <div class="card-title">Total Loans</div>
+    <div class="card-title">Total Borrowers</div>
     <h5>{{ (loan$ | async)?.length }}</h5>
   </div>
 
   <!-- Active Loans (Approved and Paid) -->
   <div class="card bg-success text-white">
-    <div class="card-title">Active Loans</div>
+    <div class="card-title">Active Borrowers</div>
     <h5>{{ (approved$ | async)?.length }}</h5>
   </div>
 
   <!-- Pending Loans -->
   <div class="card bg-warning text-white">
-    <div class="card-title">Pending Loans</div>
+    <div class="card-title">Pending Borrowers</div>
     <h5>{{ (pending$ | async)?.length }}</h5>
   </div>
 
   <!-- Defaulted Loans (Rejected) -->
   <div class="card bg-danger text-white">
-    <div class="card-title">Defaulted Loans</div>
+    <div class="card-title">Defaulted Borrowers</div>
     <h5>{{ (rejected$ | async)?.length }}</h5>
   </div>
 </div>

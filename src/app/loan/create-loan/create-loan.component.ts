@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Users, UserType } from '../../models/accounts/users';
+import { AccountStatus, Users, UserType } from '../../models/accounts/users';
 import { AuthService } from '../../services/auth.service';
 import { LoanTypeService } from '../../services/loan-type.service';
 import { Loans, LoanStatus } from '../../models/loans/loan';
@@ -110,6 +110,8 @@ export class CreateLoanComponent implements OnInit {
       password: '00000',
       createdAt: new Date(),
       verified: false,
+      accountStatus: AccountStatus.ACTIVE,
+      address: formValues.address,
     };
 
     let type = this.getLoanType(loanValues.type);
