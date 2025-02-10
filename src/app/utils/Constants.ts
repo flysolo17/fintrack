@@ -132,3 +132,29 @@ export function computeTotalCollected(history: LoanHistory[]): number {
   history.forEach((e) => (total += e.amount));
   return total;
 }
+
+export function getDailyPayableAmountWithoutInterest(
+  loanID: string,
+  loans: Loans[]
+): number {
+  const loan = loans.find((l) => l.id === loanID);
+  if (loan && loan.paymentSchedule?.length > 0) {
+    const interestAmount = (loan.amount * loan.interest) / 100;
+    const principalAmount = loan.amount - interestAmount;
+    const dailyPayableAmountWithoutInterest =
+      principalAmount / loan.paymentSchedule.length;
+    return dailyPayableAmountWithoutInterest;
+  } else {
+    return 0;
+  }
+}
+
+export function collectedAmountPerDay(loanHistory: LoanHistory[]): number {
+  let total = 0;
+  loanHistory.forEach((e) => {
+    if (e.status !== PaymentStatus.UNPAID) {
+      total += e.amount;
+    }
+  });
+  return total;
+}

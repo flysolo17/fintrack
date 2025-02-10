@@ -2,6 +2,45 @@
   <div class="row g-3">
     <div class="col-12">
       <div class="bg-white rounded-3 p-3">
+        <ul class="nav nav-pills">
+          <li class="nav-item p-1">
+            <button
+              class="btn"
+              (click)="selectActiveTab('all')"
+              [ngClass]="{
+                'btn-secondary': active === 'all',
+                'btn-outline-secondary text-dark': active !== 'all'
+              }"
+            >
+              ALL
+            </button>
+          </li>
+          <li
+            class="nav-item p-1"
+            *ngFor="let collector of collectors$ | async"
+            (click)="selectActiveTab(collector.id)"
+          >
+            <button
+              class="btn"
+              [ngClass]="{
+                'btn-primary': active === collector.id,
+                'btn-outline-secondary text-dark': active !== collector.id
+              }"
+            >
+              {{ collector.firstName }} {{ collector.lastName }}
+            </button>
+          </li>
+        </ul>
+        <div *ngIf="collector$ | async as collect">
+          <canvasjs-chart
+            [options]="collect"
+            style="width: 100%"
+          ></canvasjs-chart>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="bg-white rounded-3 p-3 mb-3">
         <div *ngIf="chartOptions$ | async as chartOptions">
           <canvasjs-chart
             [options]="chartOptions"
@@ -53,11 +92,7 @@
                           }}
                         </td>
                         <td>
-                          {{
-                            performance.profit -
-                              performance.totalAmountCollected
-                              | currency : "PHP"
-                          }}
+                          {{ performance.profit | currency : "PHP" }}
                         </td>
                       </tr>
                     </tbody>

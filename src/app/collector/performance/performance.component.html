@@ -40,14 +40,35 @@
     <div class="col-12">
       <div class="bg-white rounded-3 p-3">
         <div class="d-flex justify-content-between align-items-center">
-          <h4 class="mb-0">Borrower Performance</h4>
-          <div class="d-flex">
+          <h4 class="mb-0 flex-grow-1">Borrower Performance</h4>
+
+          <div class="d-flex align-items-center gap-1">
             <input
               type="text"
-              class="form-control me-2"
+              class="form-control"
+              style="width: 200px"
               placeholder="Search..."
               [formControl]="searchQuery"
             />
+
+            <div ngbDropdown class="dropdown">
+              <button
+                class="btn btn-outline-secondary dropdown-toggle"
+                ngbDropdownToggle
+              >
+                Filter by
+              </button>
+              <div ngbDropdownMenu>
+                <button
+                  class="dropdown-item"
+                  *ngFor="let data of arr; index as i"
+                  (click)="filterByGoodOrBad(i)"
+                >
+                  {{ data }}
+                </button>
+              </div>
+            </div>
+
             <button class="btn btn-primary" (click)="downloadPerformancePDF()">
               Download
             </button>

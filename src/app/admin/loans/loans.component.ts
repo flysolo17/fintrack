@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { LoanService } from '../../services/loan.service';
 import { Users } from '../../models/accounts/users';
 import { FormControl } from '@angular/forms';
@@ -8,6 +8,8 @@ import { AuthService } from '../../services/auth.service';
 import { generateRandomNumber } from '../../utils/Constants';
 import { LoanStatus, PaymentStatus } from '../../models/loans/loan';
 import { ToastrService } from 'ngx-toastr';
+import { CollectorService } from '../../services/collector.service';
+import { PdfGenerationService } from '../../services/pdf-generation.service';
 
 @Component({
   selector: 'app-loans',
@@ -21,14 +23,32 @@ export class LoansComponent implements OnInit {
   searchText: FormControl = new FormControl('');
   currentPage: number = 1;
   pageSize: number = 20;
-
   user$: Users | null = null;
+  collectors$: Users[] = [];
+  active = 'all';
+
+  selectActiveTab(collectorID: string) {
+    this.active = collectorID;
+    if (this.active == 'all') {
+      this.filteredLoans = this.loans;
+    } else {
+      this.filteredLoans = this.loans.filter(
+        (e) => e.loan?.collectorID == this.active
+      );
+    }
+  }
+
   constructor(
     private loanService: LoanService,
     private authService: AuthService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private collectorService: CollectorService,
+    private pdfGenerationService: PdfGenerationService
   ) {
     this.user$ = authService.users$;
+    authService.getAllCollectors().subscribe((data) => {
+      this.collectors$ = data;
+    });
   }
 
   ngOnInit(): void {
@@ -148,5 +168,18 @@ export class LoansComponent implements OnInit {
       .catch((e) => {
         this.toastr.error(e['message']);
       });
+  }
+
+  download() {
+    const title =
+      this.active === 'all'
+        ? 'Manage Loans'
+        : 'Loans Managed ' +
+            this.collectors$.find((e) => e.id === this.active)?.firstName +
+            ' ' +
+            this.collectors$.find((e) => e.id === this.active)?.lastName ||
+          'by Unknown Collector';
+
+    this.pdfGenerationService.downloadLoanReport(title, this.filteredLoans);
   }
 }

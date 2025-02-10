@@ -25,6 +25,24 @@ export interface BorrowerPerformanceData {
   styleUrls: ['./performance.component.css'],
 })
 export class PerformanceComponent implements OnInit {
+  arr: string[] = ['All', 'Good', 'Deliquent'];
+  filterByGoodOrBad(index: number) {
+    if (index === 0) {
+      this.filteredBorrowerPerformance$ = this.borrowerPerformance$;
+    } else {
+      const threshold = 75;
+      const isGood = index === 1;
+
+      this.filteredBorrowerPerformance$ = this.borrowerPerformance$?.pipe(
+        map((p) =>
+          p.filter((e) =>
+            isGood ? e.creditScore >= threshold : e.creditScore < threshold
+          )
+        )
+      );
+    }
+  }
+
   usersWithLoans$: Observable<UserWithLoanAccount[]> =
     this.authService.getUserWithLoanAccount();
 
@@ -42,6 +60,7 @@ export class PerformanceComponent implements OnInit {
 
   searchQuery = new FormControl('');
   users$: Observable<Users | null> = of(null);
+
   constructor(
     private authService: AuthService,
     private loanService: LoanService,
@@ -53,7 +72,7 @@ export class PerformanceComponent implements OnInit {
     this.pdfService.downloadBorrowerData(data);
   }
   downloadPerformancePDF() {
-    this.borrowerPerformance$?.subscribe((data) => {
+    this.filteredBorrowerPerformance$?.subscribe((data) => {
       this.pdfService.downloadBorrowerPerformanceArray(data);
     });
   }

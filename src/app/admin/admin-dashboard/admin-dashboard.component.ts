@@ -10,6 +10,7 @@ import {
   combineLatest,
   debounceTime,
   distinctUntilChanged,
+  last,
   map,
   Observable,
   of,
@@ -24,6 +25,7 @@ import { FormControl } from '@angular/forms';
 import { PdfGenerationService } from '../../services/pdf-generation.service';
 import { Users } from '../../models/accounts/users';
 import { AuthService } from '../../services/auth.service';
+import { CollectorService } from '../../services/collector.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -89,7 +91,24 @@ export class AdminDashboardComponent implements OnInit {
     }))
   );
 
+  collectors$: Users[] = [];
   topCollectors: CollectorWithData[] = [];
+
+  active = 'all';
+
+  selectActiveTab(collectorID: string) {
+    this.active = collectorID;
+
+    if (this.active === 'all') {
+      this.filteredLoan$ = this.loan$;
+    } else {
+      this.filteredLoan$ = this.loan$.pipe(
+        map((loans) =>
+          loans.filter((loan) => loan.loan?.collectorID === collectorID)
+        )
+      );
+    }
+  }
 
   constructor(
     private router: Router,
@@ -97,7 +116,8 @@ export class AdminDashboardComponent implements OnInit {
     private loanTypeService: LoanTypeService,
     private historyService: HistoryService,
     private pdfGenerationService: PdfGenerationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private collectorService: CollectorService
   ) {}
 
   loanStatusData$: Observable<{ label: string; y: number }[]> = combineLatest([
@@ -116,6 +136,9 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit() {
     const id = localStorage.getItem('uid') ?? '';
+    this.authService.getAllCollectors().subscribe((data) => {
+      this.collectors$ = data;
+    });
     this.authService.getUserByID(id).subscribe((data) => {
       this.users$ = data;
     });
@@ -180,8 +203,17 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   download() {
-    this.loan$.subscribe((data) => {
-      this.pdfGenerationService.downloadLoanWithUsers(data);
+    this.filteredLoan$.subscribe((data) => {
+      const title =
+        this.active === 'all'
+          ? 'Manage Loans'
+          : 'Loans Managed ' +
+              this.collectors$.find((e) => e.id === this.active)?.firstName +
+              ' ' +
+              this.collectors$.find((e) => e.id === this.active)?.lastName ||
+            'by Unknown Collector';
+
+      this.pdfGenerationService.downloadLoanReport(title, data);
     });
   }
 

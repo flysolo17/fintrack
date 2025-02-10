@@ -75,6 +75,35 @@
 
 <!-- Loan Listings Section -->
 <div class="bg-white rounded-3 p-3 mt-3">
+  <ul class="nav nav-pills">
+    <li class="nav-item p-1">
+      <button
+        class="btn"
+        (click)="selectActiveTab('all')"
+        [ngClass]="{
+          'btn-secondary': active === 'all',
+          'btn-outline-secondary text-dark': active !== 'all'
+        }"
+      >
+        ALL
+      </button>
+    </li>
+    <li
+      class="nav-item p-1"
+      *ngFor="let collector of collectors$"
+      (click)="selectActiveTab(collector.id)"
+    >
+      <button
+        class="btn"
+        [ngClass]="{
+          'btn-primary': active === collector.id,
+          'btn-outline-secondary text-dark': active !== collector.id
+        }"
+      >
+        {{ collector.firstName }} {{ collector.lastName }}
+      </button>
+    </li>
+  </ul>
   <div class="d-flex align-items-center justify-content-between">
     <h3>Loan Listings</h3>
     <div class="d-flex gap-3">

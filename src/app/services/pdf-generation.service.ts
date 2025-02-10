@@ -487,7 +487,6 @@ export class PdfGenerationService {
     const x = (pageWidth - imgWidth) / 2;
     const y = 10;
 
-    // Add logo if available
     if (this.logoImage.complete && this.logoImage.naturalWidth > 0) {
       doc.addImage(this.logoImage, 'PNG', x, y, imgWidth, imgHeight);
     } else {
@@ -499,20 +498,18 @@ export class PdfGenerationService {
       align: 'center',
     });
 
-    // Get formatted date for filename
     const formattedDate = this.formatDate(new Date());
 
-    // Map filtered data
     const tableData = schedules.map((item: PaymentRow) => {
       const user = `${item.loanWithUser.users?.firstName ?? ''} ${
         item.loanWithUser.users?.lastName ?? ''
       }`.trim();
 
       return [
-        this.formatDate(new Date(item.date)), // Date
-        user, // Customer name
-        this.formatCurrency(Number(item.amount)), // Amount
-        item.status, // Status
+        this.formatDate(new Date(item.date)),
+        user,
+        this.formatCurrency(Number(item.amount)),
+        item.status,
       ];
     });
 
@@ -540,5 +537,66 @@ export class PdfGenerationService {
 
     // Save the PDF
     doc.save(`daily_payment_${formattedDate}.pdf`);
+  }
+
+  downloadLoanReport(title: string, loanData: LoanWithUser[]) {
+    const doc = new jsPDF();
+    const imgWidth = 40;
+    const imgHeight = 40;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const x = (pageWidth - imgWidth) / 2;
+    const y = 10;
+
+    // Add logo if available
+    if (this.logoImage.complete && this.logoImage.naturalWidth > 0) {
+      doc.addImage(this.logoImage, 'PNG', x, y, imgWidth, imgHeight);
+    } else {
+      console.warn('Logo not loaded; skipping logo.');
+    }
+
+    doc.setFontSize(18);
+    doc.text(title, pageWidth / 2, y + imgHeight + 10, {
+      align: 'center',
+    });
+
+    // Get formatted date for filename
+    const formattedDate = this.formatDate(new Date());
+
+    // Map loan data to table format
+    const tableData = loanData.map((item: LoanWithUser) => {
+      const borrower = `${item.users?.firstName ?? ''} ${
+        item.users?.lastName ?? ''
+      }`.trim();
+
+      return [
+        item.loan?.id ?? 'N/A', // Loan ID
+        borrower, // Borrower Name
+        this.formatCurrency(Number(item.loan?.amount ?? 0)), // Payment Amount
+        item.loan?.status ?? 'Unknown', // Status
+        this.formatDate(new Date(item.loan?.createdAt ?? '')), // Created At
+        this.formatDate(new Date(item.loan?.updatedAt ?? '')), // Last Updated
+      ];
+    });
+
+    const tableY = y + imgHeight + 20;
+    autoTable(doc, {
+      startY: tableY,
+      head: [
+        [
+          'Loan ID',
+          'Borrower',
+          'Payment',
+          'Status',
+          'Created At',
+          'Last Updated',
+        ],
+      ],
+      body: tableData,
+      theme: 'grid',
+      headStyles: { fillColor: [22, 160, 133] },
+      bodyStyles: { fontSize: 10 },
+    });
+
+    doc.save(`loan_report_${formattedDate}.pdf`);
   }
 }
