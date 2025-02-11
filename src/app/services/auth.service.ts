@@ -258,7 +258,7 @@ export class AuthService {
     const q = query(
       collection(this.firestore, AUTH_COLLECTION).withConverter(userConverter),
       where('type', '==', UserType.COLLECTOR),
-      where('accountStatus', '==', AccountStatus.ACTIVE),
+
       orderBy('createdAt', 'desc')
     );
     return collectionData(q);

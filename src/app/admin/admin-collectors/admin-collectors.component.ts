@@ -32,7 +32,7 @@ export class AdminCollectorsComponent {
 
   deleteColletor(uid: string) {
     this.authService
-      .deleteAccount(uid)
+      .deleteCollector(uid)
       .then(() => this.toastr.success('Successfully Deleted'))
       .catch((err) => this.toastr.error(err['message']));
   }
