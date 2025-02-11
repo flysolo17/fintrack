@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { LoanService } from '../../services/loan.service';
-import { Users } from '../../models/accounts/users';
+import { AccountStatus, Users } from '../../models/accounts/users';
 import { FormControl } from '@angular/forms';
 import { LoanWithUser } from '../../models/loans/LoanWithUser';
 import { LoanHistory } from '../../models/loans/loan-history';
@@ -10,6 +10,8 @@ import { LoanStatus, PaymentStatus } from '../../models/loans/loan';
 import { ToastrService } from 'ngx-toastr';
 import { CollectorService } from '../../services/collector.service';
 import { PdfGenerationService } from '../../services/pdf-generation.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DeleteConfirmationComponent } from '../../components/delete-confirmation/delete-confirmation.component';
 
 @Component({
   selector: 'app-loans',
@@ -26,7 +28,7 @@ export class LoansComponent implements OnInit {
   user$: Users | null = null;
   collectors$: Users[] = [];
   active = 'all';
-
+  modalService = inject(NgbModal);
   selectActiveTab(collectorID: string) {
     this.active = collectorID;
     if (this.active == 'all') {
@@ -181,5 +183,29 @@ export class LoansComponent implements OnInit {
           'by Unknown Collector';
 
     this.pdfGenerationService.downloadLoanReport(title, this.filteredLoans);
+  }
+
+  displayName(user: Users | null): string {
+    if (user === null) {
+      return 'Unknown user';
+    }
+    if (user.accountStatus === AccountStatus.DELETED) {
+      return 'Unknown user';
+    }
+    return user.firstName + ' ' + user.middleName + ' ' + user.lastName;
+  }
+
+  deleteLoans(loanID: string) {
+    const modal = this.modalService.open(DeleteConfirmationComponent);
+    modal.componentInstance.title = 'Delete Loan';
+    modal.componentInstance.description =
+      'Are you sure you want to delete this loan ?';
+    modal.result.then((data: any) => {
+      if (data === '1') {
+        this.loanService
+          .deleteLoan(loanID)
+          .then(() => this.toastr.success('Successfully Deleted'));
+      }
+    });
   }
 }

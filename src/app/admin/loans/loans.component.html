@@ -65,13 +65,14 @@
             <td>
               <div class="d-flex gap-2 align-items-center">
                 <img
+                  *ngIf="loan.users?.accountStatus === 'ACTIVE'"
                   [src]="loan.users?.profile ?? '../../../assets/profile.png'"
-                  [alt]="formatName(loan.users)"
+                  [alt]="displayName(loan.users)"
                   width="30px"
                   height="30px"
                   class="rounded-circle"
                 />
-                <span class="text-muted">{{ formatName(loan.users) }}</span>
+                <span class="text-muted">{{ displayName(loan.users) }}</span>
               </div>
             </td>
             <td>
@@ -94,10 +95,10 @@
                 {{ loan.loan?.status }}
               </span>
             </td>
-            <td>{{ loan.loan?.createdAt | date : "short" }}</td>
-            <td>{{ loan.loan?.updatedAt | date : "short" }}</td>
+            <td>{{ loan.loan?.createdAt | date : "MMM/dd/yyyy" }}</td>
+            <td>{{ loan.loan?.updatedAt | date : "MMM/dd/yyyy" }}</td>
 
-            <td class="d-flex justify-content-center gap-2">
+            <td>
               <div *ngIf="loan.loan?.status === 'PENDING'">
                 <button
                   class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
@@ -129,6 +130,23 @@
                   <i class="bi bi-check-circle"></i> Completed
                 </button>
               </div>
+              <button
+                class="btn btn-danger btn-sm"
+                (click)="deleteLoans(loan.loan?.id ?? '')"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-trash-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"
+                  />
+                </svg>
+              </button>
             </td>
           </tr>
         </tbody>

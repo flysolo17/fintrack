@@ -7,7 +7,7 @@ import { combineLatest, map, Observable, of, startWith } from 'rxjs';
 import { UserWithLoanAccount } from '../../models/accounts/UserWithLoanAccount';
 import { Loans, LoanStatus, PaymentStatus } from '../../models/loans/loan';
 import { LoanHistory } from '../../models/loans/loan-history';
-import { Users } from '../../models/accounts/users';
+import { AccountStatus, Users } from '../../models/accounts/users';
 import { PdfGenerationService } from '../../services/pdf-generation.service';
 
 export interface BorrowerPerformanceData {
@@ -213,5 +213,22 @@ export class PerformanceComponent implements OnInit {
         },
       ],
     };
+  }
+
+  displayName(user: Users | null): string {
+    if (user === null) {
+      return 'Unknown user';
+    }
+    if (user.accountStatus === AccountStatus.DELETED) {
+      return 'Unknown user';
+    }
+    return user.firstName + ' ' + user.middleName + ' ' + user.lastName;
+  }
+  displayCreditScore(data: BorrowerPerformanceData): string {
+    if (data.user?.accountStatus === AccountStatus.DELETED) {
+      return '---';
+    }
+
+    return String(data.creditScore);
   }
 }

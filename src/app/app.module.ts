@@ -66,6 +66,7 @@ import { EmailVerificationComponent } from './auth/email-verification/email-veri
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DocumentsComponent } from './borrower/documents/documents.component';
 import { HistoryComponent } from './borrower/history/history.component';
+import { DeleteConfirmationComponent } from './components/delete-confirmation/delete-confirmation.component';
 
 @NgModule({
   declarations: [
@@ -114,6 +115,7 @@ import { HistoryComponent } from './borrower/history/history.component';
     EmailVerificationComponent,
     DocumentsComponent,
     HistoryComponent,
+    DeleteConfirmationComponent,
   ],
   imports: [
     BrowserModule,

@@ -8,6 +8,7 @@ import { UserWithLoanAccount } from '../../models/accounts/UserWithLoanAccount';
 import { AuthService } from '../../services/auth.service';
 import { generateRandomNumber } from '../../utils/Constants';
 import { PdfGenerationService } from '../../services/pdf-generation.service';
+import { DeleteConfirmationComponent } from '../../components/delete-confirmation/delete-confirmation.component';
 
 @Component({
   selector: 'app-borrowers',
@@ -40,11 +41,8 @@ export class BorrowersComponent implements OnInit {
     });
     this.authService.getUserWithLoanAccount().subscribe(
       (data) => {
-        const all = data.filter(
-          (e) => e.user?.accountStatus === AccountStatus.ACTIVE
-        );
-        this.loans$ = all;
-        this.filteredLoans$ = all;
+        this.loans$ = data;
+        this.filteredLoans$ = this.loans$;
       },
       (error) => {
         console.error('Error fetching user with loan account:', error);
@@ -127,11 +125,18 @@ export class BorrowersComponent implements OnInit {
   }
 
   delete(id: string) {
-    this.authService
-      .deleteAccount(id)
-      .then((data) => {
-        this.toastr.success('Successfully Deleted!');
-      })
-      .catch((err) => this.toastr.error(err['message']));
+    const modal = this.modalService.open(DeleteConfirmationComponent);
+    modal.componentInstance.title = 'Delete Borrower';
+    modal.componentInstance.description = `Are you sure you want to delete this borrower ? By doing so all data of this account will be deleted including loans, identifications, payment schedule and etc.`;
+    modal.result.then((data: any) => {
+      if (data === '1') {
+        this.authService
+          .deleteBorrower(id)
+          .then((data) => {
+            this.toastr.success('Successfully Deleted!');
+          })
+          .catch((err) => this.toastr.error(err['message']));
+      }
+    });
   }
 }

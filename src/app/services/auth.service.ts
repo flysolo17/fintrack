@@ -56,7 +56,7 @@ import {
   Identifications,
 } from '../models/accounts/Identifications';
 import { ToastrService } from 'ngx-toastr';
-import { IDENTIFICATION_COLLECTION } from './loan.service';
+import { IDENTIFICATION_COLLECTION, LOANS_COLLECTION } from './loan.service';
 import {
   LoanAccount,
   loanAccountConverter,
@@ -64,6 +64,7 @@ import {
 } from '../models/accounts/LoanAccount';
 import { UserWithLoanAccount } from '../models/accounts/UserWithLoanAccount';
 import { FirebaseError } from '@angular/fire/app';
+import { loanConverter } from '../models/loans/loan';
 
 export const AUTH_COLLECTION = 'users';
 export const LOAN_ACCOUNT = 'loan-account';
@@ -258,6 +259,14 @@ export class AuthService {
       collection(this.firestore, AUTH_COLLECTION).withConverter(userConverter),
       where('type', '==', UserType.COLLECTOR),
       where('accountStatus', '==', AccountStatus.ACTIVE),
+      orderBy('createdAt', 'desc')
+    );
+    return collectionData(q);
+  }
+  getAllBorrowers(): Observable<Users[]> {
+    const q = query(
+      collection(this.firestore, AUTH_COLLECTION).withConverter(userConverter),
+      where('type', '==', UserType.BORROWER),
       orderBy('createdAt', 'desc')
     );
     return collectionData(q);
@@ -551,5 +560,62 @@ export class AuthService {
         }
       );
     });
+  }
+
+  async deleteBorrower(id: string): Promise<boolean> {
+    try {
+      const accountRef = doc(this.firestore, AUTH_COLLECTION, id);
+      const result = await getDoc(accountRef.withConverter(userConverter));
+
+      if (!result.exists()) {
+        console.log('User not found');
+        return false;
+      }
+
+      const user = result.data();
+      const username = user.username;
+
+      // Delete related documents
+      await Promise.all([
+        deleteDoc(doc(this.firestore, LOAN_ACCOUNT, username)),
+        deleteDoc(doc(this.firestore, IDENTIFICATION_COLLECTION, username)),
+      ]);
+
+      // Fetch related loans
+      const loansSnapshot = await getDocs(
+        query(
+          collection(this.firestore, LOANS_COLLECTION).withConverter(
+            loanConverter
+          ),
+          where('loanAccountID', '==', username)
+        )
+      );
+
+      const historySnapshot = await getDocs(
+        query(
+          collection(this.firestore, LOANS_COLLECTION).withConverter(
+            loanConverter
+          ),
+          where('borrowerID', '==', username)
+        )
+      );
+
+      // Delete all related loans
+      const loanDeletions = loansSnapshot.docs.map((doc) => deleteDoc(doc.ref));
+      const historyDeletions = historySnapshot.docs.map((doc) =>
+        deleteDoc(doc.ref)
+      );
+
+      await Promise.all([...loanDeletions, ...historyDeletions]);
+
+      // Finally, delete the user account
+      await deleteDoc(accountRef);
+
+      console.log('Borrower and related data deleted successfully');
+      return true;
+    } catch (error) {
+      console.error('Error deleting borrower:', error);
+      return false;
+    }
   }
 }

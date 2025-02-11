@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   collection,
   collectionData,
+  deleteDoc,
   doc,
   Firestore,
   getDoc,
@@ -82,6 +83,34 @@ export class LoanService {
     private toastr: ToastrService,
     private encryptionService: EncryptionService
   ) {}
+
+  deleteLoan(id: string) {
+    let loanRef = doc(this.firestore, LOANS_COLLECTION, id);
+    let historyRef = collection(this.firestore, LOAN_HISTORY_COLLECTION);
+
+    return getDoc(loanRef)
+      .then((docSnap) => {
+        if (docSnap.exists()) {
+          // Move loan data to history collection
+          let loanData = docSnap.data();
+          setDoc(doc(historyRef, id), { ...loanData, deletedAt: new Date() })
+            .then(() => {
+              // Delete the loan from the main collection
+              deleteDoc(loanRef)
+                .then(() => {
+                  console.log('Loan moved to history and deleted successfully');
+                })
+                .catch((error) => console.error('Error deleting loan:', error));
+            })
+            .catch((error) =>
+              console.error('Error saving loan to history:', error)
+            );
+        } else {
+          console.log('Loan not found');
+        }
+      })
+      .catch((error) => console.error('Error fetching loan:', error));
+  }
 
   getAllLoans(): Observable<Loans[]> {
     const q = query(

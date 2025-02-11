@@ -23,7 +23,7 @@ import { HistoryService } from '../../services/history.service';
 import { CollectorWithData } from '../../models/accounts/CollectorWithData';
 import { FormControl } from '@angular/forms';
 import { PdfGenerationService } from '../../services/pdf-generation.service';
-import { Users } from '../../models/accounts/users';
+import { AccountStatus, Users } from '../../models/accounts/users';
 import { AuthService } from '../../services/auth.service';
 import { CollectorService } from '../../services/collector.service';
 
@@ -95,6 +95,13 @@ export class AdminDashboardComponent implements OnInit {
   topCollectors: CollectorWithData[] = [];
 
   active = 'all';
+
+  borrowers$ = this.authService.getAllBorrowers();
+  activeBorrowers$ = this.borrowers$.pipe(
+    map((e) => {
+      return e.filter((user) => user.accountStatus == AccountStatus.ACTIVE);
+    })
+  );
 
   selectActiveTab(collectorID: string) {
     this.active = collectorID;

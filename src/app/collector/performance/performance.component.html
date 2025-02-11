@@ -92,6 +92,7 @@
               <td>
                 <div class="d-flex align-items-center">
                   <img
+                    *ngIf="borrower.user?.accountStatus === 'ACTIVE'"
                     [src]="
                       borrower.user?.profile ?? '../../../assets/profile.png'
                     "
@@ -101,12 +102,11 @@
                     class="rounded-circle border"
                   />
                   <span class="ms-2">
-                    {{ borrower?.user?.firstName }}
-                    {{ borrower.user?.lastName }}
+                    {{ displayName(borrower.user) }}
                   </span>
                 </div>
               </td>
-              <td>{{ borrower.creditScore }}</td>
+              <td>{{ displayCreditScore(borrower) }}</td>
               <td>{{ borrower.totalLoans }}</td>
               <td>{{ borrower.activeLoans }}</td>
               <td>{{ borrower.totalOverdues }}</td>
