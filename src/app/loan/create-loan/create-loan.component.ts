@@ -131,6 +131,7 @@ export class CreateLoanComponent implements OnInit {
       payableDays: type?.payableDays ?? 0,
       status: LoanAccountStatus.PENDING,
       address: formValues.address,
+      collectorID: this.collector$?.id ?? '',
     };
 
     this.isLoading = true;

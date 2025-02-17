@@ -3,12 +3,13 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
-import { AccountStatus, Users } from '../../models/accounts/users';
+import { AccountStatus, Users, UserType } from '../../models/accounts/users';
 import { UserWithLoanAccount } from '../../models/accounts/UserWithLoanAccount';
 import { AuthService } from '../../services/auth.service';
 import { generateRandomNumber } from '../../utils/Constants';
 import { PdfGenerationService } from '../../services/pdf-generation.service';
 import { DeleteConfirmationComponent } from '../../components/delete-confirmation/delete-confirmation.component';
+import { User } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-borrowers',
@@ -26,6 +27,20 @@ export class BorrowersComponent implements OnInit {
   loanStatus: any;
   user$: Users | null = null;
   loanService: any;
+  collectors$: Users[] = [];
+  active = 'all';
+
+  selectActiveTab(collectorID: string) {
+    this.active = collectorID;
+
+    if (this.active === 'all') {
+      this.filteredLoans$ = this.loans$;
+    } else {
+      this.filteredLoans$ = this.loans$.filter(
+        (e) => e.loanAccount?.collectorID === collectorID
+      );
+    }
+  }
 
   constructor(
     private router: Router,
@@ -36,13 +51,23 @@ export class BorrowersComponent implements OnInit {
 
   ngOnInit(): void {
     let uid = localStorage.getItem('uid') ?? '';
+    this.authService.getAllCollectors().subscribe((data) => {
+      this.collectors$ = data;
+    });
     this.authService.getUserData(uid).then((data) => {
       this.user$ = data;
     });
     this.authService.getUserWithLoanAccount().subscribe(
       (data) => {
-        this.loans$ = data;
-        this.filteredLoans$ = this.loans$;
+        if (this.user$?.type === UserType.COLLECTOR) {
+          this.loans$ = data.filter(
+            (e) => e.loanAccount?.collectorID === this.user$?.id
+          );
+          this.filteredLoans$ = this.loans$;
+        } else {
+          this.loans$ = data;
+          this.filteredLoans$ = this.loans$;
+        }
       },
       (error) => {
         console.error('Error fetching user with loan account:', error);

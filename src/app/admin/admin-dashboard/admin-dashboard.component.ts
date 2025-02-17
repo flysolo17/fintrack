@@ -91,9 +91,8 @@ export class AdminDashboardComponent implements OnInit {
     }))
   );
 
-  collectors$: Users[] = [];
   topCollectors: CollectorWithData[] = [];
-
+  collectors$: Users[] = [];
   active = 'all';
 
   borrowers$ = this.authService.getAllBorrowers();
@@ -195,7 +194,7 @@ export class AdminDashboardComponent implements OnInit {
     const pieChart = new CanvasJS.Chart('pieChartContainer', {
       animationEnabled: true,
       title: {
-        text: 'Loan Loan Amount Distributed',
+        text: 'Loan Amount Distributed',
       },
       data: [
         {

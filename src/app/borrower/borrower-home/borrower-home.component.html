@@ -1,133 +1,156 @@
-<div class="container-fluid p-3">
-  <div class="row g-3">
-    <div class="col-3">
-      <div
-        class="box bg-dark text-light p-3 rounded-3"
-        *ngIf="activeLoans$ | async as loans"
-      >
-        <small>Active Loans</small>
-        <h5>{{ loans.length }}</h5>
-      </div>
+<div class="d-flex flex-column flex-md-row">
+  <!-- Sidebar Navigation (Desktop) -->
+  <div class="bg-dark text-white p-3 d-none d-md-block sidebar">
+    <h5>Borrower Dashboard</h5>
+    <hr />
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a
+          class="nav-link text-white"
+          [ngClass]="{ active: active === 1 }"
+          (click)="active = 1"
+        >
+          Payment Schedule/Loan history
+        </a>
+      </li>
+      <li class="nav-item mt-3">
+        <button class="btn btn-light w-100" (click)="logout()">Logout</button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Mobile Sidebar Toggle Button -->
+  <button
+    class="btn btn-dark d-md-none p-2 m-2"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#mobileSidebar"
+  >
+    ☰ Menu
+  </button>
+
+  <!-- Mobile Sidebar (Collapsible) -->
+  <div
+    class="collapse bg-dark text-white d-md-none sidebar-mobile"
+    id="mobileSidebar"
+  >
+    <div class="p-3">
+      <h5>Borrower Dashboard</h5>
+      <hr />
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a
+            class="nav-link text-white"
+            [ngClass]="{ active: active === 1 }"
+            (click)="active = 1"
+          >
+            Payment Schedule/Loan history
+          </a>
+        </li>
+        <li class="nav-item mt-3">
+          <button class="btn btn-light w-100" (click)="logout()">Logout</button>
+        </li>
+      </ul>
     </div>
-    <div class="col-3">
-      <div class="box bg-dark text-light p-3 rounded-3">
-        <small>Unpaid </small>
-        <h5>{{ unpaid }}</h5>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-grow-1 p-4 mt-3 mt-md-0 content">
+    <!-- Profile Section -->
+    <div class="mb-4 d-flex align-items-center gap-3">
+      <img
+        [src]="users$?.profile ?? '../../../assets/profile.png'"
+        class="rounded-circle"
+        width="80px"
+        height="80px"
+      />
+      <div>
+        <h6 class="text-dark">
+          {{ users$?.lastName }} {{ users$?.firstName }}
+          {{ users$?.middleName }}
+        </h6>
+        <span class="text-muted">{{ users$?.username }} </span>
       </div>
     </div>
 
-    <div class="col-3">
-      <div class="box bg-dark text-light p-3 rounded-3">
-        <small>Paid </small>
-        <h5>{{ paid }}</h5>
-      </div>
-    </div>
-
-    <div class="col-3">
-      <div class="box bg-dark text-light p-3 rounded-3">
-        <small>Overdue </small>
-        <h5>{{ overdue }}</h5>
-      </div>
-    </div>
-
-    <div class="col-7">
-      <div class="shadow-sm p-3 mb-5 bg-white rounded-3">
-        <div class="d-flex justify-content-between align-items-center">
-          <h5>Payment Schedule</h5>
-          <div class="d-flex align-items-center gap-3 w-25">
-            <input
-              type="text"
-              [formControl]="searhText$"
-              class="form-control w-100"
-              placeholder="Search loan ID"
-            />
+    <!-- Active Loans Section -->
+    <div class="row g-3">
+      <div class="col-12 col-md-6" *ngFor="let loans of activeLoans$ | async">
+        <div class="card">
+          <div class="card-body">
+            <h5>Loan ID: {{ loans.id }}</h5>
+            <p>
+              <strong>Amount:</strong> {{ loans.amount | currency : "PHP" }}
+            </p>
+            <p><strong>Interest:</strong> {{ loans.interest }}%</p>
+            <p>
+              <strong>Amount Paid:</strong>
+              {{ loans.amountPaid | currency : "PHP" }}
+            </p>
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let schedule of loans.paymentSchedule">
+                    <td>{{ schedule.date | date : "shortDate" }}</td>
+                    <td>{{ schedule.amount | currency : "PHP" }}</td>
+                    <td>
+                      <span
+                        class="badge"
+                        [ngClass]="{
+                          'bg-success': schedule.status === 'PAID',
+                          'bg-warning': schedule.status === 'UNPAID',
+                          'bg-danger': schedule.status === 'OVERDUE'
+                        }"
+                      >
+                        {{ schedule.status }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-
-        <div class="table-responsive">
-          <table class="table table-hover table-borderless">
-            <thead>
-              <tr>
-                <th>Loan ID</th>
-                <th>Amount</th>
-
-                <th>Due Date</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let loan of filteredPayments$ | async">
-                <td>{{ loan.loanId }}</td>
-                <td>{{ loan.amount | currency : "PHP" }}</td>
-                <td>{{ loan.date | date : "medium" }}</td>
-
-                <td>
-                  <span
-                    class="badge"
-                    [ngClass]="{
-                      'bg-success': loan.status === 'PAID',
-                      'bg-danger': loan.status === 'OVERDUE',
-                      'bg-warning': loan.status === 'UNPAID'
-                    }"
-                  >
-                    {{ loan.status }}
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
 
-    <div class="col-5">
-      <div class="shadow-sm p-3 mb-5 bg-white rounded-3">
-        <h5>Active Loans</h5>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item" *ngFor="let loan of activeLoans$ | async">
-            <div class="card">
-              <div class="card-header">
-                <h6 class="card-title">{{ loan.id }}</h6>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-6">
-                    <small class="text-muted">Loan ID</small>
-                    <h6 class="fw-bold">{{ loan.id }}</h6>
-                  </div>
-                  <div class="col-6">
-                    <small class="text-muted">Amount</small>
-                    <h6 class="fw-bold text-success">
-                      {{ loan.amount | currency : "PHP" }}
-                    </h6>
-                  </div>
-                  <div class="col-6">
-                    <small class="text-muted">Interest</small>
-                    <h6>{{ loan.interest }}%</h6>
-                  </div>
-                  <div class="col-6">
-                    <small class="text-muted">Amount Paid</small>
-                    <h6 class="text-info">
-                      {{ loan.amountPaid | currency : "PHP" }}
-                    </h6>
-                  </div>
-
-                  <div class="col-6 mt-3">
-                    <small class="text-muted">Remaining Balance </small>
-                    <h6 class="text-danger">
-                      {{ loan.amount - loan.amountPaid | currency : "PHP" }}
-                    </h6>
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer">
-                <button class="btn btn-success" (click)="createPdf(loan)">
-                  Download
-                </button>
-              </div>
-            </div>
-          </li>
-        </ul>
+    <!-- Summary Section -->
+    <div class="container-fluid p-3">
+      <div class="row g-3">
+        <div class="col-12 col-md-3">
+          <div
+            class="box bg-dark text-light p-3 rounded-3"
+            *ngIf="activeLoans$ | async as loans"
+          >
+            <small>Active Loans</small>
+            <h5>{{ loans.length }}</h5>
+          </div>
+        </div>
+        <div class="col-12 col-md-3">
+          <div class="box bg-dark text-light p-3 rounded-3">
+            <small>Unpaid </small>
+            <h5>{{ unpaid }}</h5>
+          </div>
+        </div>
+        <div class="col-12 col-md-3">
+          <div class="box bg-dark text-light p-3 rounded-3">
+            <small>Paid </small>
+            <h5>{{ paid }}</h5>
+          </div>
+        </div>
+        <div class="col-12 col-md-3">
+          <div class="box bg-dark text-light p-3 rounded-3">
+            <small>Overdue </small>
+            <h5>{{ overdue }}</h5>
+          </div>
+        </div>
       </div>
     </div>
   </div>

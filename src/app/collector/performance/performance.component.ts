@@ -228,7 +228,6 @@ export class PerformanceComponent implements OnInit {
     if (data.user?.accountStatus === AccountStatus.DELETED) {
       return '---';
     }
-
     return String(data.creditScore);
   }
 }

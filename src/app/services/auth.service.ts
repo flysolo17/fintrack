@@ -65,6 +65,7 @@ import {
 import { UserWithLoanAccount } from '../models/accounts/UserWithLoanAccount';
 import { FirebaseError } from '@angular/fire/app';
 import { loanConverter } from '../models/loans/loan';
+import { LOAN_HISTORY_COLLECTION } from './history.service';
 
 export const AUTH_COLLECTION = 'users';
 export const LOAN_ACCOUNT = 'loan-account';
@@ -593,7 +594,7 @@ export class AuthService {
 
       const historySnapshot = await getDocs(
         query(
-          collection(this.firestore, LOANS_COLLECTION).withConverter(
+          collection(this.firestore, LOAN_HISTORY_COLLECTION).withConverter(
             loanConverter
           ),
           where('borrowerID', '==', username)

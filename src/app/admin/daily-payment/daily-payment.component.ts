@@ -4,7 +4,7 @@ import { PaymentSchedule, PaymentStatus } from '../../models/loans/loan';
 import { LoanWithUser } from '../../models/loans/LoanWithUser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaymentDialogComponent } from '../modals/payment-dialog/payment-dialog.component';
-import { Users } from '../../models/accounts/users';
+import { Users, UserType } from '../../models/accounts/users';
 import { AuthService } from '../../services/auth.service';
 import { Observable, of } from 'rxjs';
 import { LoanHistory } from '../../models/loans/loan-history';
@@ -55,19 +55,24 @@ export class DailyPaymentComponent implements OnInit {
     }
     this.loanService.getPaymentsWithUser().subscribe(
       (data) => {
-        console.log(data);
         this.payments = [];
         data.forEach((loan) => {
-          loan.loan?.paymentSchedule.forEach((payment) => {
-            this.payments.push({
-              loanWithUser: loan,
-              date: this.formatDate(payment.date),
-              customer: `${loan.users?.firstName} ${loan.users?.lastName}`,
-              amount: payment.amount.toString(),
-              status: payment.status,
-              schedule: payment,
+          if (
+            (this.users$?.type === UserType.COLLECTOR &&
+              this.users$.id === loan.loan?.collectorID) ||
+            this.users$?.type === UserType.ADMIN
+          ) {
+            loan.loan?.paymentSchedule.forEach((payment) => {
+              this.payments.push({
+                loanWithUser: loan,
+                date: this.formatDate(payment.date),
+                customer: `${loan.users?.firstName} ${loan.users?.lastName}`,
+                amount: payment.amount.toString(),
+                status: payment.status,
+                schedule: payment,
+              });
             });
-          });
+          }
         });
         console.log('Payments: ', this.payments);
         this.filterPaymentsByDate();
