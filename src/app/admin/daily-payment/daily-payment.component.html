@@ -33,8 +33,9 @@
             <td>{{ payment.customer }}</td>
             <td>
               <span class="text-peso"
-                >&#8369;{{ payment.amount | number : "1.2-2" }}</span
-              >
+                >{{ payment.amount | currency : "PHP" }} of
+                {{ payment.loanWithUser.loan?.amountPerDay | currency : "PHP" }}
+              </span>
             </td>
             <td>
               <span

@@ -46,13 +46,13 @@
 
   <!-- Pending Loans -->
   <div class="card bg-warning text-white">
-    <div class="card-title">Pending Loans</div>
+    <div class="card-title">Pending Borrowers</div>
     <h5>{{ (pending$ | async)?.length }}</h5>
   </div>
 
   <!-- Defaulted Loans (Rejected) -->
   <div class="card bg-danger text-white">
-    <div class="card-title">Defaulted Loans</div>
+    <div class="card-title">Defaulted Borrowers</div>
     <h5>{{ (rejected$ | async)?.length }}</h5>
   </div>
 </div>

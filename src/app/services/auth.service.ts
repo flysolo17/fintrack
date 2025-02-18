@@ -64,7 +64,7 @@ import {
 } from '../models/accounts/LoanAccount';
 import { UserWithLoanAccount } from '../models/accounts/UserWithLoanAccount';
 import { FirebaseError } from '@angular/fire/app';
-import { loanConverter } from '../models/loans/loan';
+import { loanConverter, Loans } from '../models/loans/loan';
 import { LOAN_HISTORY_COLLECTION } from './history.service';
 
 export const AUTH_COLLECTION = 'users';
@@ -619,4 +619,40 @@ export class AuthService {
       return false;
     }
   }
+  // addAmountPerDayField() {
+  //   const batch = writeBatch(this.firestore);
+  //   getDocs(
+  //     collection(this.firestore, LOANS_COLLECTION).withConverter(loanConverter)
+  //   )
+  //     .then((querySnapshot) => {
+  //       querySnapshot.docs.forEach((doc) => {
+  //         const loan = doc.data();
+
+  //         // Ensure paymentSchedule exists and is not empty
+  //         if (!loan.paymentSchedule || loan.paymentSchedule.length === 0) {
+  //           console.warn(`Loan ${doc.id} has no payment schedule, skipping.`);
+  //           return;
+  //         }
+
+  //         const lastSched =
+  //           loan.paymentSchedule[loan.paymentSchedule.length - 1];
+
+  //         // Ensure lastSched has an amount field
+  //         const amountPerDay = lastSched?.amount ?? 0;
+
+  //         // Update the loan document with new field
+  //         batch.update(doc.ref, {
+  //           amountPerDay,
+  //         });
+  //       });
+
+  //       return batch.commit();
+  //     })
+  //     .then(() => {
+  //       console.log('Successfully updated loans with amountPerDay.');
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error updating loans: ', error);
+  //     });
+  // }
 }

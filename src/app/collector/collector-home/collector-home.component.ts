@@ -10,10 +10,15 @@ import {
   Observable,
   of,
 } from 'rxjs';
-import { Loans } from '../../models/loans/loan';
+import { Loans, LoanStatus } from '../../models/loans/loan';
 import { LoanWithUser } from '../../models/loans/LoanWithUser';
 import { FormControl } from '@angular/forms';
 import { PdfGenerationService } from '../../services/pdf-generation.service';
+import {
+  LoanAccount,
+  LoanAccountStatus,
+} from '../../models/accounts/LoanAccount';
+import { AccountStatus } from '../../models/accounts/users';
 
 @Component({
   selector: 'app-collector-home',
@@ -32,9 +37,19 @@ export class CollectorHomeComponent implements OnInit {
     firstSchedule?: Date | null;
     lastSchedule?: Date | null;
   })[] = [];
-
+  active: (LoanWithUser & {
+    firstSchedule?: Date | null;
+    lastSchedule?: Date | null;
+  })[] = [];
   searchText$ = new FormControl('');
-
+  pending: (LoanWithUser & {
+    firstSchedule?: Date | null;
+    lastSchedule?: Date | null;
+  })[] = [];
+  defaulted: (LoanWithUser & {
+    firstSchedule?: Date | null;
+    lastSchedule?: Date | null;
+  })[] = [];
   constructor(
     private loanService: LoanService,
     private router: Router,
@@ -60,6 +75,15 @@ export class CollectorHomeComponent implements OnInit {
               : null,
         };
       });
+      this.active = this.loansWithUsers.filter(
+        (e) => e.loanAccount?.status === LoanAccountStatus.ACCEPTED
+      );
+      this.pending = this.loansWithUsers.filter(
+        (e) => e.loanAccount?.status === LoanAccountStatus.PENDING
+      );
+      this.defaulted = this.loansWithUsers.filter(
+        (e) => e.loanAccount?.status === LoanAccountStatus.DEFAULTED
+      );
     });
 
     this.loanHistory

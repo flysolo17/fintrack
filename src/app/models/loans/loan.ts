@@ -7,6 +7,7 @@ export interface Loans {
   amount: number;
   interest: number;
   amountPaid: number;
+  amountPerDay: number;
   paymentSchedule: PaymentSchedule[];
   status: LoanStatus;
   createdAt: Date;

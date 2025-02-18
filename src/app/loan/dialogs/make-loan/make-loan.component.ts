@@ -70,6 +70,7 @@ export class MakeLoanComponent implements OnInit {
         createdAt: new Date(),
         updatedAt: new Date(),
         collectorID: this.collector?.id ?? '',
+        amountPerDay: amountWithInterest,
       };
       this.confirmLoan(loan, amount);
     } else {

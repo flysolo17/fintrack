@@ -26,6 +26,7 @@ import { PdfGenerationService } from '../../services/pdf-generation.service';
 import { AccountStatus, Users } from '../../models/accounts/users';
 import { AuthService } from '../../services/auth.service';
 import { CollectorService } from '../../services/collector.service';
+import { LoanAccountStatus } from '../../models/accounts/LoanAccount';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -53,13 +54,17 @@ export class AdminDashboardComponent implements OnInit {
 
   pending$: Observable<LoanWithUser[]> = this.loan$.pipe(
     map((loans) =>
-      loans.filter((loan) => loan.loan?.status === LoanStatus.PENDING)
+      loans.filter(
+        (loan) => loan.loanAccount?.status === LoanAccountStatus.PENDING
+      )
     )
   );
 
   rejected$: Observable<LoanWithUser[]> = this.loan$.pipe(
     map((loans) =>
-      loans.filter((loan) => loan.loan?.status === LoanStatus.DECLINED)
+      loans.filter(
+        (loan) => loan.loanAccount?.status === LoanAccountStatus.DEFAULTED
+      )
     )
   );
   productsLoansAvailed$: Observable<ProductWithAvailed[]> =

@@ -9,10 +9,8 @@ export interface LoanAccount {
   amount: number;
   interest: number;
   status: LoanAccountStatus;
-
   creditScore: number;
   payableDays: number;
-
   createdAt: Date;
   updatedAt: Date;
 }

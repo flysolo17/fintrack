@@ -479,7 +479,11 @@ export class PdfGenerationService {
     doc.save('loan_with_users.pdf');
   }
 
-  downloadDailyPayment(schedules: PaymentRow[], totalCollected: number) {
+  downloadDailyPayment(
+    schedules: PaymentRow[],
+    collectorName: string,
+    totalCollected: number
+  ) {
     const doc = new jsPDF();
     const imgWidth = 40;
     const imgHeight = 40;
@@ -509,6 +513,7 @@ export class PdfGenerationService {
         this.formatDate(new Date(item.date)),
         user,
         this.formatCurrency(Number(item.amount)),
+        this.formatCurrency(Number(item.amountPerDay)),
         item.status,
       ];
     });
@@ -517,7 +522,7 @@ export class PdfGenerationService {
     const tableY = y + imgHeight + 20;
     autoTable(doc, {
       startY: tableY,
-      head: [['Date', 'Customer', 'Amount', 'Status']],
+      head: [['Date', 'Customer', 'Amount', 'Payment Amount', 'Status']],
       body: tableData,
       theme: 'grid',
       headStyles: { fillColor: [22, 160, 133] },
@@ -527,15 +532,18 @@ export class PdfGenerationService {
     // Get the last position after the table
     const finalY = (doc as any).lastAutoTable.finalY || tableY + 10;
 
-    // Add total collected text
     doc.setFontSize(12);
-    doc.text(
-      `Total Collected: ${this.formatCurrency(totalCollected)}`,
-      pageWidth - 60,
-      finalY + 10
-    );
+    const collectorText = `Collector: ${collectorName}`;
+    const totalCollectedText = `Total Collected: ${this.formatCurrency(
+      totalCollected
+    )}`;
 
-    // Save the PDF
+    const marginLeft = 15; // Adjust left margin
+    const marginRight = pageWidth - 80; // Adjust right margin for spacing
+
+    doc.text(collectorText, marginLeft, finalY + 10);
+    doc.text(totalCollectedText, marginRight, finalY + 10);
+
     doc.save(`daily_payment_${formattedDate}.pdf`);
   }
 

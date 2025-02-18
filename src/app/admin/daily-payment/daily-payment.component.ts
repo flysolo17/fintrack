@@ -17,6 +17,7 @@ export interface PaymentRow {
   date: string;
   customer: string;
   amount: string;
+  amountPerDay: string;
   status: PaymentStatus;
   schedule: PaymentSchedule;
 }
@@ -42,7 +43,15 @@ export class DailyPaymentComponent implements OnInit {
     private pdfGeneration: PdfGenerationService
   ) {}
   generatePdf(paymenRow: PaymentRow[]) {
-    this.pdfGeneration.downloadDailyPayment(paymenRow, this.totalCollected$);
+    let fullname = `${this.users$?.firstName ?? ''} ${
+      this.users$?.middleName ?? ''
+    } ${this.users$?.lastName ?? ''}`.trim();
+
+    let total = paymenRow
+      .filter((e) => e.status !== PaymentStatus.UNPAID)
+      .reduce((sum, e) => sum + Number(e.amountPerDay), 0);
+
+    this.pdfGeneration.downloadDailyPayment(paymenRow, fullname, total);
   }
 
   ngOnInit(): void {
@@ -68,6 +77,7 @@ export class DailyPaymentComponent implements OnInit {
                 date: this.formatDate(payment.date),
                 customer: `${loan.users?.firstName} ${loan.users?.lastName}`,
                 amount: payment.amount.toString(),
+                amountPerDay: loan.loan?.amountPerDay?.toString() || '0',
                 status: payment.status,
                 schedule: payment,
               });

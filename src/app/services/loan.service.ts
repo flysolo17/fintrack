@@ -259,6 +259,7 @@ export class LoanService {
                 usersSnapshot.docs.length > 0
                   ? usersSnapshot.docs[0].data()
                   : null,
+              loanAccount: null,
             }))
           );
         });
@@ -283,16 +284,33 @@ export class LoanService {
             where('username', '==', loan.loanAccountID),
             limit(1)
           );
-          return from(getDocs(userQuery)).pipe(
-            map((usersSnapshot) => ({
+
+          const loanAccountQuery = query(
+            collection(this.firestore, LOAN_ACCOUNT).withConverter(
+              loanAccountConverter
+            ), // Ensure correct collection
+            where('id', '==', loan.loanAccountID),
+            limit(1)
+          );
+
+          return forkJoin({
+            userSnapshot: from(getDocs(userQuery)),
+            loanAccountSnapshot: from(getDocs(loanAccountQuery)),
+          }).pipe(
+            map(({ userSnapshot, loanAccountSnapshot }) => ({
               loan,
               users:
-                usersSnapshot.docs.length > 0
-                  ? usersSnapshot.docs[0].data()
+                userSnapshot.docs.length > 0
+                  ? userSnapshot.docs[0].data()
+                  : null,
+              loanAccount:
+                loanAccountSnapshot.docs.length > 0
+                  ? loanAccountSnapshot.docs[0].data()
                   : null,
             }))
           );
         });
+
         return forkJoin(loanWithUserObservables);
       })
     );
@@ -471,7 +489,23 @@ export class LoanService {
               ? null
               : (userSnap.docs[0].data() as Users);
 
-            return { loan, users: user } as LoanWithUser;
+            const loanAccountQuery = query(
+              collection(this.firestore, LOAN_ACCOUNT).withConverter(
+                loanAccountConverter
+              ),
+              where('id', '==', loan.loanAccountID),
+              limit(1)
+            );
+
+            const loanAccountSnap = await getDocs(loanAccountQuery);
+            const loanAccount = loanAccountSnap.empty
+              ? null
+              : (loanAccountSnap.docs[0].data() as LoanAccount);
+            return {
+              loan,
+              users: user,
+              loanAccount: loanAccount,
+            } as LoanWithUser;
           }),
           toArray()
         )
