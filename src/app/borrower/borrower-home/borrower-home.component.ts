@@ -35,6 +35,8 @@ export class BorrowerHomeComponent implements OnInit {
   loanHistoryByMonth$: Observable<LoanHistoryByMonth[]> = of([]);
   searhText$ = new FormControl('');
   filteredPayments$: Observable<PaymentRow[]> = of([]);
+loan: any;
+totalCollected$: string | number | undefined;
 
   constructor(
     private loanService: LoanService,

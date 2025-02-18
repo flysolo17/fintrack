@@ -1,50 +1,15 @@
-<div class="d-flex flex-column flex-md-row">
-  <!-- Sidebar Navigation (Desktop) -->
-  <div class="bg-dark text-white p-3 d-none d-md-block sidebar">
-    <h5>Borrower Dashboard</h5>
-    <hr />
-    <ul class="nav flex-column">
-      <li class="nav-item">
-        <a
-          class="nav-link text-white"
-          [ngClass]="{ active: active === 1 }"
-          (click)="active = 1"
-        >
-          Payment Schedule/Loan history
-        </a>
-      </li>
-      <li class="nav-item mt-3">
-        <button class="btn btn-light w-100" (click)="logout()">Logout</button>
-      </li>
-    </ul>
-  </div>
 
-  <!-- Mobile Sidebar Toggle Button -->
-  <button
-    class="btn btn-dark d-md-none p-2 m-2"
-    type="button"
-    data-bs-toggle="collapse"
-    data-bs-target="#mobileSidebar"
-  >
-    ☰ Menu
-  </button>
+
 
   <!-- Mobile Sidebar (Collapsible) -->
-  <div
-    class="collapse bg-dark text-white d-md-none sidebar-mobile"
-    id="mobileSidebar"
-  >
+  <div class="collapse bg-dark text-white d-md-none sidebar-mobile" id="mobileSidebar">
     <div class="p-3">
       <h5>Borrower Dashboard</h5>
       <hr />
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a
-            class="nav-link text-white"
-            [ngClass]="{ active: active === 1 }"
-            (click)="active = 1"
-          >
-            Payment Schedule/Loan history
+          <a class="nav-link text-white" [ngClass]="{ active: active === 1 }" (click)="active = 1">
+            Payment Schedule/Loan History
           </a>
         </li>
         <li class="nav-item mt-3">
@@ -53,40 +18,67 @@
       </ul>
     </div>
   </div>
+  
+      <h5>Borrower Dashboard</h5>
+      <hr />
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link text-white" [ngClass]="{ active: active === 1 }" (click)="active = 1">
+            Payment Schedule/Loan History
+          </a>
+        </li>
+      </ul>
+
+    <!-- Summary Section -->
+    <div class="container-fluid p-3">
+      <div class="row g-3">
+        <div class="col-12 col-md-3" *ngIf="activeLoans$ | async as loans">
+          <div class="box bg-dark text-light p-3 rounded-3">
+            <small>Active Loans</small>
+            <h5>{{ loans.length }}</h5>
+          </div>
+        </div>
+        <div class="col-12 col-md-3">
+          <div class="box bg-dark text-light p-3 rounded-3">
+            <small>Unpaid</small>
+            <h5>{{ unpaid }}</h5>
+          </div>
+        </div>
+        <div class="col-12 col-md-3">
+          <div class="box bg-dark text-light p-3 rounded-3">
+            <small>Paid</small>
+            <h5>{{ paid }}</h5>
+          </div>
+        </div>
+        <div class="col-12 col-md-3">
+          <div class="box bg-dark text-light p-3 rounded-3">
+            <small>Overdue</small>
+            <h5>{{ overdue }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
 
   <!-- Main Content -->
   <div class="flex-grow-1 p-4 mt-3 mt-md-0 content">
     <!-- Profile Section -->
     <div class="mb-4 d-flex align-items-center gap-3">
-      <img
-        [src]="users$?.profile ?? '../../../assets/profile.png'"
-        class="rounded-circle"
-        width="80px"
-        height="80px"
-      />
+      <img [src]="users$?.profile ?? '../../../assets/profile.png'" class="rounded-circle" width="80px" height="80px" />
       <div>
-        <h6 class="text-dark">
-          {{ users$?.lastName }} {{ users$?.firstName }}
-          {{ users$?.middleName }}
-        </h6>
-        <span class="text-muted">{{ users$?.username }} </span>
+        <h6 class="text-dark">{{ users$?.lastName }} {{ users$?.firstName }} {{ users$?.middleName }}</h6>
+        <span class="text-muted">{{ users$?.username }}</span>
       </div>
     </div>
 
     <!-- Active Loans Section -->
     <div class="row g-3">
-      <div class="col-12 col-md-6" *ngFor="let loans of activeLoans$ | async">
+      <div class="col-12 col-md-6" *ngFor="let loan of activeLoans$ | async">
         <div class="card">
           <div class="card-body">
-            <h5>Loan ID: {{ loans.id }}</h5>
-            <p>
-              <strong>Amount:</strong> {{ loans.amount | currency : "PHP" }}
-            </p>
-            <p><strong>Interest:</strong> {{ loans.interest }}%</p>
-            <p>
-              <strong>Amount Paid:</strong>
-              {{ loans.amountPaid | currency : "PHP" }}
-            </p>
+            <h5>Loan ID: {{ loan.id }}</h5>
+            <p><strong>Amount:</strong> {{ loan.amount | currency : "PHP" }}</p>
+            <p><strong>Interest:</strong> {{ loan.interest }}%</p>
+            <p><strong>Amount Paid:</strong> {{ loan.amountPaid | currency : "PHP" }}</p>
             <div class="table-responsive">
               <table class="table table-sm">
                 <thead>
@@ -97,61 +89,29 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let schedule of loans.paymentSchedule">
+                  <tr *ngFor="let schedule of loan.paymentSchedule">
                     <td>{{ schedule.date | date : "shortDate" }}</td>
                     <td>{{ schedule.amount | currency : "PHP" }}</td>
                     <td>
-                      <span
-                        class="badge"
-                        [ngClass]="{
-                          'bg-success': schedule.status === 'PAID',
-                          'bg-warning': schedule.status === 'UNPAID',
-                          'bg-danger': schedule.status === 'OVERDUE'
-                        }"
-                      >
+                      <span class="badge" [ngClass]="{
+                        'bg-success': schedule.status === 'PAID',
+                        'bg-warning': schedule.status === 'UNPAID',
+                        'bg-danger': schedule.status === 'OVERDUE'
+                      }">
                         {{ schedule.status }}
+
+                        
                       </span>
                     </td>
                   </tr>
                 </tbody>
               </table>
+              <p><strong>Total Amount:</strong> {{ loan.amount | currency : "PHP" }}</p>
+            </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  
 
-    <!-- Summary Section -->
-    <div class="container-fluid p-3">
-      <div class="row g-3">
-        <div class="col-12 col-md-3">
-          <div
-            class="box bg-dark text-light p-3 rounded-3"
-            *ngIf="activeLoans$ | async as loans"
-          >
-            <small>Active Loans</small>
-            <h5>{{ loans.length }}</h5>
-          </div>
-        </div>
-        <div class="col-12 col-md-3">
-          <div class="box bg-dark text-light p-3 rounded-3">
-            <small>Unpaid </small>
-            <h5>{{ unpaid }}</h5>
-          </div>
-        </div>
-        <div class="col-12 col-md-3">
-          <div class="box bg-dark text-light p-3 rounded-3">
-            <small>Paid </small>
-            <h5>{{ paid }}</h5>
-          </div>
-        </div>
-        <div class="col-12 col-md-3">
-          <div class="box bg-dark text-light p-3 rounded-3">
-            <small>Overdue </small>
-            <h5>{{ overdue }}</h5>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>

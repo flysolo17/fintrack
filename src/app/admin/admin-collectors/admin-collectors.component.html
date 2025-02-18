@@ -98,26 +98,12 @@
           <td>{{ user.email }}</td>
           <td>{{ user.phone }}</td>
           <td>
-            <div ngbDropdown class="d-inline-block">
-              <button
-                type="button"
-                class="btn btn-outline-secondary"
-                id="dropdownBasic1"
-                ngbDropdownToggle
-              >
-                Edit
-              </button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button ngbDropdownItem>View Profile</button>
-                <button ngbDropdownItem (click)="deleteColletor(user.id)">
-                  Delete Collector
-                </button>
-                <button ngbDropdownItem>Change Password</button>
-              </div>
-            </div>
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="deleteColletor(user.id)"
+            >
+              Delete
+            </button>
           </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+          
