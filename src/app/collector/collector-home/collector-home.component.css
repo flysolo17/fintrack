@@ -51,4 +51,67 @@ body {
   .text-dark {
     color: #343a40 !important;
   }
-  
+   /* Animation for Heading */
+   @keyframes slideInFromLeft {
+    0% {
+      transform: translateX(-50px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  /* Animation for Paragraph */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* Apply animation to the heading */
+  .animate-heading {
+    animation: slideInFromLeft 1s ease-out forwards;
+  }
+
+  /* Apply animation to the paragraph */
+  .animate-paragraph {
+    animation: fadeIn 1.5s ease-out 0.5s forwards; /* Delay to make it appear after heading */
+  }
+   /* Animation for the card */
+   @keyframes slideUp {
+    0% {
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Apply the animation to each card */
+  .animate-card {
+    animation: slideUp 0.6s ease-out forwards;
+  }
+
+  /* Add a slight delay between each card to create a staggered effect */
+  .animate-card:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+
+  .animate-card:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .animate-card:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  .animate-card:nth-child(4) {
+    animation-delay: 0.4s;
+  }

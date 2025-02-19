@@ -31,12 +31,27 @@
         width="100%"
       />
       <button
-        style="position: absolute; bottom: 100px; right: 30px; width: 120px"
-        class="btn btn-primary btn-lg rounded-0"
-        routerLink="/login"
-      >
-        Login
-      </button>
+      style="
+        position: absolute; 
+        bottom: 100px; 
+        right: 100px; 
+        width: 250px; 
+        padding: 15px 30px; 
+        font-size: 18px; 
+        transition: all 0.3s ease; 
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+        border-radius: 8px;
+      "
+      class="btn btn-primary btn-lg"
+      routerLink="/login"
+      onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 15px rgba(0, 0, 0, 0.15)';"
+      onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 10px rgba(0, 0, 0, 0.1)';"
+      aria-label="Get Started"
+    >
+      Get Started
+    </button>
+    
+    
     </div>
   </div>
 </div>

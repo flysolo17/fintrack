@@ -4,14 +4,15 @@
     <div class="container">
       <!-- Header Section -->
       <div class="text-center mb-5">
-        <h1 class="display-4 text-primary">
+        <h1 class="display-4 text-primary animate-title">
           <i class="fas fa-tachometer-alt"></i> Admin Fintrack Dashboard
         </h1>
-        <p class="lead text-muted">
+        <p class="lead text-muted animate-description">
           <i class="fas fa-cogs"></i> Monitor and manage loan applications,
           repayments, and financial analytics.
           <br />
         </p>
+
       </div>
     </div>
     <head>
@@ -29,33 +30,33 @@
     (click)="navigateToProfile()"
   />
 </div>
-
 <!-- Overview Cards Section -->
 <div class="overview-cards">
-  <!-- Total Loans -->
-  <div class="card bg-primary text-white">
+  <!-- Total Borrowers -->
+  <div class="card bg-primary text-white animate-card">
     <div class="card-title">Total Borrowers</div>
     <h5>{{ (borrowers$ | async)?.length }}</h5>
   </div>
 
-  <!-- Active Loans (Approved and Paid) -->
-  <div class="card bg-success text-white">
+  <!-- Active Borrowers (Approved and Paid) -->
+  <div class="card bg-success text-white animate-card">
     <div class="card-title">Active Borrowers</div>
     <h5>{{ (activeBorrowers$ | async)?.length }}</h5>
   </div>
 
-  <!-- Pending Loans -->
-  <div class="card bg-warning text-white">
+  <!-- Pending Borrowers -->
+  <div class="card bg-warning text-white animate-card">
     <div class="card-title">Pending Borrowers</div>
     <h5>{{ (pending$ | async)?.length }}</h5>
   </div>
 
-  <!-- Defaulted Loans (Rejected) -->
-  <div class="card bg-danger text-white">
+  <!-- Defaulted Borrowers (Rejected) -->
+  <div class="card bg-danger text-white animate-card">
     <div class="card-title">Defaulted Borrowers</div>
     <h5>{{ (rejected$ | async)?.length }}</h5>
   </div>
 </div>
+
 
 <div class="container-fluid p-3 rounded bg-white">
   <div class="row g-3">

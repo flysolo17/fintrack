@@ -60,3 +60,160 @@ h6 {
   color: #333;
   font-size: 1rem;
 }
+/* Smooth Fade In for the entire container */
+.container-fluid {
+  animation: fadeInContainer 1s ease-in-out;
+}
+
+@keyframes fadeInContainer {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Animation for Table Rows */
+.table-responsive tbody tr {
+  opacity: 0;
+  animation: slideIn 0.5s ease-in-out forwards;
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.table-responsive tbody tr:nth-child(even) {
+  animation-delay: 0.2s;
+}
+
+.table-responsive tbody tr:nth-child(odd) {
+  animation-delay: 0.3s;
+}
+
+/* Animation for the 'No payments found' message */
+.table-responsive .no-data {
+  animation: loadingText 1.5s infinite;
+}
+
+@keyframes loadingText {
+  0% {
+    color: #6c757d;
+  }
+  50% {
+    color: #007bff;
+  }
+  100% {
+    color: #6c757d;
+  }
+}
+
+/* Input field Focus Animation */
+.form-control:focus {
+  animation: focusEffect 0.3s ease-in-out;
+}
+
+@keyframes focusEffect {
+  0% {
+    box-shadow: none;
+    border-color: #007bff;
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.7);
+    border-color: #007bff;
+  }
+}
+
+/* Button Hover and Click Animations */
+.btn-outline-primary {
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+  transform: scale(1.05);
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Badge Status Animation */
+.badge {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.badge-success {
+  animation: badgeFadeInSuccess 0.5s ease-in-out;
+}
+
+.badge-warning {
+  animation: badgeFadeInWarning 0.5s ease-in-out;
+}
+
+.badge-danger {
+  animation: badgeFadeInDanger 0.5s ease-in-out;
+}
+
+@keyframes badgeFadeInSuccess {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes badgeFadeInWarning {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes badgeFadeInDanger {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Animation for the "Pay Now" button */
+.btn-sm {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-sm:hover {
+  transform: scale(1.05);
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Fade in effect for download button */
+.btn-primary {
+  animation: fadeInButton 0.5s ease-in-out;
+}
+
+@keyframes fadeInButton {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

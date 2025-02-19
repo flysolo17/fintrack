@@ -22,6 +22,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  animation: slideInLeft 1.5s ease-out;
 }
 
 .login-left h2 {
@@ -35,6 +36,7 @@ body {
   color: #6c757d;
 }
 
+/* Form styles */
 .login-left form {
   width: 100%;
   max-width: 320px;
@@ -73,15 +75,6 @@ body {
   background-color: #357ab9;
 }
 
-.signup-link {
-  color: #4a90e2;
-  text-decoration: none;
-}
-
-.signup-link:hover {
-  text-decoration: underline;
-}
-
 /* Right Section */
 .login-right {
   flex: 1;
@@ -93,6 +86,7 @@ body {
   padding: 2rem;
 }
 
+/* Login Info */
 .login-info {
   text-align: center;
 }
@@ -112,4 +106,52 @@ body {
   height: auto;
   border: 2px solid white;
   border-radius: 4px;
+}
+
+/* Animation for logo bounce */
+@keyframes logoBounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Animation for the Welcome Back text and slide-in effect */
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Animations for logo and text */
+.animate-logo {
+  animation: logoBounce 2s ease-in-out infinite;
+}
+
+.animate-text {
+  opacity: 0;
+  animation: fadeInUp 1.5s forwards;
+  animation-delay: 0.5s;
+}
+
+/* Animation for fading in and sliding up text */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -31,3 +31,106 @@
   background-color: #0056b3;
   border-color: #0056b3;
 }
+/* Smooth Fade In for the entire page */
+.container-fluid {
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Animation for table rows */
+.table-responsive tbody tr {
+  opacity: 0;
+  animation: slideIn 0.5s ease-in-out forwards;
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.table-responsive tbody tr:nth-child(even) {
+  animation-delay: 0.2s;
+}
+
+.table-responsive tbody tr:nth-child(odd) {
+  animation-delay: 0.3s;
+}
+
+/* Tab transition effect */
+.tab-content {
+  animation: fadeInTab 0.5s ease-in-out;
+}
+
+@keyframes fadeInTab {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Button Hover Effect */
+.btn {
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  background-color: rgba(0, 123, 255, 0.8); /* Subtle background change on hover */
+}
+
+/* Input Field Hover Effect */
+.form-control {
+  transition: box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.7);
+  border-color: #007bff;
+}
+
+/* Smooth animation for the search input */
+.input-group-sm {
+  animation: inputFadeIn 0.5s ease-in-out;
+}
+
+@keyframes inputFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Animated loading text in the no borrower found message */
+.table-responsive .no-data {
+  animation: loadingText 1.5s infinite;
+}
+
+@keyframes loadingText {
+  0% {
+    color: #6c757d;
+  }
+  50% {
+    color: #007bff;
+  }
+  100% {
+    color: #6c757d;
+  }
+}

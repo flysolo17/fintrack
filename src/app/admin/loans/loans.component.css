@@ -1,34 +1,73 @@
-/* Card style for a more polished appearance */
-.card {
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-/* Hover effect for table rows */
-.table-row:hover {
-  background-color: #f1f1f1;
-  cursor: pointer;
-}
-
-/* Small icon buttons with rounded edges */
-.btn-outline-danger,
-.btn-outline-success {
-  padding: 5px 12px;
-  border-radius: 20px;
+/* Box-type button style with text and icon */
+.btn-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
   font-size: 14px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  text-transform: capitalize; /* To ensure text is properly styled */
 }
 
-.btn-outline-danger:hover,
+.btn-action i {
+  margin-right: 8px; /* Adds space between icon and text */
+  font-size: 16px;
+}
+
+/* Outline colors for different statuses */
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+  background-color: #f8d7da;
+  color: #dc3545;
+}
+
+.btn-outline-success {
+  color: #28a745;
+  border-color: #28a745;
+}
+
 .btn-outline-success:hover {
+  background-color: #d4edda;
+  color: #28a745;
+}
+
+.btn-outline-warning {
+  color: #ffc107;
+  border-color: #ffc107;
+}
+
+.btn-outline-warning:hover {
+  background-color: #fff3cd;
+  color: #ffc107;
+}
+
+.btn-outline-primary {
+  color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-outline-primary:hover {
+  background-color: #cce5ff;
+  color: #007bff;
+}
+
+/* Hover and active states for all action buttons */
+.btn-action:hover {
+  background-color: #f1f1f1;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Badge color customization for loan status */
-.badge {
-  font-size: 14px;
-  padding: 5px 12px;
+.btn-action:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
-.btn:hover {
-  background-color: #f8f9fa;
-  border-color: #ced4da;
+
+/* Pagination style */
+.ngb-pagination {
+  justify-content: center;
 }

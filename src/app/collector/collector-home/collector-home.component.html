@@ -1,21 +1,16 @@
 <div class="container">
   <!-- Header Section -->
   <div class="text-center mb-5">
-    <h1 class="display-4 text-primary">
+    <h1 class="display-4 text-primary animate-heading">
       <i class="fas fa-tachometer-alt"></i> Collector Dashboard - FintrackSystem
     </h1>
-    <p class="lead text-muted">
-      <i class="fas fa-cogs"></i> Monitor and manage loan applications,
-      repayments, and financial analytics.
+    <p class="lead text-muted animate-paragraph">
+      <i class="fas fa-cogs"></i> Monitor and manage loan applications, repayments, and financial analytics.
       <br />
     </p>
-  </div>
-
   <div class="row g-4 mb-5">
     <div class="col-md-3">
-      <div
-        class="card bg-success shadow-sm p-3 d-flex flex-row align-items-center"
-      >
+      <div class="card bg-success shadow-sm p-3 d-flex flex-row align-items-center animate-card">
         <i class="fas fa-user-friends fa-2x text-white me-3"></i>
         <div>
           <h6 class="text-white">Total borrower</h6>
@@ -23,11 +18,9 @@
         </div>
       </div>
     </div>
-
+  
     <div class="col-md-3">
-      <div
-        class="card bg-light shadow-sm p-3 d-flex flex-row align-items-center"
-      >
+      <div class="card bg-light shadow-sm p-3 d-flex flex-row align-items-center animate-card">
         <i class="fas fa-user-check fa-2x text-warning me-3"></i>
         <div>
           <h6 class="text-warning">Active borrower</h6>
@@ -35,11 +28,9 @@
         </div>
       </div>
     </div>
-
+  
     <div class="col-md-3">
-      <div
-        class="card bg-warning shadow-sm p-3 d-flex flex-row align-items-center"
-      >
+      <div class="card bg-warning shadow-sm p-3 d-flex flex-row align-items-center animate-card">
         <i class="fas fa-user-check fa-2x text-white me-3"></i>
         <div>
           <h6 class="text-white">Pending borrower</h6>
@@ -47,10 +38,9 @@
         </div>
       </div>
     </div>
+  
     <div class="col-md-3">
-      <div
-        class="card bg-primary shadow-sm p-3 d-flex flex-row align-items-center"
-      >
+      <div class="card bg-primary shadow-sm p-3 d-flex flex-row align-items-center animate-card">
         <i class="fas fa-user-check fa-2x text-white me-3"></i>
         <div>
           <h6 class="text-white">Default Borrower</h6>
@@ -58,6 +48,8 @@
         </div>
       </div>
     </div>
+  </div>
+  
     <div>
       <canvasjs-chart
         [options]="chartOptions"

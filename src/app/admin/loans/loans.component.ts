@@ -112,7 +112,7 @@ export class LoansComponent implements OnInit {
       borrowerID: loanWithUser.users?.id ?? '',
       collectorID: this.user$?.id ?? '',
       loanID: loanWithUser.loan?.id ?? '',
-      message: 'Your loan has been accepted. Congratiolations',
+      message: 'Your loan has been accepted. Congratulations',
       amount: loanWithUser.loan?.amount ?? 0,
       createdAt: new Date(),
       status: PaymentStatus.UNPAID,
